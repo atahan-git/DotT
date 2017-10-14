@@ -58,6 +58,8 @@ public class ObjectPool : NetworkBehaviour {
 		
 			NetworkServer.Spawn (inst);
 			objs.Add (inst);
+			activeIds.Enqueue (poolSize);
+			poolSize++;
 			return;
 		} else {
 			int toReuse = activeIds.Dequeue ();
