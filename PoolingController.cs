@@ -7,14 +7,14 @@ public class PoolingController : MonoBehaviour {
 
 	public static PoolingController s;
 
-	// Use this for initialization
-	void Awake () {
+	void Awake ()
+    {
 		s = this;
 	}
 }
 
 
-public class Pool : NetworkBehaviour {
+public class Pool : NetworkBehaviour{
 
 	List<GameObject> objs = new List<GameObject>();
 
