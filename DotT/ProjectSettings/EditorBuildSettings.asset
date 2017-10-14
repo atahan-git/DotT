@@ -5,6 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Berke Deneme/1 vs 1 Gel Lan.unity
     guid: dfde291ecdef7fb47bd3f0a786d57fd8
+  - enabled: 1
+    path: Assets/Atahan Baba/def_lev.unity
+    guid: d863c58a90d2d414c8dad8e3ffcb8a4d
