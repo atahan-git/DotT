@@ -4,7 +4,7 @@
     {
         public const string STORE_ID = "50668";
         public const string NAME = "Rainbow Folders";
-        public const string VERSION = "0.8";
+        public const string VERSION = "0.8.1";
         public const string HELP_URL = "http://www.borodar.com/stuff/rainbowfolders/docs/quickstart_v" + VERSION + ".pdf";
     }
 }

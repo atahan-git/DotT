@@ -22,9 +22,17 @@ namespace Borodar.RainbowFolders.Editor
 
         private static Func<bool> _isCollabEnabled;
         private static Func<bool> _isVcsEnabled;
-        private static ProjectWindowItemCallback _drawCollabOverlay;
+
+        #if UNITY_2017_1_OR_NEWER
+            private static CollabItemCallback _drawCollabOverlay;
+        #else
+            private static ProjectWindowItemCallback _drawCollabOverlay;
+        #endif
+
         private static ProjectWindowItemCallback _drawVcsOverlay;
         private static bool _multiSelection;
+
+        private static GUIStyle _itemBgStyle;
 
         //---------------------------------------------------------------------
         // Ctors
@@ -42,8 +50,21 @@ namespace Borodar.RainbowFolders.Editor
         }
 
         //---------------------------------------------------------------------
+        // Properties
+        //---------------------------------------------------------------------
+
+        public static GUIStyle ItemBgStyle
+        {
+            get { return _itemBgStyle ?? (_itemBgStyle = new GUIStyle("ProjectBrowserIconAreaBg")); }
+        }
+
+        //---------------------------------------------------------------------
         // Delegates
         //---------------------------------------------------------------------
+
+        #if UNITY_2017_1_OR_NEWER
+        public delegate void CollabItemCallback(Rect iconRect, string guid, bool isListMode);
+        #endif
 
         private static void ReplaceFolderIcon(string guid, Rect rect)
         {
@@ -138,8 +159,14 @@ namespace Borodar.RainbowFolders.Editor
                 _isCollabEnabled = (Func<bool>) Delegate.CreateDelegate(typeof(Func<bool>), collabAccessInstance, collabAccessMethod);
 
                 var collabHookType = assembly.GetType("UnityEditor.Collaboration.CollabProjectHook");
-                var collabHook = collabHookType.GetMethod("OnProjectWindowItemIconOverlay", BindingFlags.Static | BindingFlags.Public);
-                _drawCollabOverlay = (ProjectWindowItemCallback) Delegate.CreateDelegate(typeof(ProjectWindowItemCallback), collabHook);
+
+                #if UNITY_2017_1_OR_NEWER
+                    var collabHook = collabHookType.GetMethod("OnProjectWindowIconOverlay", BindingFlags.Static | BindingFlags.Public);
+                    _drawCollabOverlay = (CollabItemCallback) Delegate.CreateDelegate(typeof(CollabItemCallback), collabHook);
+                #else
+                    var collabHook = collabHookType.GetMethod("OnProjectWindowItemIconOverlay", BindingFlags.Static | BindingFlags.Public);
+                    _drawCollabOverlay = (ProjectWindowItemCallback) Delegate.CreateDelegate(typeof(ProjectWindowItemCallback), collabHook);
+                #endif
             }
             catch (SystemException ex)
             {
@@ -175,36 +202,49 @@ namespace Borodar.RainbowFolders.Editor
 
         private static void DrawCustomIcon(string guid, Rect rect, Texture texture, bool isSmall)
         {
-            if (rect.width > LARGE_ICON_SIZE)
+            var iconRect = rect;
+            if (iconRect.width > LARGE_ICON_SIZE)
             {
                 // center the icon if it is zoomed
-                var offset = (rect.width - LARGE_ICON_SIZE) / 2f;
-                rect = new Rect(rect.x + offset, rect.y + offset, LARGE_ICON_SIZE, LARGE_ICON_SIZE);
+                var offset = (iconRect.width - LARGE_ICON_SIZE) / 2f;
+                iconRect = new Rect(iconRect.x + offset, iconRect.y + offset, LARGE_ICON_SIZE, LARGE_ICON_SIZE);
             }
             else
             {
                 // unity shifted small icons a bit in 5.5
                 #if UNITY_5_5
-                    if (isSmall) rect = new Rect(rect.x + 3, rect.y, rect.width, rect.height);
+                if (isSmall) rect = iconRect = new Rect(iconRect.x + 3, iconRect.y, iconRect.width, iconRect.height);
                 #endif
             }
 
             if (_isCollabEnabled())
             {
                 var background = RainbowFoldersEditorUtility.GetCollabBackground(isSmall, EditorGUIUtility.isProSkin);
-                GUI.DrawTexture(rect, background);
-                GUI.DrawTexture(rect, texture);
-                _drawCollabOverlay(guid, rect);
+
+                GUI.Box(rect, string.Empty, ItemBgStyle);
+                GUI.DrawTexture(iconRect, background);
+                GUI.DrawTexture(iconRect, texture);
+
+                #if UNITY_2017_1_OR_NEWER
+                    _drawCollabOverlay(rect, guid, isSmall);
+                #else
+                    _drawCollabOverlay(guid, rect);
+                #endif
+
             }
             else if (_isVcsEnabled())
             {
-                var iconRect = (!isSmall) ? rect : new Rect(rect.x + 7, rect.y, rect.width, rect.height);
+                var background = RainbowFoldersEditorUtility.GetCollabBackground(isSmall, EditorGUIUtility.isProSkin);
+                iconRect = (!isSmall) ? iconRect : new Rect(iconRect.x + 7, iconRect.y, iconRect.width, iconRect.height);
+
+                GUI.Box(rect, string.Empty, ItemBgStyle);
+                GUI.DrawTexture(iconRect, background);
                 GUI.DrawTexture(iconRect, texture);
                 _drawVcsOverlay(guid, rect);
             }
             else
             {
-                GUI.DrawTexture(rect, texture);
+                GUI.DrawTexture(iconRect, texture);
             }
         }
 
