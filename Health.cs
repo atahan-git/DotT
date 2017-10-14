@@ -21,7 +21,7 @@ public class Health : NetworkBehaviour
     [SyncVar]
     public int magicArmor = 0;
 
-    public enum DamageType {physical, magic, real};
+    public enum DamageType { physical, magic, real };
 
     public void Damage(int damage, DamageType damageType)
     {
