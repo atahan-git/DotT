@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Health : NetworkBehaviour
@@ -40,6 +41,9 @@ public class Health : NetworkBehaviour
     bool canTakeDamage = true;
     float invulDuration = 0;
 
+    //HealthBar
+    public Slider greenBar;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -48,7 +52,7 @@ public class Health : NetworkBehaviour
     void Update()
     {
         //Blind
-        if(blindDuration > 0)
+        if (blindDuration > 0)
         {
             blindDuration -= Time.deltaTime;
         }
@@ -58,7 +62,7 @@ public class Health : NetworkBehaviour
         }
 
         //Silence
-        if(silenceDuration > 0)
+        if (silenceDuration > 0)
         {
             silenceDuration -= Time.deltaTime;
         }
@@ -68,7 +72,7 @@ public class Health : NetworkBehaviour
         }
 
         //Root
-        if(rootDuration > 0)
+        if (rootDuration > 0)
         {
             rootDuration -= Time.deltaTime;
         }
@@ -78,13 +82,16 @@ public class Health : NetworkBehaviour
         }
 
         //Agent
-        if(agentIsEnabled)
+        if(agent != null)
         {
-            agent.enabled = true;
-        }
-        else
-        {
-            agent.enabled = false;
+            if(agentIsEnabled)
+            {
+                agent.enabled = true;
+            }
+            else
+            {
+                agent.enabled = false;
+            }
         }
 
         //Unstoppable
@@ -98,13 +105,20 @@ public class Health : NetworkBehaviour
         }
 
         //Invulnerable
-        if (invulDuration > 0)
+        if(invulDuration > 0)
         {
             invulDuration -= Time.deltaTime;
         }
         else
         {
             RemoveInvulnerability();
+        }
+
+        //HealthBar
+        if(greenBar != null)
+        {
+            greenBar.maxValue = maximumHealth;
+            greenBar.value = currentHealth;
         }
     }
 
@@ -286,11 +300,11 @@ public class Health : NetworkBehaviour
             switch(damageType)
             {
                 case DamageType.physical:
-                    currentHealth -= damage * (100 - physicalArmor);
+                    currentHealth -= damage * (100 - physicalArmor) / 100;
                     break;
 
                 case DamageType.magical:
-                    currentHealth -= damage * (100 - magicalArmor);
+                    currentHealth -= damage * (100 - magicalArmor) / 100;
                     break;
 
                 case DamageType.real:
