@@ -27,7 +27,8 @@ public class Health : NetworkBehaviour
 
     //Defensive Stats
     float maximumHealth = 1000;
-    float currentHealth = 1000;
+	[SyncVar]
+    public float currentHealth = 1000;
     float physicalArmor = 0;
     float magicalArmor = 0;
 
