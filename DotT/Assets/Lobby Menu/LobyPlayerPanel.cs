@@ -19,6 +19,9 @@ public class LobyPlayerPanel : MonoBehaviour {
 	public Text myHero;
 	public GameObject myButton;
 
+	public GameObject b1;
+	public GameObject b2;
+
 	// Use this for initialization
 	void Start () {
 	}
@@ -36,6 +39,8 @@ public class LobyPlayerPanel : MonoBehaviour {
 		myHero.text = heroType.ToString();
 
 		myButton.SetActive (isLocalPlayer);
+		b1.SetActive (isLocalPlayer);
+		b2.SetActive (isLocalPlayer);
 	}
 
 	public void ChangeHero(int amount){

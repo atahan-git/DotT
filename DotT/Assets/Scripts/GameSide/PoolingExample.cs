@@ -15,14 +15,14 @@ public class PoolingExample :  NetworkBehaviour {
 	void Start (){
 		myPool = GetComponent<ObjectPool> ();
 
-		InvokeRepeating ("SpawnStuffPOOLED", 0f, 0.005f);		//~80fps
+		InvokeRepeating ("SpawnStuffPOOLED", 1f, 0.005f);		//~80fps
 		//InvokeRepeating ("SpawnStuffNORMAL", 0f, 0.005f);		//~30fps
 	}
 		
 
 	void SpawnStuffPOOLED (){
 		Vector3 rndOffset = new Vector3 (Random.Range (-2, 2), Random.Range (-2, 2) + 5, Random.Range (-2, 2));
-		myPool.CmdSpawn (transform.position + rndOffset);
+		myPool.Spawn (transform.position + rndOffset);
 	}
 
 	void SpawnStuffNORMAL (){

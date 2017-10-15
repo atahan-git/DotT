@@ -12,6 +12,9 @@ public class LobyPlayerController : NetworkBehaviour {
 
 	[SyncVar]
 	public bool isReady;
+
+	[SyncVar]
+	public int id = -1;
 	[SyncVar]
 	public int heroType = 0;
 
@@ -34,12 +37,27 @@ public class LobyPlayerController : NetworkBehaviour {
 		else 
 			panelScript.isLocalPlayer = false;
 
+		CmdSetUpPlayer ();
 
 		if (isServer && DataHandler.s == null) {
 			GameObject _dataHandler = (GameObject)Instantiate (dataHandler, Vector3.zero, Quaternion.identity);
 			NetworkServer.Spawn (_dataHandler);
+		}
+	}
 
-			_dataHandler.GetComponent<DataHandler>().localid = manager.slot;
+	[Command]
+	void CmdSetUpPlayer () {
+		RpcGetId (connectionToClient.connectionId);
+
+	}
+
+	[ClientRpc]
+	void RpcGetId (int theId) {
+
+		id = theId;
+		print ("My Player Id = " + id);
+		if (isLocalPlayer) {
+			print ("Got Local Player Id = " + id);
 		}
 	}
 	
@@ -49,16 +67,16 @@ public class LobyPlayerController : NetworkBehaviour {
 			panelScript.playerid = manager.slot;
 			panelScript.playerState = isReady;
 			panelScript.UpdateValues ();
-			panelScript.heroType = heroType;
+			panelScript.heroType = heroType +1;
 			manager.readyToBegin = isReady;
 		}
 	}
 
 	public void ChangeHero(int amount){
 		heroType += amount;
-		heroType = Mathf.Clamp (heroType, 0, 4);
-		DataHandler.s.heroIds [DataHandler.s.localid] = heroType;
-		CmdChangeHerotype (DataHandler.s.localid, heroType);
+		heroType = Mathf.Clamp (heroType, 0, 3);
+		DataHandler.s.heroIds [id] = heroType;
+		CmdChangeHerotype (id, heroType);
 	}
 
 	[Command]

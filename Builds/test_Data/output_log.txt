@@ -23,18 +23,281 @@ Platform assembly: D:\_Unity\_DotT\Builds\test_Data\Managed\XTUtilities.dll (thi
 Loading D:\_Unity\_DotT\Builds\test_Data\Managed\XTUtilities.dll into Unity Child Domain
 Platform assembly: D:\_Unity\_DotT\Builds\test_Data\Managed\System.dll (this message is harmless)
 Platform assembly: D:\_Unity\_DotT\Builds\test_Data\Managed\System.Core.dll (this message is harmless)
-- Completed reload, in  0.029 seconds
+- Completed reload, in  0.027 seconds
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.311112 ms
+UnloadTime: 1.605776 ms
 Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 2464 -> priority: 1 
-  Thread -> id: 2364 -> priority: 1 
-UnloadTime: 2.871558 ms
+  Thread -> id: 670 -> priority: 1 
+  Thread -> id: 311c -> priority: 1 
+UnloadTime: 2.508442 ms
 
-Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 569.
-Total: 0.379111 ms (FindLiveObjects: 0.072888 ms CreateObjectMapping: 0.016888 ms MarkObjects: 0.282222 ms  DeleteObjects: 0.006666 ms)
+Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 582.
+Total: 0.375110 ms (FindLiveObjects: 0.047555 ms CreateObjectMapping: 0.017777 ms MarkObjects: 0.291999 ms  DeleteObjects: 0.017333 ms)
 
-Log: connection {1} has been disconnected by timeout; address {::ffff:127.0.0.1:50997} time {46558}, last rec time {44550} rtt {11} timeout {2000}
+Network configuration mismatch detected. The number of networked scripts on the client does not match the number of networked scripts on the server. This could be caused by lazy loading of scripts on the client. This warning can be disabled by the checkbox in NetworkManager Script CRC Check.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CRC Local Dump LobyPlayerController : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CRC Local Dump PooledObject : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CRC Local Dump DataHandler : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CRC Local Dump PlayerSpawner : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CRC Local Dump HeroController : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CRC Remote Dump HeroController : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CRC Remote Dump DataHandler : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CRC Remote Dump PooledObject : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CRC Remote Dump LobyPlayerController : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CRC Remote Dump ObjectPool : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+CRC Remote Dump PlayerSpawner : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Exception in OnStartClient:Array index is out of range.   at (wrapper stelemref) object:stelemref (object,intptr,object)
+  at UnityEngine.Networking.NetworkLobbyPlayer.OnStartClient () [0x00000] in <filename unknown>:0 
+  at UnityEngine.Networking.NetworkIdentity.OnStartClient () [0x00000] in <filename unknown>:0 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+My Player Id = 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Got Local Player Id = 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Trying to send command for object without authority.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+My Player Id = 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Got Local Player Id = 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.021332 ms
+
+Unloading 5 unused Assets to reduce memory usage. Loaded Objects now: 948.
+Total: 0.585777 ms (FindLiveObjects: 0.064444 ms CreateObjectMapping: 0.086666 ms MarkObjects: 0.416888 ms  DeleteObjects: 0.017333 ms)
+
+My Player Id = 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Got Local Player Id = 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (1.6, 1.9, -20.8)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-9.3, 0.0, -17.9)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-5.3, 0.0, -26.6)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (8.8, 0.0, -23.2)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-8.4, 0.0, 14.8)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-7.3, 0.0, -25.1)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (3.4, 0.0, -16.4)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (7.3, 0.0, -13.7)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (9.3, 0.0, -11.9)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-5.9, 0.0, 11.5)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (8.4, 0.0, -3.1)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (9.4, 0.0, -8.6)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-2.7, 0.0, -17.5)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-6.3, 0.0, -24.6)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-5.5, 0.0, -31.1)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-5.5, 0.0, -31.2)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-5.3, 0.0, -31.6)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-5.3, 0.0, -31.7)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-0.8, 1.7, -1.7)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-7.6, 0.0, -26.5)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-17.8, 0.0, -19.0)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-24.4, 0.0, -22.5)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-24.9, 0.0, -28.1)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-10.4, 0.0, -37.5)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-6.4, 0.0, -35.7)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-5.8, 0.0, -35.8)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-4.5, 0.0, -35.6)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-3.4, 0.0, -34.9)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-3.4, 0.0, -34.9)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (6.9, 0.0, -25.2)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (7.8, 0.0, -24.1)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (4.8, 0.5, -14.5)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (7.9, 0.0, -9.0)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-1.2, 0.6, -1.5)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-3.8, 0.0, -1.4)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-5.4, 0.0, 4.5)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-6.5, 0.0, 7.1)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-8.8, 0.0, 15.8)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-11.5, 0.0, 15.8)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-15.6, 0.0, 11.3)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-18.5, 0.0, -5.3)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-18.8, 0.0, -14.2)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-19.0, 0.0, -15.8)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+changed player move position  Local Player Master - (-18.2, 0.0, -19.5)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+

@@ -57,6 +57,9 @@ public class LobyController : MonoBehaviour {
 		playerCount = Mathf.Clamp (playerCount, 1, 4);
 		MenuMaster.s.textPlayer.text = playerCount.ToString ();
 
+		if(manager == null)
+			manager = GetComponent<NetworkLobbyManager> ();
+
 		manager.maxPlayers = playerCount;
 		manager.minPlayers = playerCount;
 	}

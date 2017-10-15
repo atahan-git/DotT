@@ -391,6 +391,8 @@ MonoBehaviour:
   myState: {fileID: 114000010898329240}
   myHero: {fileID: 114342975913689750}
   myButton: {fileID: 1000011146436826}
+  b1: {fileID: 1046622547455292}
+  b2: {fileID: 1408270121487238}
 --- !u!114 &114000013139784874
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -438,7 +440,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 88.69
+  m_PreferredWidth: 166.3
   m_PreferredHeight: 341.37
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1

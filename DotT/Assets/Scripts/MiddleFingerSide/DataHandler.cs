@@ -17,7 +17,6 @@ public class DataHandler : NetworkBehaviour {
 	}
 		
 	public SyncListInt heroIds = new SyncListInt ();
-	public int localid = -1; //this is the local players id
 
 	// Use this for initialization
 	void Start () {
