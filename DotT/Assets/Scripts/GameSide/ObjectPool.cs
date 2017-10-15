@@ -36,7 +36,7 @@ public class ObjectPool : NetworkBehaviour {
 	}
 
 
-	void _Spawn (Vector3 pos, Quaternion rot){
+	GameObject _Spawn (Vector3 pos, Quaternion rot){
 		for (int i = 0; i < objs.Count; i++) {
 			if (!objs [i].activeInHierarchy) {
 				objs [i].transform.position = pos;
@@ -44,7 +44,7 @@ public class ObjectPool : NetworkBehaviour {
 				objs [i].SetActive (true);
 
 				activeIds.Enqueue (i);
-				return;
+				return objs [i];
 			}
 		}
 
@@ -58,7 +58,7 @@ public class ObjectPool : NetworkBehaviour {
 			objs.Add (inst);
 			activeIds.Enqueue (poolSize);
 			poolSize++;
-			return;
+			return objs [poolSize-1];
 		} else {
 			int toReuse = activeIds.Dequeue ();
 			activeIds.Enqueue (toReuse);
@@ -67,33 +67,31 @@ public class ObjectPool : NetworkBehaviour {
 			objs [toReuse].transform.rotation = rot;
 			objs [toReuse].SetActive (true);
 			objs [toReuse].BroadcastMessage ("OnEnabled");
-			return;
+			return objs [toReuse];
 		}
 	}
 
 
-	[Command]
-	void CmdSpawn (Vector3 pos, Quaternion rot){
-		_Spawn (pos, rot);
-	}
 
 
 
-	public void Spawn(Vector3 pos, Quaternion rot){
+	public GameObject Spawn(Vector3 pos, Quaternion rot){
 		if (isServer)
-			_Spawn (pos, rot);
+			return _Spawn (pos, rot);
 		else
-			CmdSpawn (pos, rot);
+			Debug.LogError ("peasant players are tying to spawn something! - this is not allowed");
+
+		return null;
 	}
 		
 		
-	public void Spawn (Vector3 pos){
-		Spawn (pos, Quaternion.identity);
+	public GameObject Spawn (Vector3 pos){
+		return Spawn (pos, Quaternion.identity);
 	}
 		
 
-	public void Spawn (float x, float y, float z){
-		Spawn (new Vector3 (x, y, z));
+	public GameObject Spawn (float x, float y, float z){
+		return Spawn (new Vector3 (x, y, z));
 	}
 
 

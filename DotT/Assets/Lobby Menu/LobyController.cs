@@ -85,7 +85,8 @@ public class LobyController : MonoBehaviour {
 	}
 
 	public void ExitaGame () {
-		Destroy (DataHandler.s.gameObject);
+		if(DataHandler.s != null)
+			Destroy (DataHandler.s.gameObject);
 
 		MenuMaster.s.startGUI.SetActive (true);
 		MenuMaster.s.lobbyGUI.SetActive (false);
