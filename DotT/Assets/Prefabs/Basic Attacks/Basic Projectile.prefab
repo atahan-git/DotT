@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4765633217461042}
   - component: {fileID: 33208308922849896}
-  - component: {fileID: 65893970780280730}
   - component: {fileID: 23060731509968874}
   - component: {fileID: 114971985110148952}
   - component: {fileID: 114166521790638338}
@@ -85,18 +84,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1957960818838584}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65893970780280730
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1957960818838584}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!96 &96917619237229422
 TrailRenderer:
   serializedVersion: 2
@@ -199,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f44ad7d0605474409f8c95e869c5d57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myId: -1
+  myId: 1
   myPool: {fileID: 0}
 --- !u!114 &114222175108131528
 MonoBehaviour:
@@ -212,6 +199,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50a10c8dc471e214db587ccd627ae154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  damage: 0
+  speed: 20
 --- !u!114 &114971985110148952
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -27,7 +27,7 @@ public class ObjectPool : NetworkBehaviour {
 	public IEnumerator SetUp (int poolsize, GameObject item){
 		for (int i = 0; i < poolsize; i++) {
 			GameObject inst = (GameObject)Instantiate (item);
-			myObject.GetComponent<PooledObject> ().myId = i;
+			inst.GetComponent<PooledObject> ().myId = i;
 			inst.SetActive (false);
 			objs.Add (inst);
 			NetworkServer.Spawn (inst);
@@ -39,6 +39,10 @@ public class ObjectPool : NetworkBehaviour {
 	GameObject _Spawn (Vector3 pos, Quaternion rot){
 		for (int i = 0; i < objs.Count; i++) {
 			if (!objs [i].activeInHierarchy) {
+				if (objs [i].GetComponentInChildren<TrailRenderer> () != null) {
+					objs [i].GetComponentInChildren<TrailRenderer> ().Clear ();
+				}
+
 				objs [i].transform.position = pos;
 				objs [i].transform.rotation = rot;
 				objs [i].SetActive (true);
@@ -47,6 +51,7 @@ public class ObjectPool : NetworkBehaviour {
 				return objs [i];
 			}
 		}
+		print ("Not enough pooled object detected");
 
 		//there is no free object left
 		if (autoExpand) {
@@ -56,6 +61,7 @@ public class ObjectPool : NetworkBehaviour {
 
 			NetworkServer.Spawn (inst);
 			objs.Add (inst);
+			inst.GetComponent<PooledObject> ().myId = poolSize;
 			activeIds.Enqueue (poolSize);
 			poolSize++;
 			return objs [poolSize-1];
@@ -96,15 +102,17 @@ public class ObjectPool : NetworkBehaviour {
 
 
 	void _Destroy(int id){
-		if(objs[id] != null){
+		if (objs [id] != null) {
 			objs [id].SetActive (false);
+		} else {
+			Debug.LogError ("Pooled object with wrong id detected");
 		}
 	}
 
 
 	[Command]
 	void CmdDestroy (int id){
-		Destroy (id);
+		_Destroy (id);
 	}
 
 	public void Destroy (int id){

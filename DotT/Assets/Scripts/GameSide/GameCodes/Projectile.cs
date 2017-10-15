@@ -9,18 +9,32 @@ public class Projectile : MonoBehaviour {
 	public float damage = 0f;
 	public float speed = 5f;
 
+	bool isDealtDmg = false;
+
 	// Use this for initialization
 	void Start () {
 		
 	}
+
+	void OnEnable(){
+		isDealtDmg = false;
+	}
 	
 	// Update is called once per frame
 	void Update () {
-		transform.position = Vector3.MoveTowards (transform.position, target.transform.position, speed * Time.deltaTime);
+		if (target != null) {
+			transform.position = Vector3.MoveTowards (transform.position, target.transform.position, speed * Time.deltaTime);
 
-		if (Vector3.Distance (transform.position, target.transform.position) < 0.2f) {
-			target.Damage (damage, Health.DamageType.physical);
-			target = null;
+			if (GetComponent<UnityEngine.Networking.NetworkIdentity> ().isServer) {
+				if (Vector3.Distance (transform.position, target.transform.position) < 0.2f && !isDealtDmg) {
+					target.Damage (damage, Health.DamageType.physical);
+					target = null;
+					GetComponent<PooledObject> ().Destroy ();
+					isDealtDmg = true;
+				}
+			}
+		}
+		if (GetComponent<UnityEngine.Networking.NetworkIdentity> ().isServer && target == null) {
 			GetComponent<PooledObject> ().Destroy ();
 		}
 	}
