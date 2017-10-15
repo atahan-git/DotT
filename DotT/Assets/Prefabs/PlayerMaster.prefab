@@ -58,6 +58,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ebd8b38ebaed04295cb1efa4aa8c77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movePos: {x: 0, y: 0, z: 0}
+  attackTarget: {fileID: 0}
+  attackSpeed: 1.2
+  attackDamage: 50
+  attackrange: 15
 --- !u!114 &114298702041232450
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -156,3 +161,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f79ecda9a9e3f24fbf51a87bcb861f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerid: -1
+  heroType: -1
+  myHero: {fileID: 0}
