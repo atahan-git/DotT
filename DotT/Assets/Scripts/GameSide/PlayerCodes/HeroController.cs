@@ -38,7 +38,7 @@ public class HeroController : NetworkBehaviour {
 				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition); 
 				if (Physics.Raycast (ray, out hit, 100.0f)) { 
 					if (hit.transform.root.gameObject.tag == "Hero") {
-						Attack (hit.transform.root.gameObject.GetComponent<Health>());
+						Attack (hit.transform.root.gameObject);
 						Stop ();
 						mode = MovementMode.attackmove;
 						attackCounter = 0;
@@ -101,17 +101,17 @@ public class HeroController : NetworkBehaviour {
 		projectile.GetComponent<Projectile> ().damage = attackDamage;
 	}
 
-	void Attack (Health target){
+	void Attack (GameObject target){
 		if (isServer) {
-			attackTarget = target;
+			attackTarget = target.GetComponent<Health>();
 		} else {
 			CmdAttack (target);
 		}
 	}
 
 	[Command]
-	void CmdAttack (Health target){
-		attackTarget = target;
+	void CmdAttack (GameObject target){
+		attackTarget = target.GetComponent<Health>();
 	}
 
 	[Command]
