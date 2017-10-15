@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f44ad7d0605474409f8c95e869c5d57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myId: 49
+  myId: -1
   myPool: {fileID: 0}
 --- !u!114 &114250368962385268
 MonoBehaviour:

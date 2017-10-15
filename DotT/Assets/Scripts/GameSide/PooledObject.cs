@@ -5,9 +5,14 @@ using UnityEngine.Networking;
 
 public class PooledObject : NetworkBehaviour {
 
+	[SyncVar]
 	public int myId = -1;
 	public ObjectPool myPool;
 
+
+	void Start(){
+		gameObject.SetActive (false);
+	}
 
 	void OnEnabled (){
 		RpcSyncEnable (transform.position, transform.rotation);
@@ -40,6 +45,6 @@ public class PooledObject : NetworkBehaviour {
 
 
 	public void Destroy (){
-		myPool.CmdDestroy (myId);
+		myPool.Destroy (myId);
 	}
 }

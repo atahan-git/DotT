@@ -17,28 +17,26 @@ public class ObjectPool : NetworkBehaviour {
 		myObject.GetComponent<PooledObject> ().myPool = this;
 
 		if(isServer)
-			SetUp (poolSize, myObject);
+			StartCoroutine(SetUp (poolSize, myObject));
 	}
 
 	List<GameObject> objs = new List<GameObject>();
 	Queue<int> activeIds = new Queue<int>();
 
 
-	public void SetUp (int poolsize, GameObject item){
+	public IEnumerator SetUp (int poolsize, GameObject item){
 		for (int i = 0; i < poolsize; i++) {
 			GameObject inst = (GameObject)Instantiate (item);
 			myObject.GetComponent<PooledObject> ().myId = i;
-			NetworkServer.Spawn (inst);
 			inst.SetActive (false);
 			objs.Add (inst);
+			NetworkServer.Spawn (inst);
+			yield return 0;
 		}
 	}
 
-		
 
-
-	[Command]
-	public void CmdSpawn (Vector3 pos, Quaternion rot){
+	void _Spawn (Vector3 pos, Quaternion rot){
 		for (int i = 0; i < objs.Count; i++) {
 			if (!objs [i].activeInHierarchy) {
 				objs [i].transform.position = pos;
@@ -55,7 +53,7 @@ public class ObjectPool : NetworkBehaviour {
 			GameObject inst = (GameObject)Instantiate (objs[0]);
 			inst.transform.position = pos;
 			inst.transform.rotation = rot;
-		
+
 			NetworkServer.Spawn (inst);
 			objs.Add (inst);
 			activeIds.Enqueue (poolSize);
@@ -72,22 +70,49 @@ public class ObjectPool : NetworkBehaviour {
 			return;
 		}
 	}
+
+
+	[Command]
+	void CmdSpawn (Vector3 pos, Quaternion rot){
+		_Spawn (pos, rot);
+	}
+
+
+
+	public void Spawn(Vector3 pos, Quaternion rot){
+		if (isServer)
+			_Spawn (pos, rot);
+		else
+			CmdSpawn (pos, rot);
+	}
 		
 		
-	public void CmdSpawn (Vector3 pos){
-		CmdSpawn (pos, Quaternion.identity);
+	public void Spawn (Vector3 pos){
+		Spawn (pos, Quaternion.identity);
 	}
 		
 
-	public void CmdSpawn (float x, float y, float z){
-		CmdSpawn (new Vector3 (x, y, z));
+	public void Spawn (float x, float y, float z){
+		Spawn (new Vector3 (x, y, z));
+	}
+
+
+	void _Destroy(int id){
+		if(objs[id] != null){
+			objs [id].SetActive (false);
+		}
 	}
 
 
 	[Command]
-	public void CmdDestroy (int id){
-		if(objs[id] != null){
-			objs [id].SetActive (false);
-		}
+	void CmdDestroy (int id){
+		Destroy (id);
+	}
+
+	public void Destroy (int id){
+		if (isServer)
+			_Destroy (id);
+		else
+			CmdDestroy (id);
 	}
 }
