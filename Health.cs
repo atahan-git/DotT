@@ -28,8 +28,8 @@ public class Health : NetworkBehaviour
     //Defensive Stats
     float maximumHealth = 1000;
     float currentHealth = 1000;
-    float physicalDmgTakenRatio = 100;
-    float magicalDamageTakenRatio = 100;
+    float physicalArmor = 0;
+    float magicalArmor = 0;
 
     //Damage
     public enum DamageType{physical, magical, real};
@@ -199,16 +199,16 @@ public class Health : NetworkBehaviour
         switch (damageType)
         {
             case DamageType.physical:
-                physicalDmgTakenRatio *= amount / 100;
+                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
                 break;
 
             case DamageType.magical:
-                magicalDamageTakenRatio *= amount / 100;
+                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
                 break;
 
             case DamageType.real:
-                physicalDmgTakenRatio *= amount / 100;
-                magicalDamageTakenRatio *= amount / 100;
+                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
+                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
                 break;
         }
     }
@@ -219,16 +219,16 @@ public class Health : NetworkBehaviour
         switch(damageType)
         {
             case DamageType.physical:
-                physicalDmgTakenRatio *= amount / 100;
+                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
                 break;
 
             case DamageType.magical:
-                magicalDamageTakenRatio *= amount / 100;
+                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
                 break;
 
             case DamageType.real:
-                physicalDmgTakenRatio *= amount / 100;
-                magicalDamageTakenRatio *= amount / 100;
+                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
+                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
                 break;
         }
         StartCoroutine(RemoveDefensiveStatModifier(amount, damageType, duration));
@@ -246,16 +246,16 @@ public class Health : NetworkBehaviour
         switch (damageType)
         {
             case DamageType.physical:
-                physicalDmgTakenRatio /= amount / 100;
+                physicalArmor = (physicalArmor - 100) / (1 - amount / 100) + 100;
                 break;
 
             case DamageType.magical:
-                magicalDamageTakenRatio /= amount / 100;
+                magicalArmor = (magicalArmor - 100) / (1 - amount / 100) + 100;
                 break;
 
             case DamageType.real:
-                physicalDmgTakenRatio /= amount / 100;
-                magicalDamageTakenRatio /= amount / 100;
+                physicalArmor = (physicalArmor - 100) / (1 - amount / 100) + 100;
+                magicalArmor = (magicalArmor - 100) / (1 - amount / 100) + 100;
                 break;
         }
     }
@@ -285,11 +285,11 @@ public class Health : NetworkBehaviour
             switch(damageType)
             {
                 case DamageType.physical:
-                    currentHealth -= damage * physicalDmgTakenRatio / 100;
+                    currentHealth -= damage * (100 - physicalArmor);
                     break;
 
                 case DamageType.magical:
-                    currentHealth -= damage * magicalDamageTakenRatio / 100;
+                    currentHealth -= damage * (100 - magicalArmor);
                     break;
 
                 case DamageType.real:
