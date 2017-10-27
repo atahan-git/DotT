@@ -29,6 +29,7 @@ public class HeroController : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//----------------------------------------------------------------------------------PLAYER SIDE CODE
 		if (isLocalPlayer) {
 			if (Input.GetMouseButtonDown (1)) {
 				RaycastHit hit; 
@@ -48,6 +49,8 @@ public class HeroController : NetworkBehaviour {
 			}
 		}
 
+
+		//----------------------------------------------------------------------------------SERVER SIDE CODE
 		if (isServer) {
 
 			if (myHero == null) {
@@ -94,6 +97,7 @@ public class HeroController : NetworkBehaviour {
 		}
 	}
 
+	//----------------------------------------------------------------------------------mostly SERVER SIDE CODE
 	void ShootProjectile (){
 		GameObject projectile = myPool.Spawn (myHero.transform.position);
 		projectile.GetComponent<Projectile> ().target = attackTarget;
@@ -138,4 +142,6 @@ public class HeroController : NetworkBehaviour {
 			CmdChangePos (GetComponent<PlayerSpawner> ().myHero.transform.position);
 		}
 	}
+
+
 }

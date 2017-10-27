@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class LobyController : MonoBehaviour {
+public class LobyController : NetworkBehaviour {
 
 	public static LobyController s;
 
@@ -36,6 +37,7 @@ public class LobyController : MonoBehaviour {
 		if (lobbyGUI == null) {
 			SceneManager.LoadScene (0);
 		}
+
 	}
 
 	NetworkLobbyPlayer[] oldSlots;
@@ -101,4 +103,51 @@ public class LobyController : MonoBehaviour {
 		//UnityEngine.SceneManagement.SceneManager.LoadScene (0);
 	}
 
+
+	//-----------------------------------------------------------------BOT STUFF
+
+	int connectedPlayers = -1;
+	public GameObject botLobyPanel;
+	public List<GameObject> allBotLobyPanels = new List<GameObject>();
+
+	void Update (){
+
+		if (manager.isNetworkActive) {
+			if (manager.numPlayers != connectedPlayers) {
+
+				if (allBotLobyPanels.Count == 0 && manager.numPlayers != 10) {
+					while (manager.numPlayers + allBotLobyPanels.Count < 10) {
+						GameObject extraPanel = (GameObject)Instantiate (botLobyPanel, transform.position, transform.rotation);
+						allBotLobyPanels.Add (extraPanel);
+					}
+				}
+
+				if (manager.numPlayers > connectedPlayers) {
+					
+					while (manager.numPlayers + allBotLobyPanels.Count > 10) {
+
+						int num = allBotLobyPanels.Count;
+						GameObject toDestroy = allBotLobyPanels [num - 1];
+						allBotLobyPanels.Remove (toDestroy);
+						Destroy (toDestroy);
+
+						allBotLobyPanels.TrimExcess ();
+					}
+
+
+				} else if (manager.numPlayers < connectedPlayers) {
+
+
+					while (manager.numPlayers + allBotLobyPanels.Count < 10) {
+						GameObject extraPanel = (GameObject)Instantiate (botLobyPanel);
+						allBotLobyPanels.Add (extraPanel);
+					}
+
+				}
+
+
+				connectedPlayers = manager.numPlayers;
+			}
+		}
+	}
 }

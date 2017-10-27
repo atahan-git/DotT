@@ -186,6 +186,8 @@ MonoBehaviour:
   startGUI: {fileID: 0}
   lobbyGUI: {fileID: 0}
   isHost: 0
+  botLobyPanel: {fileID: 1820228579867496, guid: f6204ea14bc351248b2e1c869d907b51,
+    type: 2}
 --- !u!114 &114966118561445216
 MonoBehaviour:
   m_ObjectHideFlags: 1
