@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class M_Special : MonoBehaviour {
+public class M_Special : Minion{
+    override float attackRange = 3f;
+    public override int damage = 10;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    override void Attack()
+    {
+        //Stuff 'n' things
+    }
 }
