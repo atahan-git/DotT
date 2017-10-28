@@ -6,8 +6,7 @@ public class M_Special : Minion{
     override float attackRange = 3f;
     public override int damage = 10;
 
-    override void Attack()
-    {
+    override void Attack(){
         //Stuff 'n' things
     }
 }
