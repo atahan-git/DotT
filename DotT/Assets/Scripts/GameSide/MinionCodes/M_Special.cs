@@ -7,6 +7,6 @@ public class M_Special : Minion{
     public override int damage = 10;
 
     override void Attack(){
-        //Stuff 'n' things
+        attackFocus.gameObject.GetComponent<Health>().Damage(damage, Health.DamageType.real);
     }
 }
