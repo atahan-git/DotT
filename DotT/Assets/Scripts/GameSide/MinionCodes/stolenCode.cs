@@ -114,7 +114,7 @@ public class stolenCode : MonoBehaviour{
 			}
 			
 			
-			if(Vector3.Distance(destination, target.position) > 1.0f){//If the buffered destination and the targets position differ by more than 1 unit
+			if(Vector3.Distance(destination, target.position) > 1.0f){//If the cached destination and the targets position differ by more than 1 unit
 				destination = target.position; //Cache the new position of the target
 				agent.destination = destination; //Set the NavMeshAgent destination to the cahced position
 			}
