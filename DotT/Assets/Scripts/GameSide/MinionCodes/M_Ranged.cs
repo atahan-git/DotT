@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class M_Ranged : MonoBehaviour {
+    override float attackRange = 10f;
+    public override int damage = 10;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    override void Attack()
+    {
+        attackFocus.gameObject.GetComponent<Health>().Damage(damage, Health.DamageType.real);
+    }
 }
