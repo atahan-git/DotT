@@ -36,14 +36,9 @@ public class HeroController : NetworkBehaviour {
 				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition); 
 				if (Physics.Raycast (ray, out hit, 100.0f)) { 
 					if (hit.transform.root.gameObject.tag == "Hero" && hit.transform.root.gameObject.GetComponent<Health>()!= null) {
-						Attack (hit.transform.root.gameObject);
-						Stop ();
-						mode = MovementMode.attackmove;
-						attackCounter = 0;
+						CmdAttack (hit.transform.root.gameObject);
 					} else {
-						mode = MovementMode.move;
-						Attack (null);
-						ChangePos(hit.point);
+						CmdChangePos(hit.point);
 					}
 				}
 			}
@@ -83,64 +78,64 @@ public class HeroController : NetworkBehaviour {
 						} else {
 							attackCounter -= Time.deltaTime;
 						}
-						spawn.myHero.GetComponent<NavMeshAgent> ().enabled = false;
+						movePos = GetComponent<PlayerSpawner> ().myHero.transform.position;
 					} else {
 						movePos = attackTarget.transform.position;
 						GetComponent<PlayerSpawner> ().myHero.GetComponent<HeroObjectRelay> ().movePos = movePos;
-						spawn.myHero.GetComponent<NavMeshAgent> ().enabled = true;
 					}
 				} else {
 					mode = MovementMode.stop;
 				}
 				break;
 			}
+
+
+			GetComponent<PlayerSpawner> ().myHero.GetComponent<HeroObjectRelay> ().movePos = movePos;
 		}
 	}
 
-	//----------------------------------------------------------------------------------mostly SERVER SIDE CODE
+	//----------------------------------------------------------------------------------SERVER SIDE CODE
 	void ShootProjectile (){
 		GameObject projectile = myPool.Spawn (myHero.transform.position);
-		projectile.GetComponent<Projectile> ().target = attackTarget;
-		projectile.GetComponent<Projectile> ().damage = attackDamage;
+		projectile.GetComponentInChildren<Projectile> (true).target = attackTarget;
+		projectile.GetComponentInChildren<Projectile> (true).damage = attackDamage;
+
+		RpcShootProjectile (projectile, attackTarget.gameObject);
 	}
 
-	void Attack (GameObject target){
-		if (isServer) {
-			if(target != null)
-			attackTarget = target.GetComponent<Health>();
-		} else {
-			CmdAttack (target);
-		}
+	[ClientRpc]
+	void RpcShootProjectile (GameObject projectile, GameObject target){
+		projectile.GetComponentInChildren<Projectile> (true).target = target.GetComponent<Health>();
+		projectile.GetComponentInChildren<Projectile> (true).damage = attackDamage;
 	}
+
 
 	[Command]
 	void CmdAttack (GameObject target){
-		if(target != null)
-		attackTarget = target.GetComponent<Health>();
+		if (target != null) {
+			attackTarget = target.GetComponent<Health> ();
+			mode = MovementMode.attackmove;
+			print (gameObject.name + " - attacking");
+
+		} else {
+			attackTarget = null;
+			mode = MovementMode.move;
+			print (gameObject.name + " - moving");
+
+		}
 	}
 
 	[Command]
 	void CmdChangePos (Vector3 pos){
 		movePos = pos;
-		GetComponent<PlayerSpawner> ().myHero.GetComponent<HeroObjectRelay> ().movePos = movePos;
+		mode = MovementMode.move;
+		print (gameObject.name + " - moving");
+		attackTarget = null;
 	}
 
-	void ChangePos (Vector3 pos){
-		if (isServer) {
-			movePos = pos;
-			GetComponent<PlayerSpawner> ().myHero.GetComponent<HeroObjectRelay> ().movePos = movePos;
-		} else {
-			CmdChangePos (pos);
-		}
-	}
-
-	void Stop (){
-		if (isServer) {
-			movePos = GetComponent<PlayerSpawner> ().myHero.transform.position;
-			GetComponent<PlayerSpawner> ().myHero.GetComponent<HeroObjectRelay> ().movePos = movePos;
-		} else {
-			CmdChangePos (GetComponent<PlayerSpawner> ().myHero.transform.position);
-		}
+	[Command]
+	void CmdStop (){
+		CmdChangePos (GetComponent<PlayerSpawner> ().myHero.transform.position);
 	}
 
 

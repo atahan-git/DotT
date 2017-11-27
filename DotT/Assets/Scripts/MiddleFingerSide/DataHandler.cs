@@ -19,6 +19,9 @@ public class DataHandler : NetworkBehaviour {
 	public SyncListInt heroIds = new SyncListInt ();
 	public SyncListInt playerSlots = new SyncListInt ();
 
+	[SyncVar]
+	public int playerCount = 1;
+
 	// Use this for initialization
 	void Start () {
 		if (playerSlots.Count == 0)

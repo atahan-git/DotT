@@ -6,6 +6,42 @@ using System.Collections;
 
 public class Health : NetworkBehaviour
 {
+	/*
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//TODO: HEAL EKLE
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	*/
+	
     //Blind
     bool canAutoAttack = true;
     float blindDuration = 0;
@@ -389,4 +425,5 @@ public class Health : NetworkBehaviour
     {
         canTakeDamage = true;
     }
+	
 }

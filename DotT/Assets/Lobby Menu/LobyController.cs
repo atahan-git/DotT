@@ -67,6 +67,7 @@ public class LobyController : NetworkBehaviour {
 	}
 
 	public bool isHost = false;
+	public bool isOnline = false;
 
 	public void HostaGame () {
 
@@ -75,6 +76,7 @@ public class LobyController : NetworkBehaviour {
 
 		manager.StartHost ();
 		isHost = true;
+		isOnline = true;
 	}
 
 	public void JoinaGame () {
@@ -84,6 +86,7 @@ public class LobyController : NetworkBehaviour {
 
 		manager.StartClient ();
 		isHost = false;
+		isOnline = true;
 	}
 
 	public void ExitaGame () {
@@ -101,30 +104,48 @@ public class LobyController : NetworkBehaviour {
 
 		textPlayer = null;
 		//UnityEngine.SceneManagement.SceneManager.LoadScene (0);
+
+		allBotLobyPanels = new List<GameObject> ();
+
+		isOnline = false;
+		connectedPlayers = -1;
+		oldConnectedPlayers = -1;
 	}
 
 
 	//-----------------------------------------------------------------BOT STUFF
 
 	int connectedPlayers = -1;
+	int oldConnectedPlayers = -1;
 	public GameObject botLobyPanel;
 	public List<GameObject> allBotLobyPanels = new List<GameObject>();
 
 	void Update (){
 
-		if (manager.isNetworkActive) {
-			if (manager.numPlayers != connectedPlayers) {
+		if (manager.isNetworkActive && DataHandler.s != null) {
+			//print ("botPanel Spawn task");
 
-				if (allBotLobyPanels.Count == 0 && manager.numPlayers != 10) {
-					while (manager.numPlayers + allBotLobyPanels.Count < 10) {
+			if (isHost) {
+				connectedPlayers = manager.numPlayers;
+				DataHandler.s.playerCount = connectedPlayers;
+			} else {
+				connectedPlayers = DataHandler.s.playerCount;
+			}
+
+
+
+			if (connectedPlayers != oldConnectedPlayers) {
+
+				if (allBotLobyPanels.Count == 0 && connectedPlayers != 10) {
+					while (connectedPlayers + allBotLobyPanels.Count < 10) {
 						GameObject extraPanel = (GameObject)Instantiate (botLobyPanel, transform.position, transform.rotation);
 						allBotLobyPanels.Add (extraPanel);
 					}
 				}
 
-				if (manager.numPlayers > connectedPlayers) {
+				if (connectedPlayers > oldConnectedPlayers) {
 					
-					while (manager.numPlayers + allBotLobyPanels.Count > 10) {
+					while (connectedPlayers + allBotLobyPanels.Count > 10) {
 
 						int num = allBotLobyPanels.Count;
 						GameObject toDestroy = allBotLobyPanels [num - 1];
@@ -135,19 +156,24 @@ public class LobyController : NetworkBehaviour {
 					}
 
 
-				} else if (manager.numPlayers < connectedPlayers) {
+				} else if (connectedPlayers < oldConnectedPlayers) {
 
 
-					while (manager.numPlayers + allBotLobyPanels.Count < 10) {
+					while (connectedPlayers + allBotLobyPanels.Count < 10) {
 						GameObject extraPanel = (GameObject)Instantiate (botLobyPanel);
 						allBotLobyPanels.Add (extraPanel);
 					}
 
 				}
-
-
-				connectedPlayers = manager.numPlayers;
 			}
+			oldConnectedPlayers = connectedPlayers;
+
+			isOnline = true;
+		} else if (isOnline && !manager.isNetworkActive) {
+			ExitaGame ();
+			isOnline = false;
+			connectedPlayers = -1;
+			oldConnectedPlayers = -1;
 		}
 	}
 }

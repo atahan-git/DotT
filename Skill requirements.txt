@@ -1,0 +1,158 @@
+template script
+
+//all this is encapsulated in a ScriptableObject for easy and more robust handling of these settings - see google for more details
+ScriptSettings : ScriptableObject {
+
+scriptButton = Buttons.Q //Q,W,E,R,D,1-5
+
+//see the end for the rest
+scriptType = Types.Area;
+
+scriptTarget = Targets.Enemy;
+
+//only one available, will show up on the ground, can be left empty, can have multiple states, triggers for talents, and animations
+GameObject telegrapgh;	//see the end for more details
+
+//add as many as needed - non functional visible effects
+GameObject[] Effects;
+
+//Functioning Prefabs with their own settings, see the end for more details
+GameObject[] Projectiles;
+GameObject[] Structures;
+
+int damage;
+RatioType damageType;	//also includes a "normal" in addition to other values in the Health script
+int heal;
+RatioType healType;
+
+//multiple values for more complex skills
+int[] otherValues;
+RatioType[] otherValueType;
+
+//any status effects the skill may apply - maybe this should be an array?
+StatusEffect myEffect = StatusEffect.Slow;
+float myEffectDuration = 1f;
+float myEffectAmount = 0.4f;
+
+//values used in the script itself
+float waitTimes[] = new int{0.2f,0.1f,0.3f,0.2f};
+
+
+int manaCost;
+
+float cooldown;
+
+//use 0 for insta cast skills
+float castTime;
+string castAnimation = "ShootBlizzard";	//will triggered said animation in the hero
+}
+
+//example Execute code
+IEnumarator Execute(){
+
+	DisplayTelegraph();	
+
+	yield return new WaitForSeconds(ScriptSettings.waitTimes[0]);
+	
+	for(int i = 0; i < 3; i++){
+	
+		InstantiateEffect(0);
+
+		yield return new WaitForSeconds(ScriptSettings.waitTimes[1]);
+
+		Damage();
+		ApplyEffect();
+
+		yield return new WaitForSeconds(ScriptSettings.waitTimes[2]);
+	}
+
+	yield return new WaitForSeconds(ScriptSettings.waitTimes[3]);
+	
+	HideTelegraph();
+}
+
+//built in variables - these will change dynamicaly based on the game state
+self : Health;
+target : Health;
+areaTargets : MultipleHealths;
+firstInLine : Health;
+firstInLine[] : Health []; //if gonna hit more than one thing in line
+areaTargets[-trigger id defined in telegrapgh controller-] : MultipleHealths[]; //skills that damage more in the middle for example
+talentstuffthingy;	//needs more thought
+
+
+//built in methods
+
+TriggerAnimation("name");	//triggers an animation in the player model
+
+DisplayTelegraph();		//displays the set telegrapgh based on the skill type. 
+					//over head effect for targeted, ground telegrapgh for area and directional, 
+					//disabled for istant and toggle, amazingly advanced vectors for vector stuff
+HideTelegrapgh();
+
+ChangeTelegrapghState(-int-);	//for changing telegrapgh state (talents etc.)
+
+yield return new WaitForSeconds(1f);	//for waiting
+
+InstantiateEffect(-index-);	//for spawning Effects[-index-] prefab. location is the same as DisplayTelegrapgh() location
+InstantiateEffect(-index-, settings);	//will add settings as needed - maybe custom locations?
+
+Damage();	//damages the target based on skill type (target/area/instant(self)/directional(same as area)/toggle(self))
+//any one of this can be added for more control:
+-target-	//self/target/areatargets/areatargets[id]	pass the built in variable
+-value-		//any other value in otherValues array		pass the index in the array
+
+Damage(), Damage(-target-), Damage(-value-), Damage(-target-, -value-);
+
+Heal();		//same as damage but heals, custom values can also be used
+
+InstantiateProjectile();	//is only possible for Directional skils, spawns a projectile in the said direction
+InstantiateProjectile(-pos-,-rot-);	//for more special projectiles, Xul things for example
+
+InstantiateStructure();		//is only possible for TargetedStructure skills, spawns a structure in the selected position
+
+//built in triggered methods
+IEnumarator Casting();	//this will be triggered when the cast time begins, use this for showing telegrapghs
+//allways gets triggered even if the cast time is zero
+
+IEnumarator Execute();	//this will be triggered as soon as the cast time ends
+
+//for toggle only
+IEnumarator ToggleOpen();
+IEnumarator ToggleOpenStay();
+IEnumarator ToggleClose();
+IEnumarator ToggleCloseStay();
+
+
+
+
+
+//built in enums and other types
+MultipleHealths	//will include Health[], ClosestTo(point) - when fed to damage, it will automagically damage everything
+RatioType
+Buttons {Q,W,E,R,D,1-5}
+Types {Targeted, Area, Instant, Directional, Toggle, Vector, TargetedStructure}
+scriptTarget {Enemy, Ally, Both}
+
+ScriptSettings : Asset {
+just see the beginning
+}
+
+//extra components
+Telegrapgh Settings{
+
+isVisibletotheEnemies;
+GameObject[] allyGfx;
+GameObject[] enemyGfx;
+
+int currentState; //will change Gfx based on this state - 0 by default
+
+//this gameobject will have its triggers as childs and they will have settings for their ids and will return MultipleHealths
+}
+
+//moar
+Projectile and structure scripts will include a detailed thing like this one
+
+
+lazer
+movement

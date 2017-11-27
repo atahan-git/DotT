@@ -51,14 +51,16 @@ public class LobyBotPanel : MonoBehaviour {
 			bg.color = redTeam;
 		}
 
-		heroType = DataHandler.s.heroIds [playerid];
+		if(playerid != -1)
+			heroType = DataHandler.s.heroIds [playerid];
 
-		myHero.text = (heroType + 1).ToString();
+		myHero.text = (heroType).ToString();
 	}
 
 	void Update (){
 		playerSlot = transform.GetSiblingIndex ();
-		playerid = DataHandler.s.playerSlots.IndexOf (playerSlot);
+		if(DataHandler.s != null)
+			playerid = DataHandler.s.playerSlots.IndexOf (playerSlot);
 
 		UpdateValues ();
 	}

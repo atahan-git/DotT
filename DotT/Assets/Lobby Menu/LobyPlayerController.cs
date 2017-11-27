@@ -41,6 +41,7 @@ public class LobyPlayerController : NetworkBehaviour {
 		if (isLocalPlayer) {
 			panelScript.isLocalPlayer = true;
 			localPlayer = this;
+			gameObject.name = "Local lobey player";
 		}else 
 			panelScript.isLocalPlayer = false;
 
@@ -51,8 +52,8 @@ public class LobyPlayerController : NetworkBehaviour {
 			NetworkServer.Spawn (_dataHandler);
 		}
 
-
-		CmdSetUpPlayer ();
+		if (isLocalPlayer)
+			CmdSetUpPlayer ();
 	}
 		
 
@@ -67,9 +68,9 @@ public class LobyPlayerController : NetworkBehaviour {
 
 		id = theId;
 		playerSlot = slot;
-		print ("My Player Id = " + id);
+		print ("My Player Id = " + id + " - " + gameObject.name);
 		if (isLocalPlayer) {
-			print ("Got Local Player Id = " + id);
+			print ("Got Local Player Id = " + id + " - " + gameObject.name);
 		}
 	}
 	
@@ -80,7 +81,7 @@ public class LobyPlayerController : NetworkBehaviour {
 			panelScript.playerSlot = playerSlot;
 			panelScript.playerState = isReady;
 			panelScript.UpdateValues ();
-			panelScript.heroType = heroType + 1;
+			panelScript.heroType = heroType;
 			manager.readyToBegin = isReady;
 		}
 	}
@@ -177,5 +178,10 @@ public class LobyPlayerController : NetworkBehaviour {
 	void CmdChangeBotHero (int slot, int amount){
 		DataHandler.s.heroIds[slot] += amount;
 		DataHandler.s.heroIds[slot] = Mathf.Clamp (DataHandler.s.heroIds[slot], 0, 3);
+	}
+
+
+	void OnDestroy (){
+		Destroy (playerPanel);
 	}
 }
