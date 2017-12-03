@@ -51,7 +51,7 @@ public class ObjectPool : NetworkBehaviour {
 				return objs [i];
 			}
 		}
-		print ("Not enough pooled object detected");
+		print ("Not enough pooled object detected " + gameObject.name);
 
 		//there is no free object left
 		if (autoExpand) {

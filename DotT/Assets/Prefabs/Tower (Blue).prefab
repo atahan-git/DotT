@@ -53,6 +53,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4379583425659086}
+  - component: {fileID: 114563705159013304}
+  - component: {fileID: 136862716265487436}
   m_Layer: 0
   m_Name: Tower (Blue)
   m_TagString: Untagged
@@ -377,3 +379,29 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1170374637088904}
   m_Mesh: {fileID: 4300004, guid: 92237d04780e183418e60edbda824838, type: 3}
+--- !u!114 &114563705159013304
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1243547465507748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 018cc4908c4d33040a127fc5e92ab4aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 100
+  target: {fileID: 0}
+--- !u!136 &136862716265487436
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1243547465507748}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1
+  m_Height: 3.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.8, z: 0}

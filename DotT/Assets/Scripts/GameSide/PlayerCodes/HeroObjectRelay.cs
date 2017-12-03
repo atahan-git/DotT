@@ -19,6 +19,7 @@ public class HeroObjectRelay : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		GetComponent<NavMeshAgent> ().SetDestination (movePos);
+        //Buggy
+		//GetComponent<NavMeshAgent> ().SetDestination (movePos);
 	}
 }

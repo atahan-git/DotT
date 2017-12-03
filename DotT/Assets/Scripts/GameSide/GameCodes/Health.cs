@@ -6,6 +6,12 @@ using System.Collections;
 
 public class Health : NetworkBehaviour
 {
+    //Properties
+    public enum Type{minion, hero, tower, nexus, jungle};
+    public enum Side{blue, red, neutral};
+    public Type myType = Type.jungle;
+    public Side mySide = Side.neutral;
+
     //Blind
     bool canAutoAttack = true;
     float blindDuration = 0;
@@ -27,32 +33,86 @@ public class Health : NetworkBehaviour
     float unstopDuration = 0;
 
     //Defensive Stats
-    float maximumHealth = 1000;
+    float maximumHealth;
 	[SyncVar]
     public float currentHealth = 1000;
-    float physicalArmor = 0;
-    float magicalArmor = 0;
+    public float physicalArmor = 0;
+    public float magicalArmor = 0;
+    public float healReduction = 0;
 
-    //Damage
-    public enum DamageType{physical, magical, real};
+    //HealthModification
+    public enum HpModType{physicalDamage, magicalDamage, trueDamage, heal};
     public enum RatioType{current, missing, maximum};
+    public float ticksPerSecond = 4;
 
     //Invulnerable
     bool canTakeDamage = true;
-    float invulDuration = 0;
+    float invulnerabilityDuration = 0;
 
     //HealthBar
-    public Slider greenBar;
+    public float healthBarOffSet = 100;
+    public float linesPerMileStone = 10;
+    public Image orangeBar;
+    public Image greenBar;
+    public Image mainBar;
+    public float healthBarWidth;
+    public float hpModOverTime;
+    public float animatingHpMod;
+    public GameObject healthBarLine;
+    public GameObject mileStoneLine;
 
     void Start()
     {
+        maximumHealth = currentHealth;
+        if(mainBar != null)
+        {
+            healthBarWidth = mainBar.GetComponent<RectTransform>().sizeDelta.x;
+            SetHealthBarValues();
+        }
         agent = GetComponent<NavMeshAgent>();
     }
 
     void Update()
     {
+        //Clamps
+        currentHealth = Mathf.Clamp(currentHealth, 0, maximumHealth);
+
+        physicalArmor = Mathf.Clamp(physicalArmor, 0, 100);
+        magicalArmor = Mathf.Clamp(magicalArmor, 0, 100);
+        healReduction = Mathf.Clamp(healReduction, 0, 100);
+
+        animatingHpMod = Mathf.Clamp(animatingHpMod, 0, maximumHealth);
+
+        //Health Bar
+        if (hpModOverTime > 0)
+        {
+            greenBar.fillAmount = (currentHealth + animatingHpMod + hpModOverTime) / maximumHealth;
+            orangeBar.fillAmount = 0;
+            mainBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
+        }
+        else if(hpModOverTime < 0)
+        {
+            greenBar.fillAmount = 0;
+            orangeBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
+            mainBar.fillAmount = (currentHealth + animatingHpMod + hpModOverTime) / maximumHealth;
+        }
+        else
+        {
+            greenBar.fillAmount = 0;
+            orangeBar.fillAmount = 0;
+            mainBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
+        }
+
+        //Main Bar Decay
+        if(animatingHpMod > 0 && mainBar != null)
+        {
+            animatingHpMod -= (animatingHpMod + 400) * Time.deltaTime * 2;
+        }
+
+        //========================================================= Crowd Controls and Effects =========================================================
+
         //Blind
-        if (blindDuration > 0)
+        if(blindDuration > 0)
         {
             blindDuration -= Time.deltaTime;
         }
@@ -62,7 +122,7 @@ public class Health : NetworkBehaviour
         }
 
         //Silence
-        if (silenceDuration > 0)
+        if(silenceDuration > 0)
         {
             silenceDuration -= Time.deltaTime;
         }
@@ -72,7 +132,7 @@ public class Health : NetworkBehaviour
         }
 
         //Root
-        if (rootDuration > 0)
+        if(rootDuration > 0)
         {
             rootDuration -= Time.deltaTime;
         }
@@ -105,20 +165,13 @@ public class Health : NetworkBehaviour
         }
 
         //Invulnerable
-        if(invulDuration > 0)
+        if(invulnerabilityDuration > 0)
         {
-            invulDuration -= Time.deltaTime;
+            invulnerabilityDuration -= Time.deltaTime;
         }
         else
         {
             RemoveInvulnerability();
-        }
-
-        //HealthBar
-        if(greenBar != null)
-        {
-            greenBar.maxValue = maximumHealth;
-            greenBar.value = currentHealth;
         }
     }
 
@@ -154,7 +207,7 @@ public class Health : NetworkBehaviour
         canAutoAttack = true;
     }
 
-    //Increases or decreases movement speed.
+    //Modifies movement speed.
     public void ModifyMovementSpeed(float ratio, float duration)
     {
         movementSpeed *= 100 + ratio;
@@ -208,71 +261,20 @@ public class Health : NetworkBehaviour
         canTakeCC = true;
     }
 
-    //Adds a defensive stat modifier.
-    void AddDefensiveStatModifier(float amount, DamageType damageType)
+    //Makes invulnerabe.
+    public void MakeInvulnerable(float duration)
     {
-        switch (damageType)
+        if (invulnerabilityDuration < duration)
         {
-            case DamageType.physical:
-                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
-
-            case DamageType.magical:
-                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
-
-            case DamageType.real:
-                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
-                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
+            canTakeDamage = false;
+            invulnerabilityDuration = duration;
         }
     }
 
-    //Adds a defensive stat modifier for a limited time.
-    void AddDefensiveStatModifier(float amount, DamageType damageType, float duration)
+    //Makes vulnerable.
+    void RemoveInvulnerability()
     {
-        switch(damageType)
-        {
-            case DamageType.physical:
-                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
-
-            case DamageType.magical:
-                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
-
-            case DamageType.real:
-                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
-                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
-        }
-        StartCoroutine(RemoveDefensiveStatModifier(amount, damageType, duration));
-    }
-
-
-    //Removes the defensive stat modifier.
-    IEnumerator RemoveDefensiveStatModifier(float amount, DamageType damageType, float duration)
-    {
-        while (duration > 0)
-        {
-            duration -= Time.deltaTime;
-            yield return null;
-        }
-        switch (damageType)
-        {
-            case DamageType.physical:
-                physicalArmor = (physicalArmor - 100) / (1 - amount / 100) + 100;
-                break;
-
-            case DamageType.magical:
-                magicalArmor = (magicalArmor - 100) / (1 - amount / 100) + 100;
-                break;
-
-            case DamageType.real:
-                physicalArmor = (physicalArmor - 100) / (1 - amount / 100) + 100;
-                magicalArmor = (magicalArmor - 100) / (1 - amount / 100) + 100;
-                break;
-        }
+        canTakeDamage = true;
     }
 
     //Adds disarm effect.
@@ -292,101 +294,285 @@ public class Health : NetworkBehaviour
         Root(duration);
     }
 
-    //Deals damage.
-    public void Damage(float damage, DamageType damageType)
+    //========================================================= Defensive Stat Modification =========================================================
+
+    //Adds a defensive stat modifier.
+    public void AddDefensiveStatModifier(float amount, HpModType type)
+    {
+        switch(type)
+        {
+            case HpModType.physicalDamage:
+                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
+                break;
+
+            case HpModType.magicalDamage:
+                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
+                break;
+
+            case HpModType.trueDamage:
+                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
+                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
+                break;
+
+            case HpModType.heal:
+                healReduction = (healReduction - 100) * (1 - amount / 100) + 100;
+                break;
+        }
+    }
+
+    //Adds a defensive stat modifier for a limited time.
+    public void AddDefensiveStatModifier(float amount, HpModType type, float duration)
+    {
+        switch(type)
+        {
+            case HpModType.physicalDamage:
+                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
+                break;
+
+            case HpModType.magicalDamage:
+                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
+                break;
+
+            case HpModType.trueDamage:
+                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
+                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
+                break;
+
+            case HpModType.heal:
+                healReduction = (healReduction - 100) * (1 - amount / 100) + 100;
+                break;
+        }
+        StartCoroutine(RemoveDefensiveStatModifier(amount, type, duration));
+    }
+
+    //Removes the defensive stat modifier.
+    IEnumerator RemoveDefensiveStatModifier(float amount, HpModType type, float duration)
+    {
+        while (duration > 0)
+        {
+            duration -= Time.deltaTime;
+            yield return null;
+        }
+        switch(type)
+        {
+            case HpModType.physicalDamage:
+                physicalArmor = (physicalArmor - 100) / (1 - amount / 100) + 100;
+                break;
+
+            case HpModType.magicalDamage:
+                magicalArmor = (magicalArmor - 100) / (1 - amount / 100) + 100;
+                break;
+
+            case HpModType.trueDamage:
+                physicalArmor = (physicalArmor - 100) / (1 - amount / 100) + 100;
+                magicalArmor = (magicalArmor - 100) / (1 - amount / 100) + 100;
+                break;
+
+            case HpModType.heal:
+                healReduction = (healReduction - 100) * (1 - amount / 100) + 100;
+                break;
+        }
+    }
+
+    //========================================================= Health Modification =========================================================
+
+    //Calculates armors and heal redduction.
+    float FindRealAmount(float amount, HpModType type)
+    {
+        switch(type)
+        {
+            case HpModType.physicalDamage:
+                amount *= (100 - physicalArmor) / 100;
+                break;
+
+            case HpModType.magicalDamage:
+                amount *= (100 - magicalArmor) / 100;
+                break;
+
+            case HpModType.heal:
+                amount *= (100 - healReduction) / -100;
+                break;
+        }
+        return amount;
+    }
+
+    float FindRealAmount(float amount, RatioType ratioType)
+    {
+        switch(ratioType)
+        {
+            case RatioType.current:
+                amount *= currentHealth / 100;
+                break;
+
+            case RatioType.missing:
+                amount *= (maximumHealth - currentHealth) / 100;
+                break;
+
+            case RatioType.maximum:
+                amount *= maximumHealth / 100;
+                break;
+        }
+        return amount;
+    }
+
+    float FindRealAmount(float amount, HpModType type, RatioType ratioType)
+    {
+        switch(ratioType)
+        {
+            case RatioType.current:
+                amount *= currentHealth / 100;
+                break;
+
+            case RatioType.missing:
+                amount *= (maximumHealth - currentHealth) / 100;
+                break;
+
+            case RatioType.maximum:
+                amount *= maximumHealth / 100;
+                break;
+        }
+        switch (type)
+        {
+            case HpModType.physicalDamage:
+                amount *= (100 - physicalArmor) / 100;
+                break;
+
+            case HpModType.magicalDamage:
+                amount *= (100 - magicalArmor) / 100;
+                break;
+
+            case HpModType.heal:
+                amount *= (100 - healReduction) / -100;
+                break;
+        }
+        return amount;
+    }
+
+    //Deals damage or heals.
+    public void ModifyHealth(float amount, HpModType type)
     {
         if(canTakeDamage)
         {
-            switch(damageType)
+            currentHealth -= FindRealAmount(amount, type);
+
+            if(type != HpModType.heal)
             {
-                case DamageType.physical:
-                    currentHealth -= damage * (100 - physicalArmor) / 100;
-                    break;
-
-                case DamageType.magical:
-                    currentHealth -= damage * (100 - magicalArmor) / 100;
-                    break;
-
-                case DamageType.real:
-                    currentHealth -= damage;
-                    break;
+                animatingHpMod += amount;
             }
         }
-    }
 
-    //Deals damage over time.
-    public void Damage(float damage, DamageType damageType, float duration)
-    {
-        damage /= 2 * duration;
-
-        StartCoroutine(DamageOverTime(damage, damageType, duration));
-    }
-
-    IEnumerator DamageOverTime(float damage, DamageType damageType, float duration)
-    {
-        while(duration >= 0)
+        if(mainBar != null)
         {
-            yield return new WaitForSeconds(0.5f);
-            duration -= 0.5f;
-            Damage(damage, damageType);
+            SetHealthBarValues();
         }
     }
 
-    //Deals damage proportional to health.
-    public void Damage(float damage, DamageType damageType, RatioType ratioType)
+    //Modifies health over time.
+    public void ModifyHealth(float amount, HpModType type, float duration)
     {
-        switch(ratioType)
-        {
-            case RatioType.current:
-                damage *= currentHealth;
-                break;
+        amount = (FindRealAmount(amount, type) / (ticksPerSecond * duration)) + 1;
 
-            case RatioType.missing:
-                damage *= maximumHealth - currentHealth;
-                break;
+        hpModOverTime -= amount * ticksPerSecond * duration;
 
-            case RatioType.maximum:
-                damage *= maximumHealth;
-                break;
-        }
-
-        Damage(damage, damageType);
+        StartCoroutine(ModifyHealthOverTime(amount, duration));
     }
 
-    //Deals damage proportional to health over time.
-    public void Damage(float damage, DamageType damageType, RatioType ratioType, float duration)
+    IEnumerator ModifyHealthOverTime(float amount, float duration)
     {
-        switch(ratioType)
+        duration -= 1 / ticksPerSecond;
+        if(canTakeDamage || amount < 0)
         {
-            case RatioType.current:
-                damage *= currentHealth;
-                break;
-
-            case RatioType.missing:
-                damage *= maximumHealth - currentHealth;
-                break;
-
-            case RatioType.maximum:
-                damage *= maximumHealth;
-                break;
+            currentHealth -= amount;
         }
+        SetHealthBarValues();
 
-        Damage(damage, damageType, duration);
-    }
-
-    //Makes invulnerabe.
-    public void MakeInvulnerable(float duration)
-    {
-        if (invulDuration < duration)
+        while (duration >= 0)
         {
-            canTakeDamage = false;
-            invulDuration = duration;
+            yield return new WaitForSeconds(1 / ticksPerSecond);
+
+            if(canTakeDamage || amount < 0)
+            {
+                currentHealth -= amount;
+            }
+            hpModOverTime += amount;
+
+            SetHealthBarValues();
+            duration -= 1 / ticksPerSecond;
         }
     }
 
-    //Makes vulnerable.
-    void RemoveInvulnerability()
+    //Modifiels health proportionally.
+    public void ModifyHealth(float amount, HpModType type, RatioType ratioType)
     {
-        canTakeDamage = true;
+        amount -= FindRealAmount(amount, type, ratioType);
+    }
+
+    /*//Modifies health over time proportionally.
+    public void ModifyHealth(float amount, HpModType type, RatioType ratioType, float duration)
+    {
+        amount = FindRealAmount(amount, type);
+        amount /= (ticksPerSecond * duration) + 1;
+
+        if (type != HpModType.heal)
+        {
+            hpModOverTime += FindRealAmount(amount, ratioType) * ticksPerSecond * duration;
+        }
+
+        StartCoroutine(ModHealthOverTimePro(amount, type, ratioType, duration));
+    }
+
+    IEnumerator ModHealthOverTimePro(float amount, HpModType type, RatioType ratioType, float duration)
+    {
+        duration -= 1 / ticksPerSecond;
+        if (canTakeDamage)
+        {
+            currentHealth -= FindRealAmount(amount, ratioType);
+        }
+        SetHealthBarValues();
+
+        while (duration >= 0)
+        {
+            yield return new WaitForSeconds(1 / ticksPerSecond);
+
+            if (canTakeDamage)
+            {
+                currentHealth -= FindRealAmount(amount, ratioType);
+
+                if (type != HpModType.heal)
+                {
+                    hpModOverTime -= FindRealAmount(amount, ratioType);
+                }
+            }
+
+            SetHealthBarValues();
+            duration -= 1 / ticksPerSecond;
+        }
+    }*/
+
+    //========================================================= Health Bar Arrangement =========================================================
+
+    //Overwrites the health bar.
+    void SetHealthBarValues()
+    {
+        //Destroy Children
+        int childs = mainBar.transform.childCount;
+
+        for (int i = 0; i < childs; i++)
+        {
+            Destroy(mainBar.transform.GetChild(i).gameObject);
+        }
+
+        //Lines
+        for (int i = 1; i < Mathf.FloorToInt(maximumHealth / healthBarOffSet) + 1; i++)
+        {
+            GameObject myLine = healthBarLine;
+
+            if (0 == i % linesPerMileStone)
+            {
+                myLine = mileStoneLine;
+            }
+
+            Instantiate(myLine, new Vector3(i * healthBarWidth * healthBarOffSet / maximumHealth, 0, 0), transform.rotation).transform.SetParent(mainBar.transform, false);
+        }
     }
 }
