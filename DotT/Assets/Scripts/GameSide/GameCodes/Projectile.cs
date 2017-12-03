@@ -26,8 +26,8 @@ public class Projectile : MonoBehaviour {
 			transform.position = Vector3.MoveTowards (transform.position, target.transform.position, speed * Time.deltaTime);
 
 			if (GetComponentInParent<UnityEngine.Networking.NetworkIdentity> ().isServer) {
-				if (Vector3.Distance (transform.position, target.transform.position) < 0.2f && !isDealtDmg) {
-					target.Damage (damage, Health.DamageType.physical);
+				if (Vector3.Distance (transform.position, target.transform.position) < 0.2f && !isDealtDmg){
+					target.ModifyHealth(damage, Health.HpModType.physicalDamage);
 					target = null;
 					GetComponentInParent<PooledObject> ().Destroy ();
 					isDealtDmg = true;
