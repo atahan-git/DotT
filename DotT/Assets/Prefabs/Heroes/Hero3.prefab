@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoExpand: 1
-  myObject: {fileID: 1957960818838584, guid: da416b1f6168fd84984bb6fec9fd43d0, type: 2}
+  myObject: {fileID: 1522347954697334, guid: da416b1f6168fd84984bb6fec9fd43d0, type: 2}
   poolSize: 2
 --- !u!114 &114222448468505076
 MonoBehaviour:
@@ -140,13 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95308a7945c54e34081a8e5d4bb9dc69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canCastSpell: 1
-  canAutoAttack: 1
-  movementSpeed: 100
-  slowAmount: 0
-  myHealth: 0
-  physicalArmor: 0
-  magicArmor: 0
+  currentHealth: 1000
+  greenBar: {fileID: 0}
 --- !u!114 &114290227242905068
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -225,8 +220,8 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 10000
   avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_AngularSpeed: 10000
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

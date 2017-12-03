@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class M_Special : MonoBehaviour {
+public class M_Special : Minion{
+    float attackRange = 3f;
+    public int damage = 10;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	override public void Attack(){
+        attackFocus.gameObject.GetComponent<Health>().Damage(damage, Health.DamageType.real);
+    }
 }

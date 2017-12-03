@@ -1,12 +1,10 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class LobyPlayerPanel : NetworkMaster {
+public class LobyBotPanel : MonoBehaviour {
 
-
-	[HideInInspector]
-	public LobyPlayerController myPlayer;
 
 	public int playerid = -1;
 	public int playerSlot = -1;
@@ -29,11 +27,16 @@ public class LobyPlayerPanel : NetworkMaster {
 
 	// Use this for initialization
 	void Start () {
+		playerState = true;
+		GameObject panelParrent = GameObject.Find ("PanelParent");
+		transform.SetParent (panelParrent.transform);
+		transform.localScale = new Vector3 (0.8f, 0.8f, 0.8f);
+
 		bg = GetComponent<Image> ();
 	}
 
 	public void UpdateValues () {
-		myName.text = "Player " + playerid;
+		myName.text = "Bot " + playerid;
 		if (playerState) {
 			myState.text = "Ready";
 			myState.color = Color.green;
@@ -48,31 +51,25 @@ public class LobyPlayerPanel : NetworkMaster {
 			bg.color = redTeam;
 		}
 
-		myHero.text = heroType.ToString();
+		if(playerid != -1)
+			heroType = DataHandler.s.heroIds [playerid];
 
-		myButton.SetActive (isLocalPlayer);
-		b1.SetActive (isLocalPlayer);
-		b2.SetActive (isLocalPlayer);
-
+		myHero.text = (heroType).ToString();
 	}
 
 	void Update (){
-		if (playerSlot != -1) {
-			if (transform.parent.childCount > playerSlot) {
-				if (transform.parent.GetChild (playerSlot) != transform) {
-					transform.SetSiblingIndex (playerSlot);
-				}
-			} else {
-				print ("not enough child exists!");
-			}
-		}
+		playerSlot = transform.GetSiblingIndex ();
+		if(DataHandler.s != null)
+			playerid = DataHandler.s.playerSlots.IndexOf (playerSlot);
+
+		UpdateValues ();
 	}
 
 	public void ChangeHero(int amount){
-		myPlayer.ChangeHero (amount);
+		LobyPlayerController.localPlayer.ChangeBotHero (playerSlot, amount);
 	}
 
-	public void ChangeState () {
-		myPlayer.ChangeReadyState ();
+	public void ChangePlayerPosition () {
+		LobyPlayerController.localPlayer.ChangeSlot (playerSlot);
 	}
 }

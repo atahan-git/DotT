@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012408815834}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 578.0316, y: 330.14996, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -78,6 +78,7 @@ MonoBehaviour:
   - {fileID: 1241356389840552, guid: dc51dd4e2e3ce7049a111f971c42eb2a, type: 2}
   - {fileID: 1620724889665396, guid: 142938ce20460354599f3ada3a174c9e, type: 2}
   - {fileID: 1000012591736656, guid: 5c3b69012f2171a4e8b10e9efd55fd30, type: 2}
+  - {fileID: 1522347954697334, guid: da416b1f6168fd84984bb6fec9fd43d0, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -186,6 +187,10 @@ MonoBehaviour:
   startGUI: {fileID: 0}
   lobbyGUI: {fileID: 0}
   isHost: 0
+  isOnline: 0
+  botLobyPanel: {fileID: 1820228579867496, guid: f6204ea14bc351248b2e1c869d907b51,
+    type: 2}
+  allBotLobyPanels: []
 --- !u!114 &114966118561445216
 MonoBehaviour:
   m_ObjectHideFlags: 1

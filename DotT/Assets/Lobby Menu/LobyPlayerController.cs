@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class LobyPlayerController : NetworkBehaviour {
 
+	public static LobyPlayerController localPlayer;
+
 	public GameObject playerPanel;
-	public GameObject dataHandler;
+	public GameObject prefabDataHandler;
 	LobyPlayerPanel panelScript;
 	NetworkLobbyPlayer manager;
 
@@ -16,10 +18,13 @@ public class LobyPlayerController : NetworkBehaviour {
 	[SyncVar]
 	public int id = -1;
 	[SyncVar]
+	public int playerSlot = -1;
+	[SyncVar]
 	public int heroType = 0;
 
 	// Use this for initialization
 	void Start () {
+
 		manager = GetComponent<NetworkLobbyPlayer> ();
 
 		GameObject panelParrent = GameObject.Find ("PanelParent");
@@ -28,46 +33,55 @@ public class LobyPlayerController : NetworkBehaviour {
 
 		panelScript= playerPanel.GetComponent<LobyPlayerPanel> ();
 
-		panelScript.playerid = manager.slot;
+		panelScript.playerid = id;
+		panelScript.playerSlot = playerSlot;
 		panelScript.playerState = manager.readyToBegin;
 		panelScript.myPlayer = this;
 
-		if (isLocalPlayer)
+		if (isLocalPlayer) {
 			panelScript.isLocalPlayer = true;
-		else 
+			localPlayer = this;
+			gameObject.name = "Local lobey player";
+		}else 
 			panelScript.isLocalPlayer = false;
 
-		CmdSetUpPlayer ();
 
 		if (isServer && DataHandler.s == null) {
-			GameObject _dataHandler = (GameObject)Instantiate (dataHandler, Vector3.zero, Quaternion.identity);
+			GameObject _dataHandler = (GameObject)Instantiate (prefabDataHandler, Vector3.zero, Quaternion.identity);
+			_dataHandler.GetComponent<DataHandler> ().SetUp ();
 			NetworkServer.Spawn (_dataHandler);
 		}
+
+		if (isLocalPlayer)
+			CmdSetUpPlayer ();
 	}
+		
 
 	[Command]
 	void CmdSetUpPlayer () {
-		RpcGetId (connectionToClient.connectionId);
+		RpcGetId (connectionToClient.connectionId, DataHandler.s.playerSlots[connectionToClient.connectionId]);
 
 	}
 
 	[ClientRpc]
-	void RpcGetId (int theId) {
+	void RpcGetId (int theId, int slot) {
 
 		id = theId;
-		print ("My Player Id = " + id);
+		playerSlot = slot;
+		print ("My Player Id = " + id + " - " + gameObject.name);
 		if (isLocalPlayer) {
-			print ("Got Local Player Id = " + id);
+			print ("Got Local Player Id = " + id + " - " + gameObject.name);
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (SceneManager.GetActiveScene ().buildIndex == 0) {
-			panelScript.playerid = manager.slot;
+			panelScript.playerid = id;
+			panelScript.playerSlot = playerSlot;
 			panelScript.playerState = isReady;
 			panelScript.UpdateValues ();
-			panelScript.heroType = heroType +1;
+			panelScript.heroType = heroType;
 			manager.readyToBegin = isReady;
 		}
 	}
@@ -111,5 +125,63 @@ public class LobyPlayerController : NetworkBehaviour {
 		Update ();
 		panelScript.UpdateValues ();
 		GameObject.Find ("NetWorkManaGer").GetComponent<NetworkLobbyManager>().CheckReadyToBegin();
+	}
+
+
+
+	public void ChangeSlot(int slot){
+		int oldSlot = playerSlot;
+		playerSlot = slot;
+		int toSwitch = DataHandler.s.playerSlots.IndexOf (playerSlot);
+
+		DataHandler.s.playerSlots [id] = playerSlot;
+		DataHandler.s.playerSlots [toSwitch] = oldSlot;
+		CmdChangeSlot (id, playerSlot);
+	}
+
+	[Command]
+	public void CmdChangeSlot (int id, int slot){
+		int oldSlot = playerSlot;
+		playerSlot = slot;
+		int toSwitch = DataHandler.s.playerSlots.IndexOf (playerSlot);
+
+		DataHandler.s.playerSlots [id] = playerSlot;
+		DataHandler.s.playerSlots [toSwitch] = oldSlot;
+
+		Update ();
+		panelScript.UpdateValues ();
+		RpcChangeSlot (id, slot);
+	}
+
+	[ClientRpc]
+	public void RpcChangeSlot (int id, int slot){
+		int oldSlot = playerSlot;
+		playerSlot = slot;
+		int toSwitch = DataHandler.s.playerSlots.IndexOf (playerSlot);
+
+		DataHandler.s.playerSlots [id] = playerSlot;
+		DataHandler.s.playerSlots [toSwitch] = oldSlot;
+
+		Update ();
+		panelScript.UpdateValues ();
+	}
+		
+
+
+
+
+	public void ChangeBotHero (int slot, int amount){
+		CmdChangeBotHero (slot, amount);
+	}
+
+	[Command]
+	void CmdChangeBotHero (int slot, int amount){
+		DataHandler.s.heroIds[slot] += amount;
+		DataHandler.s.heroIds[slot] = Mathf.Clamp (DataHandler.s.heroIds[slot], 0, 3);
+	}
+
+
+	void OnDestroy (){
+		Destroy (playerPanel);
 	}
 }

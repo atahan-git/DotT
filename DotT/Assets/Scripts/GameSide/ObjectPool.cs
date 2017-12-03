@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 
 public class ObjectPool : NetworkBehaviour {
 
-	public bool autoExpand = true;
+	public bool autoExpand = true; //dont change this at runtime
 	public GameObject myObject;
 	public int poolSize = 50;
 
@@ -28,7 +28,7 @@ public class ObjectPool : NetworkBehaviour {
 		for (int i = 0; i < poolsize; i++) {
 			GameObject inst = (GameObject)Instantiate (item);
 			inst.GetComponent<PooledObject> ().myId = i;
-			inst.SetActive (false);
+			inst.GetComponent<PooledObject> ().DisableObject ();
 			objs.Add (inst);
 			NetworkServer.Spawn (inst);
 			yield return 0;
@@ -38,20 +38,19 @@ public class ObjectPool : NetworkBehaviour {
 
 	GameObject _Spawn (Vector3 pos, Quaternion rot){
 		for (int i = 0; i < objs.Count; i++) {
-			if (!objs [i].activeInHierarchy) {
-				if (objs [i].GetComponentInChildren<TrailRenderer> () != null) {
-					objs [i].GetComponentInChildren<TrailRenderer> ().Clear ();
-				}
+			if (!objs [i].GetComponent<PooledObject>().isActive) {
 
 				objs [i].transform.position = pos;
 				objs [i].transform.rotation = rot;
-				objs [i].SetActive (true);
+				objs [i].GetComponent<PooledObject> ().EnableObject ();
 
-				activeIds.Enqueue (i);
+				if(!autoExpand)
+					activeIds.Enqueue (i);
+				
 				return objs [i];
 			}
 		}
-		print ("Not enough pooled object detected " + gameObject.name);
+		print ("Not enough pooled objects detected");
 
 		//there is no free object left
 		if (autoExpand) {
@@ -62,7 +61,6 @@ public class ObjectPool : NetworkBehaviour {
 			NetworkServer.Spawn (inst);
 			objs.Add (inst);
 			inst.GetComponent<PooledObject> ().myId = poolSize;
-			activeIds.Enqueue (poolSize);
 			poolSize++;
 			return objs [poolSize-1];
 		} else {
@@ -71,7 +69,7 @@ public class ObjectPool : NetworkBehaviour {
 
 			objs [toReuse].transform.position = pos;
 			objs [toReuse].transform.rotation = rot;
-			objs [toReuse].SetActive (true);
+			objs [toReuse].GetComponent<PooledObject> ().EnableObject ();
 			objs [toReuse].BroadcastMessage ("OnEnabled");
 			return objs [toReuse];
 		}
@@ -85,7 +83,7 @@ public class ObjectPool : NetworkBehaviour {
 		if (isServer)
 			return _Spawn (pos, rot);
 		else
-			Debug.LogError ("peasant players are tying to spawn something! - this is not allowed");
+			Debug.LogError ("Only server side spawning is allowed!");
 
 		return null;
 	}
@@ -103,7 +101,7 @@ public class ObjectPool : NetworkBehaviour {
 
 	void _Destroy(int id){
 		if (objs [id] != null) {
-			objs [id].SetActive (false);
+			objs [id].GetComponent<PooledObject> ().DisableObject ();
 		} else {
 			Debug.LogError ("Pooled object with wrong id detected");
 		}

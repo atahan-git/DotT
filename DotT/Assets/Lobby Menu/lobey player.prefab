@@ -99,7 +99,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPanel: {fileID: 1000010928370168, guid: 930ae6047487de345bd9de7365f049a8,
     type: 2}
-  dataHandler: {fileID: 1620724889665396, guid: 142938ce20460354599f3ada3a174c9e,
+  prefabDataHandler: {fileID: 1620724889665396, guid: 142938ce20460354599f3ada3a174c9e,
     type: 2}
   isReady: 0
+  id: -1
+  playerSlot: -1
   heroType: 0
