@@ -67,7 +67,7 @@ public class Health : NetworkBehaviour
         if(mainBar != null)
         {
             healthBarWidth = mainBar.GetComponent<RectTransform>().sizeDelta.x;
-            SetHealthBarValues();
+            SetHealthBarLines();
         }
         agent = GetComponent<NavMeshAgent>();
     }
@@ -393,6 +393,7 @@ public class Health : NetworkBehaviour
         return amount;
     }
 
+    //Calculates ratio
     float FindRealAmount(float amount, RatioType ratioType)
     {
         switch(ratioType)
@@ -414,34 +415,7 @@ public class Health : NetworkBehaviour
 
     float FindRealAmount(float amount, HpModType type, RatioType ratioType)
     {
-        switch(ratioType)
-        {
-            case RatioType.current:
-                amount *= currentHealth / 100;
-                break;
-
-            case RatioType.missing:
-                amount *= (maximumHealth - currentHealth) / 100;
-                break;
-
-            case RatioType.maximum:
-                amount *= maximumHealth / 100;
-                break;
-        }
-        switch (type)
-        {
-            case HpModType.physicalDamage:
-                amount *= (100 - physicalArmor) / 100;
-                break;
-
-            case HpModType.magicalDamage:
-                amount *= (100 - magicalArmor) / 100;
-                break;
-
-            case HpModType.heal:
-                amount *= (100 - healReduction) / -100;
-                break;
-        }
+        amount = FindRealAmount(FindRealAmount(amount, ratioType), type);
         return amount;
     }
 
@@ -460,41 +434,35 @@ public class Health : NetworkBehaviour
 
         if(mainBar != null)
         {
-            SetHealthBarValues();
+            SetHealthBarLines();
         }
     }
 
     //Modifies health over time.
     public void ModifyHealth(float amount, HpModType type, float duration)
     {
-        amount = (FindRealAmount(amount, type) / (ticksPerSecond * duration)) + 1;
+        amount = (FindRealAmount(amount, type) / ((ticksPerSecond * duration) + 1));
 
-        hpModOverTime -= amount * ticksPerSecond * duration;
+        print(amount);
+
+        hpModOverTime -= amount * ((ticksPerSecond * duration) + 1);
 
         StartCoroutine(ModifyHealthOverTime(amount, duration));
     }
 
     IEnumerator ModifyHealthOverTime(float amount, float duration)
     {
-        duration -= 1 / ticksPerSecond;
-        if(canTakeDamage || amount < 0)
-        {
-            currentHealth -= amount;
-        }
-        SetHealthBarValues();
-
         while (duration >= 0)
         {
-            yield return new WaitForSeconds(1 / ticksPerSecond);
-
             if(canTakeDamage || amount < 0)
             {
                 currentHealth -= amount;
             }
             hpModOverTime += amount;
-
-            SetHealthBarValues();
             duration -= 1 / ticksPerSecond;
+            SetHealthBarLines();
+
+            yield return new WaitForSeconds(1 / ticksPerSecond);
         }
     }
 
@@ -549,7 +517,7 @@ public class Health : NetworkBehaviour
     //========================================================= Health Bar Arrangement =========================================================
 
     //Overwrites the health bar.
-    void SetHealthBarValues()
+    void SetHealthBarLines()
     {
         //Destroy Children
         int childs = mainBar.transform.childCount;
