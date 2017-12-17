@@ -129,7 +129,7 @@ public class HeroController : NetworkBehaviour {
 	void CmdChangePos (Vector3 pos){
 		movePos = pos;
 		mode = MovementMode.move;
-		print (gameObject.name + " - moving");
+		print (gameObject.name + " - moving to " + pos.ToString());
 		attackTarget = null;
 	}
 

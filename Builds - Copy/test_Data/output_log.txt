@@ -1,0 +1,105 @@
+Initialize engine version: 2017.1.0f3 (472613c02cf7)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 950M (ID=0x139a)
+    Vendor:   NVIDIA
+    VRAM:     2019 MB
+    Driver:   22.21.13.8205
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\UnityEngine.Timeline.dll (this message is harmless)
+Loading D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\UnityEngine.Timeline.dll into Unity Child Domain
+Platform assembly: D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\XTUtilities.dll (this message is harmless)
+Loading D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\XTUtilities.dll into Unity Child Domain
+Platform assembly: D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\System.dll (this message is harmless)
+Platform assembly: D:\_Unity\_DotT\Builds - Copy\test_Data\Managed\System.Core.dll (this message is harmless)
+- Completed reload, in  0.024 seconds
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 1.621334 ms
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 1bc8 -> priority: 1 
+  Thread -> id: 1ff0 -> priority: 1 
+UnloadTime: 6.358227 ms
+
+Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 654.
+Total: 0.460889 ms (FindLiveObjects: 0.070666 ms CreateObjectMapping: 0.021777 ms MarkObjects: 0.360889 ms  DeleteObjects: 0.007111 ms)
+
+My Player Id = 0 - Local lobey player
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Got Local Player Id = 0 - Local lobey player
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.748001 ms
+### Setting up the player Local Player Master
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+Unloading 5 unused Assets to reduce memory usage. Loaded Objects now: 1209.
+Total: 0.712000 ms (FindLiveObjects: 0.056888 ms CreateObjectMapping: 0.021333 ms MarkObjects: 0.621333 ms  DeleteObjects: 0.012000 ms)
+
+### Sending setting to the client Local Player Master
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+### Received Settings Local Player Master
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+### My Player Id = 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+### Got Local Player Id = 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Camera Position Set (-6.2, 0.6, 0.9)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Local Player Setup Complete! ->0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Local Player Master - moving
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Local Player Master - moving
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Local Player Master - moving
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Local Player Master - moving
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Local Player Master - moving
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Local Player Master - moving
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+

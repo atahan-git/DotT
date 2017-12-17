@@ -83,25 +83,22 @@ public class Health : NetworkBehaviour
 
         animatingHpMod = Mathf.Clamp(animatingHpMod, 0, maximumHealth);
 
-        //Health Bar
-        if (hpModOverTime > 0)
-        {
-            greenBar.fillAmount = (currentHealth + animatingHpMod + hpModOverTime) / maximumHealth;
-            orangeBar.fillAmount = 0;
-            mainBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
-        }
-        else if(hpModOverTime < 0)
-        {
-            greenBar.fillAmount = 0;
-            orangeBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
-            mainBar.fillAmount = (currentHealth + animatingHpMod + hpModOverTime) / maximumHealth;
-        }
-        else
-        {
-            greenBar.fillAmount = 0;
-            orangeBar.fillAmount = 0;
-            mainBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
-        }
+		if (greenBar != null) {
+			//Health Bar
+			if (hpModOverTime > 0) {
+				greenBar.fillAmount = (currentHealth + animatingHpMod + hpModOverTime) / maximumHealth;
+				orangeBar.fillAmount = 0;
+				mainBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
+			} else if (hpModOverTime < 0) {
+				greenBar.fillAmount = 0;
+				orangeBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
+				mainBar.fillAmount = (currentHealth + animatingHpMod + hpModOverTime) / maximumHealth;
+			} else {
+				greenBar.fillAmount = 0;
+				orangeBar.fillAmount = 0;
+				mainBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
+			}
+		}
 
         //Main Bar Decay
         if(animatingHpMod > 0 && mainBar != null)
