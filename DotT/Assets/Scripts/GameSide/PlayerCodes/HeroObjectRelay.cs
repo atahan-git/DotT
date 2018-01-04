@@ -12,6 +12,9 @@ public class HeroObjectRelay : NetworkBehaviour {
 	[SyncVar]
 	public int id = -1;
 
+
+	public ObjectPool myBasicAttackPool;
+
 	// Use this for initialization
 	void Start () {
 		

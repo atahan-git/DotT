@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ada231cc9d911545a4e41e381750b5f, type: 3}
+  m_Name: W_BlizzardSkill
+  m_EditorClassIdentifier: Assembly-CSharp::SkillSettings
+  skillButton: 0
+  skillType: 1
+  skillTarget: 0
+  telegrapgh: {fileID: 0}
+  Projectiles: []
+  Structures: []
+  damage: 200
+  damageType: 1
+  heal: 0
+  healType: 0
+  otherValues: 
+  otherValueType: 
+  myEffect: 0
+  myEffectDuration: 1
+  myEffectAmount: 0.4
+  waitTimes:
+  - 0.2
+  - 0.15
+  - 0.5
+  - 0.2
+  manaCost: 0
+  cooldown: 0
+  castTime: 0
+  castAnimation: ShootBlizzard

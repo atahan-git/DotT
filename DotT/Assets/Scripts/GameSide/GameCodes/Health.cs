@@ -6,10 +6,14 @@ using System.Collections;
 
 public class Health : NetworkBehaviour
 {
+	public bool isLocalPlayerHealth = false;
+
     //Properties
     public enum Type{minion, hero, tower, nexus, jungle};
     public enum Side{blue, red, neutral};
+	[SyncVar]
     public Type myType = Type.jungle;
+	[SyncVar]
     public Side mySide = Side.neutral;
 
     //Blind
@@ -41,7 +45,7 @@ public class Health : NetworkBehaviour
     public float healReduction = 0;
 
     //HealthModification
-    public enum HpModType{physicalDamage, magicalDamage, trueDamage, heal};
+    public enum HpModType{physicalDamage, magicalDamage, trueDamage, healys};
     public enum RatioType{current, missing, maximum};
     public float ticksPerSecond = 4;
 
@@ -84,6 +88,15 @@ public class Health : NetworkBehaviour
         animatingHpMod = Mathf.Clamp(animatingHpMod, 0, maximumHealth);
 
 		if (greenBar != null) {
+			if (mySide != PlayerSpawner.LocalPlayerSpawner.mySide) {
+				mainBar.color = Color.red;
+			} else {
+				mainBar.color = Color.blue;
+			}
+
+			if (isLocalPlayerHealth)
+				mainBar.color = Color.green;
+
 			//Health Bar
 			if (hpModOverTime > 0) {
 				greenBar.fillAmount = (currentHealth + animatingHpMod + hpModOverTime) / maximumHealth;
@@ -311,7 +324,7 @@ public class Health : NetworkBehaviour
                 magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
                 break;
 
-            case HpModType.heal:
+		case HpModType.healys:
                 healReduction = (healReduction - 100) * (1 - amount / 100) + 100;
                 break;
         }
@@ -335,7 +348,7 @@ public class Health : NetworkBehaviour
                 magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
                 break;
 
-            case HpModType.heal:
+		case HpModType.healys:
                 healReduction = (healReduction - 100) * (1 - amount / 100) + 100;
                 break;
         }
@@ -365,7 +378,7 @@ public class Health : NetworkBehaviour
                 magicalArmor = (magicalArmor - 100) / (1 - amount / 100) + 100;
                 break;
 
-            case HpModType.heal:
+		case HpModType.healys:
                 healReduction = (healReduction - 100) * (1 - amount / 100) + 100;
                 break;
         }
@@ -386,7 +399,7 @@ public class Health : NetworkBehaviour
                 amount *= (100 - magicalArmor) / 100;
                 break;
 
-            case HpModType.heal:
+		case HpModType.healys:
                 amount *= (100 - healReduction) / -100;
                 break;
         }
@@ -426,7 +439,7 @@ public class Health : NetworkBehaviour
         {
             currentHealth -= FindRealAmount(amount, type);
 
-            if(type != HpModType.heal)
+			if(type != HpModType.healys)
             {
                 animatingHpMod += amount;
             }
