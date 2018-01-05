@@ -1,0 +1,20 @@
+minions:
+	melee
+	ranged
+	special
+	siege
+	
+Camps:
+	-add something-
+
+Heroes:
+	-add something-
+
+Buildings:
+	tower
+	nexus
+
+Terrain:
+	trees
+	rocks
+	roads?

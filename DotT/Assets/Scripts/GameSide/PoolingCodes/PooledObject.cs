@@ -11,6 +11,8 @@ public class PooledObject : NetworkBehaviour {
 
 	public bool isActive = false;
 
+	public float lifeTime = -1f; //if a value bigger than zero will auto disable after that time
+
 	void Start (){
 		transform.GetChild(0).gameObject.SetActive (false);
 	}
@@ -22,6 +24,8 @@ public class PooledObject : NetworkBehaviour {
 			transform.GetChild(0).gameObject.SetActive (true);
 			isActive = true;
 			ResetValues ();
+			if (lifeTime > 0f)
+				Invoke ("DisableObject", lifeTime);
 		}
 	}
 

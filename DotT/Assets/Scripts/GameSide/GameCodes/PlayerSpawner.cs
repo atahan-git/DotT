@@ -5,13 +5,19 @@ using UnityEngine.Networking;
 
 public class PlayerSpawner : NetworkBehaviour {
 
+	public static PlayerSpawner LocalPlayerSpawner;	//used for knowing which color of telegraphs to displays and such
+
 	[SyncVar]
 	public int playerid = -1;
 	[SyncVar]
 	public int heroType = -1;
+	[SyncVar]
+	public Health.Side mySide = Health.Side.neutral;
 
 	[HideInInspector]
 	public GameObject myHero;
+	[HideInInspector]
+	public Health myHealth;
 
 	public Transform[] Spawns = new Transform[10];
 
@@ -27,6 +33,7 @@ public class PlayerSpawner : NetworkBehaviour {
 
 			print ("### Setting up the player " + gameObject.name);
 			Invoke ("DelayedCmdSetUpPlayer", 0.5f);
+			LocalPlayerSpawner = this;
 		}
 	}
 
@@ -61,13 +68,38 @@ public class PlayerSpawner : NetworkBehaviour {
 	void SpawnHero (){
 		myHero = (GameObject)Instantiate (STORAGE_HeroPrefabs.s.heroes [heroType], Spawns[DataHandler.s.playerSlots[playerid]].position, Spawns[DataHandler.s.playerSlots[playerid]].rotation);
 		myHero.GetComponent<HeroObjectRelay> ().id = playerid;
+		myHero.name = myHero.name + " - " + playerid.ToString();
 		NetworkServer.Spawn (myHero);
-		RpcSetHeroPos (myHero.transform.position);
+		RpcSetLocalHero (myHero, myHero.transform.position);
+
+		myHealth = myHero.GetComponent<Health> ();
+		if (DataHandler.s.playerSlots [playerid] < 5)
+			myHealth.mySide = Health.Side.blue;
+		else
+			myHealth.mySide = Health.Side.red;
+
+		mySide = myHealth.mySide;
 	}
 
 	[ClientRpc]
-	void RpcSetHeroPos (Vector3 pos){
+	void RpcSetLocalHero (GameObject _myHero, Vector3 pos){
 		GetComponent<HeroController> ().movePos = pos;
+
+
+		myHero = _myHero;
+
+		myHealth = _myHero.GetComponent<Health> ();
+		if (DataHandler.s.playerSlots [playerid] < 5)
+			myHealth.mySide = Health.Side.blue;
+		else
+			myHealth.mySide = Health.Side.red;
+
+		mySide = myHealth.mySide;
+
+
+		if (isLocalPlayer) {
+			myHero.GetComponent<Health> ().isLocalPlayerHealth = true;
+		}
 
 		print ("Local Player Setup Complete! ->" + playerid.ToString());
 	}

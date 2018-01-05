@@ -50,11 +50,12 @@ public class HeroController : NetworkBehaviour {
 
 			if (myHero == null) {
 				myHero = spawn.myHero;
+				print ("Getting hero");
 				return;
 			}
 
 			if (myPool == null) {
-				myPool = myHero.GetComponent<ObjectPool> ();
+				myPool = myHero.GetComponent<HeroObjectRelay> ().myBasicAttackPool;
 				return;
 			}
 
@@ -76,11 +77,10 @@ public class HeroController : NetworkBehaviour {
 								ShootProjectile ();
 							attackCounter = 1f / attackSpeed;
 						} else {
-							attackCounter -= Time.deltaTime;
+							
 						}
 						movePos = GetComponent<PlayerSpawner> ().myHero.transform.position;
 					} else {
-						movePos = attackTarget.transform.position;
 						GetComponent<PlayerSpawner> ().myHero.GetComponent<HeroObjectRelay> ().movePos = movePos;
 					}
 				} else {
@@ -89,7 +89,7 @@ public class HeroController : NetworkBehaviour {
 				break;
 			}
 
-
+			attackCounter -= Time.deltaTime;
 			GetComponent<PlayerSpawner> ().myHero.GetComponent<HeroObjectRelay> ().movePos = movePos;
 		}
 	}
@@ -113,23 +113,27 @@ public class HeroController : NetworkBehaviour {
 	[Command]
 	void CmdAttack (GameObject target){
 		if (target != null) {
-			attackTarget = target.GetComponent<Health> ();
-			mode = MovementMode.attackmove;
-			print (gameObject.name + " - attacking");
-
-		} else {
-			attackTarget = null;
-			mode = MovementMode.move;
-			print (gameObject.name + " - moving");
-
-		}
+			if (target.GetComponent<Health>() != null) {
+				if (target.GetComponent<Health> ().mySide != spawn.mySide) {
+					
+					attackTarget = target.GetComponent<Health> ();
+					mode = MovementMode.attackmove;
+					print (gameObject.name + " - attacking");
+					return;
+				}
+			}
+		} 
+	
+		attackTarget = null;
+		mode = MovementMode.move;
+		print (gameObject.name + " - moving");
 	}
 
 	[Command]
 	void CmdChangePos (Vector3 pos){
 		movePos = pos;
 		mode = MovementMode.move;
-		print (gameObject.name + " - moving");
+		print (gameObject.name + " - moving to " + pos.ToString());
 		attackTarget = null;
 	}
 

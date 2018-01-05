@@ -11,7 +11,7 @@ public class TowerController : MonoBehaviour
     private void Start()
     {
         FindTarget();
-        print("hello, i am " + gameObject.name);
+        //print("hello, i am " + gameObject.name);
     }
 
     void FindTarget()
@@ -22,12 +22,12 @@ public class TowerController : MonoBehaviour
 
         foreach(Collider collider in inRangeColliders)
         {
-            print("i am " + collider.gameObject.name + " in " + gameObject.name);
+            //print("i am " + collider.gameObject.name + " in " + gameObject.name);
             if (collider.gameObject.GetComponent<Health>() != null)
             {
                 if (Vector3.Distance(transform.position, collider.transform.position) < Vector3.Distance(transform.position, target.position))
                 {
-                    print("new target is " + collider.gameObject.name + " for " + gameObject.name);
+                    //print("new target is " + collider.gameObject.name + " for " + gameObject.name);
                     target = collider.gameObject.transform;
                 }
             }

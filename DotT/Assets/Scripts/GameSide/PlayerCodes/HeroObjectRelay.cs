@@ -12,6 +12,9 @@ public class HeroObjectRelay : NetworkBehaviour {
 	[SyncVar]
 	public int id = -1;
 
+
+	public ObjectPool myBasicAttackPool;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -20,6 +23,6 @@ public class HeroObjectRelay : NetworkBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Buggy
-		//GetComponent<NavMeshAgent> ().SetDestination (movePos);
+		GetComponent<NavMeshAgent> ().SetDestination (movePos);
 	}
 }

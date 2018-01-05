@@ -206,8 +206,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95308a7945c54e34081a8e5d4bb9dc69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myType: 4
+  mySide: 2
   currentHealth: 1000
+  physicalArmor: 0
+  magicalArmor: 0
+  healReduction: 0
+  ticksPerSecond: 4
+  healthBarOffSet: 100
+  linesPerMileStone: 10
+  orangeBar: {fileID: 0}
   greenBar: {fileID: 0}
+  mainBar: {fileID: 0}
+  healthBarWidth: 0
+  hpModOverTime: 0
+  animatingHpMod: 0
+  healthBarLine: {fileID: 0}
+  mileStoneLine: {fileID: 0}
 --- !u!195 &195499830399132784
 NavMeshAgent:
   m_ObjectHideFlags: 1
