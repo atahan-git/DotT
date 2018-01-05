@@ -17,7 +17,8 @@ public class CameraController : MonoBehaviour
 
 	void Update()
     {
-		if (toggle) {
+		if (toggle)
+        {
 			Rect screenRect = new Rect (0, 0, Screen.width, Screen.height);
 			//if (screenRect.Contains (Input.mousePosition)) {
 			
@@ -35,7 +36,9 @@ public class CameraController : MonoBehaviour
 				}
 			//}
 
-		} else {
+		}
+        else
+        {
 			if (Input.GetKey (KeyCode.A)) {
 				transform.Translate (-0.5f, 0, 0, Space.World);
 			}
@@ -54,7 +57,8 @@ public class CameraController : MonoBehaviour
 			toggle = !toggle;
     }
 
-	public void SetPos (Vector3 pos){
+	public void SetPos (Vector3 pos)
+    {
 		transform.position = pos + cameraOffset;
 		print ("Camera Position Set " + pos.ToString());
 	}

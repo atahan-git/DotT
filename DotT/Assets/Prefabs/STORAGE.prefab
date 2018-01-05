@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4819416318403786}
   - component: {fileID: 114467041970636220}
+  - component: {fileID: 114882411488035460}
   m_Layer: 0
   m_Name: STORAGE
   m_TagString: Untagged
@@ -34,7 +35,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1160667894849200}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.49603236, y: 1.799838, z: -1.518816}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -52,7 +53,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroes:
-  - {fileID: 1656372588925118, guid: 4293f923cee7ca747812969614ed2db8, type: 2}
+  - {fileID: 1754823917970344, guid: 4293f923cee7ca747812969614ed2db8, type: 2}
   - {fileID: 1536462421774152, guid: 297d93028c8a08b478ff6a1361fcd008, type: 2}
   - {fileID: 1948941357216408, guid: efb1b1daa8c7a5344a496c1cdc36635c, type: 2}
   - {fileID: 1241356389840552, guid: dc51dd4e2e3ce7049a111f971c42eb2a, type: 2}
+--- !u!114 &114882411488035460
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1160667894849200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca765ee05711ab84c94b2dcbd873af3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarLine: {fileID: 1285795318384600, guid: 016229ddd543fdc448ed500eb6477e71,
+    type: 2}
+  mileStoneLine: {fileID: 1285795318384600, guid: c6b7d43cb619ab44093f58b997a0e93d,
+    type: 2}
+  heroHealthBar: {fileID: 1909475244038902, guid: 585f33935585b4c4985764cb563a4f05,
+    type: 2}

@@ -7,9 +7,9 @@ using System.Collections;
 
 public class Health : NetworkBehaviour
 {
-    public Text armorText;
-    public Text hpModText;
-    public Text hpText;
+    //public Text armorText;
+    //public Text hpModText;
+    //public Text hpText;
 
     //========== Properties ==========
 
@@ -17,6 +17,7 @@ public class Health : NetworkBehaviour
     public enum Side { blue, red, neutral };
     public Type myType = Type.jungle;
     public Side mySide = Side.neutral;
+    public bool isLocalPlayerHealth;
 
     //========== Crowd Controls ==========
 
@@ -62,17 +63,16 @@ public class Health : NetworkBehaviour
     public float ticksPerSecond = 4;
 
     //HealthBarLines
-    public float healthBarOffSet = 100;
-    public float linesPerMileStone = 10;
-    public GameObject healthBarLine;
-    public GameObject mileStoneLine;
+    float healthBarOffSet = 100;
+    float linesPerMileStone = 10;
 
     //HealthBarImages
-    public Image orangeBar;
-    public Image greenBar;
-    public Image mainBar;
-    public Image greyBar;
+    Image orangeBar;
+    Image greenBar;
+    Image mainBar;
+    Image greyBar;
 
+    GameObject healthBar;
     float healthBarWidth;
 
     //HpModOverTime
@@ -94,6 +94,30 @@ public class Health : NetworkBehaviour
 
     void Start()
     {
+        switch (myType)
+        {
+            case Type.minion:
+                Debug.Log("Type Error");
+                break;
+
+            case Type.hero:
+                healthBar = Instantiate(STORAGE_HealthPrefabs.s.heroHealthBar);
+                break;
+
+            case Type.tower:
+            case Type.nexus:
+            case Type.jungle:
+                Debug.Log("Type Error");
+                break;
+        }
+
+        healthBar.transform.SetParent(gameObject.transform, false);
+
+        orangeBar = healthBar.transform.Find("Orange").GetComponent<Image>();
+        greenBar = healthBar.transform.Find("Green").GetComponent<Image>();
+        mainBar = healthBar.transform.Find("Main").GetComponent<Image>();
+        greyBar = healthBar.transform.Find("Grey").GetComponent<Image>();
+
         maximumHealth = currentHealth;
         if (mainBar != null)
         {
@@ -122,7 +146,7 @@ public class Health : NetworkBehaviour
         }
 
         //Text
-        if(armorText)
+        /*if(armorText)
             armorText.text = "DefStats: " + DefensiveStats[HpModType.physicalDamage] + "/"
            + DefensiveStats[HpModType.magicalDamage] + "/" + DefensiveStats[HpModType.heal];
 
@@ -132,7 +156,7 @@ public class Health : NetworkBehaviour
             + Mathf.RoundToInt(HpModOverTime[HpModType.heal]) + "/" + Mathf.RoundToInt(hpModOverTime);
 
         if (hpText)
-            hpText.text = Mathf.RoundToInt(currentHealth).ToString();
+            hpText.text = Mathf.RoundToInt(currentHealth).ToString();*/
 
         //Bar fillAmounts
         if (hpModOverTime > 0)
@@ -331,7 +355,10 @@ public class Health : NetworkBehaviour
     //Makes vulnerable.
     void RemoveInvulnerability()
     {
-        greyBar.fillAmount = 0;
+        if(greyBar)
+        {
+            greyBar.fillAmount = 0;
+        }
         canTakeDamage = true;
     }
 
@@ -497,11 +524,11 @@ public class Health : NetworkBehaviour
         //Lines
         for (int i = 1; i < Mathf.FloorToInt(maximumHealth / healthBarOffSet) + 1; i++)
         {
-            GameObject myLine = healthBarLine;
+            GameObject myLine = STORAGE_HealthPrefabs.s.healthBarLine;
 
             if (0 == i % linesPerMileStone)
             {
-                myLine = mileStoneLine;
+                myLine = STORAGE_HealthPrefabs.s.mileStoneLine;
             }
 
             Instantiate(myLine, new Vector3(i * healthBarWidth * healthBarOffSet / maximumHealth, 0, 0), transform.rotation).transform.SetParent(mainBar.transform, false);
