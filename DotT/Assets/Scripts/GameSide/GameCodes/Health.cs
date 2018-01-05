@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.Networking;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -6,11 +7,18 @@ using System.Collections;
 
 public class Health : NetworkBehaviour
 {
-    //Properties
-    public enum Type{minion, hero, tower, nexus, jungle};
-    public enum Side{blue, red, neutral};
+    public Text armorText;
+    public Text hpModText;
+    public Text hpText;
+
+    //========== Properties ==========
+
+    public enum Type { minion, hero, tower, nexus, jungle };
+    public enum Side { blue, red, neutral };
     public Type myType = Type.jungle;
     public Side mySide = Side.neutral;
+
+    //========== Crowd Controls ==========
 
     //Blind
     bool canAutoAttack = true;
@@ -32,39 +40,62 @@ public class Health : NetworkBehaviour
     bool canTakeCC = true;
     float unstopDuration = 0;
 
-    //Defensive Stats
-    float maximumHealth;
-	[SyncVar]
-    public float currentHealth = 1000;
-    public float physicalArmor = 0;
-    public float magicalArmor = 0;
-    public float healReduction = 0;
-
-    //HealthModification
-    public enum HpModType{physicalDamage, magicalDamage, trueDamage, heal};
-    public enum RatioType{current, missing, maximum};
-    public float ticksPerSecond = 4;
-
     //Invulnerable
     bool canTakeDamage = true;
     float invulnerabilityDuration = 0;
 
-    //HealthBar
+    //========== Defensive Stats ==========
+    float maximumHealth;
+    [SyncVar]
+    public float currentHealth = 1000;
+
+    Dictionary<HpModType, float> DefensiveStats = new Dictionary<HpModType, float>()
+    {
+        {HpModType.physicalDamage, 0},
+        {HpModType.magicalDamage, 0},
+        {HpModType.heal, 0},
+    };
+
+    //========== HealthModification ==========
+    public enum HpModType { physicalDamage, magicalDamage, trueDamage, heal };
+    public enum RatioType { current, missing, maximum };
+    public float ticksPerSecond = 4;
+
+    //HealthBarLines
     public float healthBarOffSet = 100;
     public float linesPerMileStone = 10;
+    public GameObject healthBarLine;
+    public GameObject mileStoneLine;
+
+    //HealthBarImages
     public Image orangeBar;
     public Image greenBar;
     public Image mainBar;
-    public float healthBarWidth;
-    public float hpModOverTime;
-    public float animatingHpMod;
-    public GameObject healthBarLine;
-    public GameObject mileStoneLine;
+    public Image greyBar;
+
+    float healthBarWidth;
+
+    //HpModOverTime
+    Dictionary<HpModType, float> HpModOverTime = new Dictionary<HpModType, float>()
+    {
+        {HpModType.physicalDamage, 0},
+        {HpModType.magicalDamage, 0},
+        {HpModType.trueDamage, 0},
+        {HpModType.heal, 0},
+    };
+
+    float hpModOverTime;
+
+    //HpMod
+    float animatingDamage;
+    float animatingHeal;
+
+    //============================================================== void Start() ==============================================================
 
     void Start()
     {
         maximumHealth = currentHealth;
-        if(mainBar != null)
+        if (mainBar != null)
         {
             healthBarWidth = mainBar.GetComponent<RectTransform>().sizeDelta.x;
             SetHealthBarLines();
@@ -72,47 +103,72 @@ public class Health : NetworkBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
+    //============================================================== void Update() ==============================================================
+
     void Update()
     {
         //Clamps
         currentHealth = Mathf.Clamp(currentHealth, 0, maximumHealth);
 
-        physicalArmor = Mathf.Clamp(physicalArmor, 0, 100);
-        magicalArmor = Mathf.Clamp(magicalArmor, 0, 100);
-        healReduction = Mathf.Clamp(healReduction, 0, 100);
+        animatingDamage = Mathf.Clamp(animatingDamage, 0, maximumHealth);
+        animatingHeal = Mathf.Clamp(animatingHeal, 0, maximumHealth);
 
-        animatingHpMod = Mathf.Clamp(animatingHpMod, 0, maximumHealth);
+        //========== Health Bar Modifcation ==========
 
-        //Health Bar
+        //Calculate hpModOverTime
+        foreach (HpModType type in HpModOverTime.Keys)
+        {
+            hpModOverTime += FindRealAmount(HpModOverTime[type], type);
+        }
+
+        //Text
+        if(armorText)
+            armorText.text = "DefStats: " + DefensiveStats[HpModType.physicalDamage] + "/"
+           + DefensiveStats[HpModType.magicalDamage] + "/" + DefensiveStats[HpModType.heal];
+
+        if (hpModText)
+            hpModText.text = "HpModOT: " + Mathf.RoundToInt(HpModOverTime[HpModType.physicalDamage]) + "/"
+            + Mathf.RoundToInt(HpModOverTime[HpModType.magicalDamage]) + "/" + Mathf.RoundToInt(HpModOverTime[HpModType.trueDamage]) + "/"
+            + Mathf.RoundToInt(HpModOverTime[HpModType.heal]) + "/" + Mathf.RoundToInt(hpModOverTime);
+
+        if (hpText)
+            hpText.text = Mathf.RoundToInt(currentHealth).ToString();
+
+        //Bar fillAmounts
         if (hpModOverTime > 0)
         {
-            greenBar.fillAmount = (currentHealth + animatingHpMod + hpModOverTime) / maximumHealth;
+            greenBar.fillAmount = (currentHealth + animatingDamage - animatingHeal + hpModOverTime) / maximumHealth;
             orangeBar.fillAmount = 0;
-            mainBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
+            mainBar.fillAmount = (currentHealth + animatingDamage - animatingHeal) / maximumHealth;
         }
-        else if(hpModOverTime < 0)
+        else if (hpModOverTime < 0)
         {
             greenBar.fillAmount = 0;
-            orangeBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
-            mainBar.fillAmount = (currentHealth + animatingHpMod + hpModOverTime) / maximumHealth;
+            orangeBar.fillAmount = (currentHealth + animatingDamage - animatingHeal) / maximumHealth;
+            mainBar.fillAmount = (currentHealth + animatingDamage - animatingHeal + hpModOverTime) / maximumHealth;
         }
         else
         {
             greenBar.fillAmount = 0;
             orangeBar.fillAmount = 0;
-            mainBar.fillAmount = (currentHealth + animatingHpMod) / maximumHealth;
+            mainBar.fillAmount = (currentHealth + animatingDamage - animatingHeal) / maximumHealth;
         }
+        hpModOverTime = 0;
 
         //Main Bar Decay
-        if(animatingHpMod > 0 && mainBar != null)
+        if (animatingDamage > 0 && mainBar != null)
         {
-            animatingHpMod -= (animatingHpMod + 400) * Time.deltaTime * 2;
+            animatingDamage -= (animatingDamage + 400) * Time.deltaTime * 2;
+        }
+        if (animatingHeal > 0 && mainBar != null)
+        {
+            animatingHeal -= (animatingHeal + 400) * Time.deltaTime * 2;
         }
 
-        //========================================================= Crowd Controls and Effects =========================================================
+        //========== Crowd Controls ==========
 
         //Blind
-        if(blindDuration > 0)
+        if (blindDuration > 0)
         {
             blindDuration -= Time.deltaTime;
         }
@@ -122,7 +178,7 @@ public class Health : NetworkBehaviour
         }
 
         //Silence
-        if(silenceDuration > 0)
+        if (silenceDuration > 0)
         {
             silenceDuration -= Time.deltaTime;
         }
@@ -132,7 +188,7 @@ public class Health : NetworkBehaviour
         }
 
         //Root
-        if(rootDuration > 0)
+        if (rootDuration > 0)
         {
             rootDuration -= Time.deltaTime;
         }
@@ -140,11 +196,9 @@ public class Health : NetworkBehaviour
         {
             RemoveRoot();
         }
-
-        //Agent
-        if(agent != null)
+        if (agent != null)
         {
-            if(agentIsEnabled)
+            if (agentIsEnabled)
             {
                 agent.enabled = true;
             }
@@ -155,7 +209,7 @@ public class Health : NetworkBehaviour
         }
 
         //Unstoppable
-        if(unstopDuration > 0)
+        if (unstopDuration > 0)
         {
             unstopDuration -= Time.deltaTime;
         }
@@ -165,7 +219,7 @@ public class Health : NetworkBehaviour
         }
 
         //Invulnerable
-        if(invulnerabilityDuration > 0)
+        if (invulnerabilityDuration > 0)
         {
             invulnerabilityDuration -= Time.deltaTime;
         }
@@ -175,26 +229,28 @@ public class Health : NetworkBehaviour
         }
     }
 
+    //========================================================= Crowd Control Methods ==========================================================
+
     //Adds blind effect.
     public void Blind(float duration)
     {
-        if(blindDuration < duration && canTakeCC)
+        if (blindDuration < duration && canTakeCC)
         {
             canAutoAttack = false;
-            blindDuration = duration;
+			blindDuration = duration;
         }
     }
 
     //Removes blind effect.
     void RemoveBlind()
     {
-        canCastSpell = true;
+        canAutoAttack = true;
     }
 
     //Adds silence effect.
     public void Silence(float duration)
     {
-        if(silenceDuration < duration && canTakeCC)
+        if (silenceDuration < duration && canTakeCC)
         {
             canCastSpell = false;
             silenceDuration = duration;
@@ -204,7 +260,7 @@ public class Health : NetworkBehaviour
     //Removes silence effect.
     void RemoveSilence()
     {
-        canAutoAttack = true;
+        canCastSpell = true;
     }
 
     //Modifies movement speed.
@@ -264,6 +320,7 @@ public class Health : NetworkBehaviour
     //Makes invulnerabe.
     public void MakeInvulnerable(float duration)
     {
+        greyBar.fillAmount = 1;
         if (invulnerabilityDuration < duration)
         {
             canTakeDamage = false;
@@ -274,6 +331,7 @@ public class Health : NetworkBehaviour
     //Makes vulnerable.
     void RemoveInvulnerability()
     {
+        greyBar.fillAmount = 0;
         canTakeDamage = true;
     }
 
@@ -299,98 +357,46 @@ public class Health : NetworkBehaviour
     //Adds a defensive stat modifier.
     public void AddDefensiveStatModifier(float amount, HpModType type)
     {
-        switch(type)
-        {
-            case HpModType.physicalDamage:
-                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
-
-            case HpModType.magicalDamage:
-                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
-
-            case HpModType.trueDamage:
-                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
-                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
-
-            case HpModType.heal:
-                healReduction = (healReduction - 100) * (1 - amount / 100) + 100;
-                break;
-        }
+        DefensiveStats[type] = (DefensiveStats[type] - 100) * (1 - amount / 100) + 100;
     }
 
     //Adds a defensive stat modifier for a limited time.
     public void AddDefensiveStatModifier(float amount, HpModType type, float duration)
     {
-        switch(type)
-        {
-            case HpModType.physicalDamage:
-                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
+        DefensiveStats[type] = (DefensiveStats[type] - 100) * (1 - amount / 100) + 100;
 
-            case HpModType.magicalDamage:
-                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
-
-            case HpModType.trueDamage:
-                physicalArmor = (physicalArmor - 100) * (1 - amount / 100) + 100;
-                magicalArmor = (magicalArmor - 100) * (1 - amount / 100) + 100;
-                break;
-
-            case HpModType.heal:
-                healReduction = (healReduction - 100) * (1 - amount / 100) + 100;
-                break;
-        }
         StartCoroutine(RemoveDefensiveStatModifier(amount, type, duration));
     }
 
     //Removes the defensive stat modifier.
     IEnumerator RemoveDefensiveStatModifier(float amount, HpModType type, float duration)
     {
-        while (duration > 0)
-        {
-            duration -= Time.deltaTime;
-            yield return null;
-        }
-        switch(type)
-        {
-            case HpModType.physicalDamage:
-                physicalArmor = (physicalArmor - 100) / (1 - amount / 100) + 100;
-                break;
+        yield return new WaitForSeconds(duration);
 
-            case HpModType.magicalDamage:
-                magicalArmor = (magicalArmor - 100) / (1 - amount / 100) + 100;
-                break;
-
-            case HpModType.trueDamage:
-                physicalArmor = (physicalArmor - 100) / (1 - amount / 100) + 100;
-                magicalArmor = (magicalArmor - 100) / (1 - amount / 100) + 100;
-                break;
-
-            case HpModType.heal:
-                healReduction = (healReduction - 100) * (1 - amount / 100) + 100;
-                break;
-        }
+        DefensiveStats[type] = (DefensiveStats[type] - 100) / (1 - amount / 100) + 100;
     }
 
     //========================================================= Health Modification =========================================================
 
-    //Calculates armors and heal redduction.
+    //Calculates defensive stats.
     float FindRealAmount(float amount, HpModType type)
     {
-        switch(type)
+        switch (type)
         {
             case HpModType.physicalDamage:
-                amount *= (100 - physicalArmor) / 100;
+                amount *= (100 - DefensiveStats[HpModType.physicalDamage]) / -100;
                 break;
 
             case HpModType.magicalDamage:
-                amount *= (100 - magicalArmor) / 100;
+                amount *= (100 - DefensiveStats[HpModType.magicalDamage]) / -100;
+                break;
+
+            case HpModType.trueDamage:
+                amount = -amount;
                 break;
 
             case HpModType.heal:
-                amount *= (100 - healReduction) / -100;
+                amount *= (100 - DefensiveStats[HpModType.heal]) / 100;
                 break;
         }
         return amount;
@@ -399,7 +405,7 @@ public class Health : NetworkBehaviour
     //Calculates ratio
     float FindRealAmount(float amount, RatioType ratioType)
     {
-        switch(ratioType)
+        switch (ratioType)
         {
             case RatioType.current:
                 amount *= currentHealth / 100;
@@ -416,54 +422,54 @@ public class Health : NetworkBehaviour
         return amount;
     }
 
-    float FindRealAmount(float amount, HpModType type, RatioType ratioType)
+    void SetHealthBarValues(float amount, HpModType type)
     {
-        amount = FindRealAmount(FindRealAmount(amount, ratioType), type);
-        return amount;
+        HpModOverTime[type] += amount;
     }
 
     //Deals damage or heals.
     public void ModifyHealth(float amount, HpModType type)
     {
-        if(canTakeDamage)
-        {
-            currentHealth -= FindRealAmount(amount, type);
+        amount = FindRealAmount(amount, type);
 
-            if(type != HpModType.heal)
+        if (canTakeDamage || type == HpModType.heal)
+        {
+            currentHealth += amount;
+
+            if (type == HpModType.heal)
             {
-                animatingHpMod += amount;
+                animatingHeal += amount;
             }
-        }
-
-        if(mainBar != null)
-        {
-            SetHealthBarLines();
+            else
+            {
+                animatingDamage -= amount;
+            }
         }
     }
 
     //Modifies health over time.
     public void ModifyHealth(float amount, HpModType type, float duration)
     {
-        amount = (FindRealAmount(amount, type) / ((ticksPerSecond * duration) + 1));
+        amount = (amount / ((ticksPerSecond * duration) + 1));
 
-        print(amount);
+        SetHealthBarValues(amount * ((ticksPerSecond * duration) + 1), type);
 
-        hpModOverTime -= amount * ((ticksPerSecond * duration) + 1);
-
-        StartCoroutine(ModifyHealthOverTime(amount, duration));
+        StartCoroutine(ModifyHealthOverTime(amount, type, duration));
     }
 
-    IEnumerator ModifyHealthOverTime(float amount, float duration)
+    IEnumerator ModifyHealthOverTime(float amount, HpModType type, float duration)
     {
         while (duration >= 0)
         {
-            if(canTakeDamage || amount < 0)
+            if (canTakeDamage || type == HpModType.heal)
             {
-                currentHealth -= amount;
+                currentHealth += FindRealAmount(amount, type);
             }
-            hpModOverTime += amount;
-            duration -= 1 / ticksPerSecond;
+
+            SetHealthBarValues(-amount, type);
             SetHealthBarLines();
+
+            duration -= 1 / ticksPerSecond;
 
             yield return new WaitForSeconds(1 / ticksPerSecond);
         }
@@ -472,52 +478,10 @@ public class Health : NetworkBehaviour
     //Modifiels health proportionally.
     public void ModifyHealth(float amount, HpModType type, RatioType ratioType)
     {
-        amount -= FindRealAmount(amount, type, ratioType);
+        ModifyHealth(FindRealAmount(amount, ratioType), type);
     }
 
-    /*//Modifies health over time proportionally.
-    public void ModifyHealth(float amount, HpModType type, RatioType ratioType, float duration)
-    {
-        amount = FindRealAmount(amount, type);
-        amount /= (ticksPerSecond * duration) + 1;
-
-        if (type != HpModType.heal)
-        {
-            hpModOverTime += FindRealAmount(amount, ratioType) * ticksPerSecond * duration;
-        }
-
-        StartCoroutine(ModHealthOverTimePro(amount, type, ratioType, duration));
-    }
-
-    IEnumerator ModHealthOverTimePro(float amount, HpModType type, RatioType ratioType, float duration)
-    {
-        duration -= 1 / ticksPerSecond;
-        if (canTakeDamage)
-        {
-            currentHealth -= FindRealAmount(amount, ratioType);
-        }
-        SetHealthBarValues();
-
-        while (duration >= 0)
-        {
-            yield return new WaitForSeconds(1 / ticksPerSecond);
-
-            if (canTakeDamage)
-            {
-                currentHealth -= FindRealAmount(amount, ratioType);
-
-                if (type != HpModType.heal)
-                {
-                    hpModOverTime -= FindRealAmount(amount, ratioType);
-                }
-            }
-
-            SetHealthBarValues();
-            duration -= 1 / ticksPerSecond;
-        }
-    }*/
-
-    //========================================================= Health Bar Arrangement =========================================================
+    //====================================================== Health Bar LineArrangement ======================================================
 
     //Overwrites the health bar.
     void SetHealthBarLines()

@@ -4,11 +4,19 @@ using UnityEngine;
 
 public class TestScript : MonoBehaviour
 {
+    public class Test
+    {
+        public bool execute = false;
+
+    }
+
+    public Test[] tests;
+
     public bool execute = false;
 
     public Health subjectHealth;
 
-    public enum Function{ModHp, ModHpPro, AddDefStatMod};
+    public enum Function{ModHp, ModHpPro, AddDefStatMod, MakeInvulnerable};
     public Function function;
 
     public Health.HpModType hpModType;
@@ -57,6 +65,13 @@ public class TestScript : MonoBehaviour
                     else
                     {
                         subjectHealth.AddDefensiveStatModifier(amount, hpModType);
+                    }
+                    break;
+
+                case Function.MakeInvulnerable:
+                    if (duration > 0)
+                    {
+                        subjectHealth.MakeInvulnerable(duration);
                     }
                     break;
             }
