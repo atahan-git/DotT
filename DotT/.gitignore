@@ -35,3 +35,9 @@ Icon?
 ehthumbs.db
 [Tt]humbs.db
 Desktop.ini
+
+
+# ================================== #
+# That annoying project version shit #
+# ================================== #
+ProjectSettings/ProjectVersion.txt
