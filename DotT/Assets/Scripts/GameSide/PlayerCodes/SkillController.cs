@@ -16,7 +16,7 @@ public class SkillController : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
 		if(isServer)
-		StartCoroutine(HookUpSkills ());
+			StartCoroutine(HookUpSkills ());
 	}
 
 	IEnumerator HookUpSkills (){

@@ -99,7 +99,7 @@ public class ObjectPool : NetworkBehaviour {
 	}
 
 
-	void _Destroy(int id){
+	void _DestroyPooledObject(int id){
 		if (objs [id] != null) {
 			objs [id].GetComponent<PooledObject> ().DisableObject ();
 		} else {
@@ -109,14 +109,14 @@ public class ObjectPool : NetworkBehaviour {
 
 
 	[Command]
-	void CmdDestroy (int id){
-		_Destroy (id);
+	void CmdDestroyPooledObject (int id){
+		_DestroyPooledObject (id);
 	}
 
-	public void Destroy (int id){
+	public void DestroyPooledObject (int id){
 		if (isServer)
-			_Destroy (id);
+			_DestroyPooledObject (id);
 		else
-			CmdDestroy (id);
+			CmdDestroyPooledObject (id);
 	}
 }

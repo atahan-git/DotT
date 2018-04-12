@@ -7,10 +7,13 @@ public class MenuMaster : MonoBehaviour {
 
 	public static MenuMaster s;
 
-	public Text textPlayer;
 
-	public GameObject startGUI;
-	public GameObject lobbyGUI;
+	public Text textPlayerCount;
+
+	[SerializeField]
+	GameObject startGUI;
+	[SerializeField]
+	GameObject lobbyGUI;
 
 	GameObject buttonUp;
 
@@ -21,8 +24,8 @@ public class MenuMaster : MonoBehaviour {
 
 		//-------------------Warning!
 		//----------------Cancer Ahead
-		if (textPlayer == null) {
-			textPlayer = GameObject.Find ("PlayerText").GetComponent<Text> ();
+		if (textPlayerCount == null) {
+			textPlayerCount = GameObject.Find ("PlayerText").GetComponent<Text> ();
 			startGUI = GameObject.Find ("Start GUI");
 			lobbyGUI = GameObject.Find ("Lobby GUI");
 			GameObject.Find ("ButtonUp").GetComponent<Button> ().onClick.AddListener (IncreasePlayerCount);
@@ -37,12 +40,13 @@ public class MenuMaster : MonoBehaviour {
 		DecreasePlayerCount ();
 	}
 
+	//GUI Button calls
 	public void IncreasePlayerCount () {
-		LobyController.s.IncreasePlayerCount ();
+		LobyController.s.ChangePlayerCount (1);
 	}
 
 	public void DecreasePlayerCount () {
-		LobyController.s.DecreasePlayerCount ();
+		LobyController.s.ChangePlayerCount (-1);
 	}
 		
 
@@ -56,5 +60,18 @@ public class MenuMaster : MonoBehaviour {
 
 	public void ExitaGame () {
 		LobyController.s.ExitaGame ();
+	}
+
+
+	//Lobby Controller helpers
+	public void OpenStartGUI (){
+		//this transition will hopefully be more animated an stuff
+		MenuMaster.s.startGUI.SetActive (true);
+		MenuMaster.s.lobbyGUI.SetActive (false);
+	}
+
+	public void OpenLobbyGUI (){
+		MenuMaster.s.startGUI.SetActive (false);
+		MenuMaster.s.lobbyGUI.SetActive (true);
 	}
 }

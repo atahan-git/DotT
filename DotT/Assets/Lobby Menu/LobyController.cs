@@ -8,19 +8,10 @@ using UnityEngine.SceneManagement;
 public class LobyController : NetworkBehaviour {
 
 	public static LobyController s;
-
-	public int playerCount = 2;
-	[HideInInspector]
-	public Text textPlayer;
-
 	NetworkLobbyManager manager;
 
-	[HideInInspector]
-	public GameObject startGUI;
-	[HideInInspector]
-	public GameObject lobbyGUI;
+	public int playerCount = 2;
 
-	GameObject buttonUp;
 
 	void Awake (){
 		if (s != null && s != this) {
@@ -34,30 +25,18 @@ public class LobyController : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
 		manager = GetComponent<NetworkLobbyManager> ();
-		if (lobbyGUI == null) {
+		//if this is not the correct scene at start load the correct scene
+		if (SceneManager.GetActiveScene().buildIndex != 0) {
 			SceneManager.LoadScene (0);
 		}
-
 	}
+		
 
-	NetworkLobbyPlayer[] oldSlots;
-	GameObject[] myPanels;
-	// Update is called once per frame
-
-	public void IncreasePlayerCount () {
-		ChangePlayerCount (1);
-
-	}
-
-	public void DecreasePlayerCount () {
-		ChangePlayerCount (-1);
-	}
-
-	void ChangePlayerCount (int amount){
+	public void ChangePlayerCount (int amount){
 
 		playerCount += amount;
 		playerCount = Mathf.Clamp (playerCount, 1, 4);
-		MenuMaster.s.textPlayer.text = playerCount.ToString ();
+		MenuMaster.s.textPlayerCount.text = playerCount.ToString ();
 
 		if(manager == null)
 			manager = GetComponent<NetworkLobbyManager> ();
@@ -71,8 +50,7 @@ public class LobyController : NetworkBehaviour {
 
 	public void HostaGame () {
 
-		MenuMaster.s.startGUI.SetActive (false);
-		MenuMaster.s.lobbyGUI.SetActive (true);
+		MenuMaster.s.OpenLobbyGUI ();
 
 		manager.StartHost ();
 		isHost = true;
@@ -81,8 +59,7 @@ public class LobyController : NetworkBehaviour {
 
 	public void JoinaGame () {
 
-		MenuMaster.s.startGUI.SetActive (false);
-		MenuMaster.s.lobbyGUI.SetActive (true);
+		MenuMaster.s.OpenLobbyGUI ();
 
 		manager.StartClient ();
 		isHost = false;
@@ -93,16 +70,14 @@ public class LobyController : NetworkBehaviour {
 		if(DataHandler.s != null)
 			Destroy (DataHandler.s.gameObject);
 
-		MenuMaster.s.startGUI.SetActive (true);
-		MenuMaster.s.lobbyGUI.SetActive (false);
+		MenuMaster.s.OpenStartGUI ();
 
 		if (isHost) {
 			manager.StopHost ();
 		} else {
 			manager.StopClient ();
 		}
-
-		textPlayer = null;
+			
 		//UnityEngine.SceneManagement.SceneManager.LoadScene (0);
 
 		allBotLobyPanels = new List<GameObject> ();

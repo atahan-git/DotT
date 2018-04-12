@@ -1,0 +1,3 @@
+Dont overwrite other people's builds
+increment if you are going to make a build yourself
+increment if you made a change (not a bugfix or sth)

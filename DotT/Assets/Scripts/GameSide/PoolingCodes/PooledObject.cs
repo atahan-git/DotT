@@ -18,6 +18,9 @@ public class PooledObject : NetworkBehaviour {
 	}
 
 	//These two should only be called from server side
+	/// <summary>
+	/// DONT CALLS THIS. this is only for internal ObjectPool use. Use ObjectPool.Spawn() instead
+	/// </summary>
 	public void EnableObject (){
 		if (isServer) {
 			RpcSyncEnable (transform.position, transform.rotation);
@@ -30,7 +33,10 @@ public class PooledObject : NetworkBehaviour {
 	}
 
 
-
+	//only server side
+	/// <summary>
+	/// DONT CALLS THIS. this is only for internal ObjectPool use. Use PooledObject.DestroyPooledObject() instead
+	/// </summary>
 	public void DisableObject (){
 		if (isServer) {
 			RpcSyncDisable ();
@@ -57,8 +63,8 @@ public class PooledObject : NetworkBehaviour {
 	}
 
 
-	public void Destroy (){
-		myPool.Destroy (myId);
+	public void DestroyPooledObject (){
+		myPool.DestroyPooledObject (myId);
 	}
 
 	void ResetValues (){

@@ -59,39 +59,43 @@ public class HeroController : NetworkBehaviour {
 				return;
 			}
 
-			switch (mode) {
-			case MovementMode.move:
-				if (Vector3.Distance (spawn.myHero.transform.position, movePos) < 0.1f)
-					mode = MovementMode.stop;
-
-				spawn.myHero.GetComponent<NavMeshAgent> ().enabled = true;
-				break;
-			case MovementMode.stop:
-				spawn.myHero.GetComponent<NavMeshAgent> ().enabled = false;
-				break;
-			case MovementMode.attackmove:
-				if (attackTarget != null) {
-					if (Vector3.Distance (spawn.myHero.transform.position, attackTarget.transform.position) < attackrange) {
-						if (attackCounter <= 0) {
-							if(attackTarget != null)
-								ShootProjectile ();
-							attackCounter = 1f / attackSpeed;
-						} else {
-							
-						}
-						movePos = GetComponent<PlayerSpawner> ().myHero.transform.position;
-					} else {
-						GetComponent<PlayerSpawner> ().myHero.GetComponent<HeroObjectRelay> ().movePos = movePos;
-					}
-				} else {
-					mode = MovementMode.stop;
-				}
-				break;
-			}
-
-			attackCounter -= Time.deltaTime;
-			GetComponent<PlayerSpawner> ().myHero.GetComponent<HeroObjectRelay> ().movePos = movePos;
+			CalculateMovement ();
 		}
+	}
+
+	void CalculateMovement (){
+		switch (mode) {
+		case MovementMode.move:
+			if (Vector3.Distance (spawn.myHero.transform.position, movePos) < 0.1f)
+				mode = MovementMode.stop;
+
+			spawn.myHero.GetComponent<NavMeshAgent> ().enabled = true;
+			break;
+		case MovementMode.stop:
+			spawn.myHero.GetComponent<NavMeshAgent> ().enabled = false;
+			break;
+		case MovementMode.attackmove:
+			if (attackTarget != null) {
+				if (Vector3.Distance (spawn.myHero.transform.position, attackTarget.transform.position) < attackrange) {
+					if (attackCounter <= 0) {
+						if(attackTarget != null)
+							ShootProjectile ();
+						attackCounter = 1f / attackSpeed;
+					} else {
+
+					}
+					movePos = GetComponent<PlayerSpawner> ().myHero.transform.position;
+				} else {
+					GetComponent<PlayerSpawner> ().myHero.GetComponent<HeroObjectRelay> ().movePos = movePos;
+				}
+			} else {
+				mode = MovementMode.stop;
+			}
+			break;
+		}
+
+		attackCounter -= Time.deltaTime;
+		GetComponent<PlayerSpawner> ().myHero.GetComponent<HeroObjectRelay> ().movePos = movePos;
 	}
 
 	//----------------------------------------------------------------------------------SERVER SIDE CODE

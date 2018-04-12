@@ -29,13 +29,13 @@ public class Projectile : MonoBehaviour {
 				if (Vector3.Distance (transform.position, target.transform.position) < 0.2f && !isDealtDmg) {
 					target.ModifyHealth(damage, Health.HpModType.physicalDamage);
 					target = null;
-					GetComponentInParent<PooledObject> ().Destroy ();
+					GetComponentInParent<PooledObject> ().DestroyPooledObject ();
 					isDealtDmg = true;
 				}
 			}
 		}
 		if (GetComponentInParent<UnityEngine.Networking.NetworkIdentity> ().isServer && target == null) {
-			GetComponentInParent<PooledObject> ().Destroy ();
+			GetComponentInParent<PooledObject> ().DestroyPooledObject ();
 		}
 	}
 }

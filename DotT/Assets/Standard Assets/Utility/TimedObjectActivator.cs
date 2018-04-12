@@ -52,7 +52,7 @@ namespace UnityStandardAssets.Utility
                         StartCoroutine(Deactivate(entry));
                         break;
                     case Action.Destroy:
-                        Destroy(entry.target, entry.delay);
+						Destroy(entry.target, entry.delay);
                         break;
 
                     case Action.ReloadLevel:
