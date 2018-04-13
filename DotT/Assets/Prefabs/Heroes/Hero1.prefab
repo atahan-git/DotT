@@ -94,8 +94,8 @@ GameObject:
   - component: {fileID: 195188832908904670}
   - component: {fileID: 114595431689007400}
   - component: {fileID: 114692077242888492}
-  - component: {fileID: 114438224591726940}
-  - component: {fileID: 114082927761806984}
+  - component: {fileID: 114412921078333226}
+  - component: {fileID: 114430724112254182}
   m_Layer: 0
   m_Name: Hero1
   m_TagString: Hero
@@ -181,7 +181,6 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -197,7 +196,6 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -255,20 +253,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114082927761806984
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1754823917970344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bd07853cfb73304691ecae3e9171ef5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  autoExpand: 1
-  myObject: {fileID: 1461358515048652, guid: 7ec26be5a8e319640b0e03c3f9aa5332, type: 2}
-  poolSize: 3
 --- !u!114 &114183068666759458
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -328,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c74581229d67d9499a562a8b9f841b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114438224591726940
+--- !u!114 &114412921078333226
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -340,10 +324,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mySettings: {fileID: 11400000, guid: 0fe27e3d45d504346bead7e6573e4612, type: 2}
-  executePos: {x: 0, y: 0, z: 0}
   activeTelegraph: {fileID: 114765562698926528}
   effectPools:
-  - {fileID: 114082927761806984}
+  - {fileID: 114430724112254182}
+--- !u!114 &114430724112254182
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1754823917970344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd07853cfb73304691ecae3e9171ef5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoExpand: 1
+  myObject: {fileID: 1461358515048652, guid: 7ec26be5a8e319640b0e03c3f9aa5332, type: 2}
+  poolSize: 3
 --- !u!114 &114595431689007400
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -434,7 +431,6 @@ SpriteRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -450,7 +446,6 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -478,7 +473,6 @@ SpriteRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -494,7 +488,6 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5

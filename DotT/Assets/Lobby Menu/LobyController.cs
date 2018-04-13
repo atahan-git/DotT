@@ -35,7 +35,7 @@ public class LobyController : NetworkBehaviour {
 	public void ChangePlayerCount (int amount){
 
 		playerCount += amount;
-		playerCount = Mathf.Clamp (playerCount, 1, 4);
+		playerCount = Mathf.Clamp (playerCount, 1, 10);
 		MenuMaster.s.textPlayerCount.text = playerCount.ToString ();
 
 		if(manager == null)

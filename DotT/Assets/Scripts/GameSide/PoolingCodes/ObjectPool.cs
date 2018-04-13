@@ -80,11 +80,11 @@ public class ObjectPool : NetworkBehaviour {
 
 
 	public GameObject Spawn(Vector3 pos, Quaternion rot){
-		if (isServer)
+		if (isServer) {
 			return _Spawn (pos, rot);
-		else
-			Debug.LogError ("Only server side spawning is allowed!");
-
+		} else {
+			throw new System.Exception("Only server side spawning is allowed!");
+		}
 		return null;
 	}
 		

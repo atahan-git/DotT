@@ -6,22 +6,27 @@ using UnityEngine.Networking;
 //skills are executed from the server, targets supplied by client
 public class SkillController : NetworkBehaviour {
 
-	public delegate void SkillDelegate (bool isServer, Vector3 pos);
+	public delegate void SkillDelegate (ExecutionData data);
 
 	public SkillDelegate QSkill;
 	public SkillDelegate WSkill;
 	public SkillDelegate ESkill;
 	public SkillDelegate RSkill;
 
+	//this exists only in the server side
+	GameObject myHero;
 	// Use this for initialization
 	void Start () {
-		if(isServer)
-			StartCoroutine(HookUpSkills ());
+		if (isServer) {
+			myHero = GetComponent<PlayerSpawner> ().myHero;
+			StartCoroutine (HookUpSkills ());
+
+		}
 	}
 
 	IEnumerator HookUpSkills (){
 		while (true) {
-			if (GetComponent<PlayerSpawner> ().myHero != null) {
+			if (myHero != null) {
 				foreach (SkillMasterClass skill in GetComponent<PlayerSpawner>().myHero.GetComponentsInChildren<SkillMasterClass>()) {
 					switch (skill.mySettings.skillButton) {
 					case SkillSettings.Buttons.Q:
@@ -39,10 +44,11 @@ public class SkillController : NetworkBehaviour {
 					}
 				}
 
-				RpcHookUpClient (GetComponent<PlayerSpawner> ().myHero);
+				RpcHookUpClient (myHero);
 
 				break;
 			} else {
+				myHero = GetComponent<PlayerSpawner> ().myHero;
 				yield return 0;
 			}
 		}
@@ -98,46 +104,48 @@ public class SkillController : NetworkBehaviour {
 	[Command]
 	void CmdExecuteSkill (SkillSettings.Buttons mySkillType, Vector3 executePos){
 		print (gameObject.name + " executed skill in Server "+ mySkillType.ToString());
+		ExecutionData myData = new ExecutionData (true, executePos, executePos - myHero.transform.position);
 		switch (mySkillType) {
 		case SkillSettings.Buttons.Q:
 			if (QSkill != null)
-				QSkill (true, executePos);
+				QSkill (myData);
 			break;
 		case SkillSettings.Buttons.W:
 			if (WSkill != null)
-				WSkill (true, executePos);
+				WSkill (myData);
 			break;
 		case SkillSettings.Buttons.E:
 			if (ESkill != null)
-				ESkill (true, executePos);
+				ESkill (myData);
 			break;
 		case SkillSettings.Buttons.R:
 			if (RSkill != null)
-				RSkill (true, executePos);
+				RSkill (myData);
 			break;
 		}
-		RpcExecuteSkill (mySkillType, executePos);
+		RpcExecuteSkill (mySkillType, myData);
 	}
 
 	[ClientRpc]
-	void RpcExecuteSkill (SkillSettings.Buttons mySkillType, Vector3 executePos){
+	void RpcExecuteSkill (SkillSettings.Buttons mySkillType, ExecutionData myData){
 		print (gameObject.name + " executed skill in Client "+ mySkillType.ToString());
+		myData.isServer = false;
 		switch (mySkillType) {
 		case SkillSettings.Buttons.Q:
 			if (QSkill != null)
-				QSkill (false, executePos);
+				QSkill (myData);
 			break;
 		case SkillSettings.Buttons.W:
 			if (WSkill != null)
-				WSkill (false, executePos);
+				WSkill (myData);
 			break;
 		case SkillSettings.Buttons.E:
 			if (ESkill != null)
-				ESkill (false, executePos);
+				ESkill (myData);
 			break;
 		case SkillSettings.Buttons.R:
 			if (RSkill != null)
-				RSkill (false, executePos);
+				RSkill (myData);
 			break;
 		}
 	}

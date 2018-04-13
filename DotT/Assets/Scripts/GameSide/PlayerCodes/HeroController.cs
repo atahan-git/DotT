@@ -101,16 +101,16 @@ public class HeroController : NetworkBehaviour {
 	//----------------------------------------------------------------------------------SERVER SIDE CODE
 	void ShootProjectile (){
 		GameObject projectile = myPool.Spawn (myHero.transform.position);
-		projectile.GetComponentInChildren<Projectile> (true).target = attackTarget;
-		projectile.GetComponentInChildren<Projectile> (true).damage = attackDamage;
+		projectile.GetComponentInChildren<BasicAttackProjectile> (true).target = attackTarget;
+		projectile.GetComponentInChildren<BasicAttackProjectile> (true).damage = attackDamage;
 
 		RpcShootProjectile (projectile, attackTarget.gameObject);
 	}
 
 	[ClientRpc]
 	void RpcShootProjectile (GameObject projectile, GameObject target){
-		projectile.GetComponentInChildren<Projectile> (true).target = target.GetComponent<Health>();
-		projectile.GetComponentInChildren<Projectile> (true).damage = attackDamage;
+		projectile.GetComponentInChildren<BasicAttackProjectile> (true).target = target.GetComponent<Health>();
+		projectile.GetComponentInChildren<BasicAttackProjectile> (true).damage = attackDamage;
 	}
 
 
