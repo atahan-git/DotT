@@ -24,13 +24,15 @@ public class LobyBotPanel : MonoBehaviour {
 	Image bg;
 	public Color blueTeam = Color.blue;
 	public Color redTeam = Color.red;
+	public Color greenTeam = Color.green;
 
 	// Use this for initialization
 	void Start () {
 		playerState = true;
-		GameObject panelParrent = GameObject.Find ("PanelParent");
-		transform.SetParent (panelParrent.transform);
+		GameObject panelParent = GameObject.Find ("PanelParent");
+		transform.SetParent (panelParent.transform);
 		transform.localScale = new Vector3 (0.8f, 0.8f, 0.8f);
+		PanelPositionHandler.s.panels.Add (gameObject);
 
 		bg = GetComponent<Image> ();
 	}
@@ -45,10 +47,12 @@ public class LobyBotPanel : MonoBehaviour {
 			myState.color = Color.red;
 		}
 
-		if (playerSlot < 5) {
+		if (playerSlot < 3) {
 			bg.color = blueTeam;
-		} else {
+		} else if (playerSlot < 6) {
 			bg.color = redTeam;
+		} else {
+			bg.color = greenTeam;
 		}
 
 		if(playerid != -1)
@@ -58,7 +62,7 @@ public class LobyBotPanel : MonoBehaviour {
 	}
 
 	void Update (){
-		playerSlot = transform.GetSiblingIndex ();
+		playerSlot = PanelPositionHandler.s.panels.IndexOf(gameObject);
 		if(DataHandler.s != null)
 			playerid = DataHandler.s.playerSlots.IndexOf (playerSlot);
 

@@ -131,8 +131,17 @@ public class SkillMasterClass : MonoBehaviour {
 
 
 	//--------------------------------------------------------------STRUCTURE AND PROJECTILE STUFF
+	//Functioning Prefabs with their own settings
+	public ObjectPool[] Projectiles;
+	public ObjectPool[] Structures;
+
 	protected void InstantiateProjectile(ExecutionData data){	//is only possible for Directional skils, spawns a projectile in the said direction
-		GameObject myProjectile = mySettings.Projectiles [0].Spawn (data.executePos,data.executeRot);
+		if (!data.isServer)
+			return;
+
+		GameObject myProjectile = Projectiles [0].Spawn (data.heroPos + (Projectiles [0].myObject.GetComponentInChildren<AdvancedProjectile> ().myHeight * Vector3.up), data.executeRot);
+		myProjectile.GetComponentInChildren<AdvancedProjectile> ().damage = mySettings.damage;
+		myProjectile.GetComponentInChildren<AdvancedProjectile> ().mySide = self.mySide;
 	}
 	//InstantiateProjectile(-pos-,-rot-);	//for more special projectiles, Xul things for example
 
@@ -167,6 +176,7 @@ public class MultipleHealths{
 [System.Serializable]
 public class ExecutionData{
 	public bool isServer;
+	public Vector3 heroPos;
 	public Vector3 executePos;
 	public Vector3 executeDir;
 	public Quaternion executeRot{
@@ -181,8 +191,9 @@ public class ExecutionData{
 	public ExecutionData(){}
 
 
-	public ExecutionData(bool _isServer, Vector3 _executePos, Vector3 _executeDir){
+	public ExecutionData(bool _isServer,Vector3 _heroPos, Vector3 _executePos, Vector3 _executeDir){
 		isServer = _isServer;
+		heroPos = _heroPos;
 		executePos = _executePos;
 		executeDir = _executeDir;
 	}

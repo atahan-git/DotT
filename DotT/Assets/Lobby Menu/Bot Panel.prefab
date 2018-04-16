@@ -767,6 +767,7 @@ MonoBehaviour:
   b2: {fileID: 1900088844670586}
   blueTeam: {r: 0.73399997, g: 0.8018758, b: 1, a: 1}
   redTeam: {r: 1, g: 0.74300003, b: 0.74300003, a: 1}
+  greenTeam: {r: 0.7411765, g: 1, b: 0.7411765, a: 1}
 --- !u!114 &114988386503372734
 MonoBehaviour:
   m_ObjectHideFlags: 1

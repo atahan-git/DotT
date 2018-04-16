@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class PlayerSpawner : NetworkBehaviour {
+public class PlayerSpawner : NetworkBehaviour, IRespawnManager {
 
 	public static PlayerSpawner LocalPlayerSpawner;	//used for knowing which color of telegraphs to displays and such
 
@@ -19,12 +19,12 @@ public class PlayerSpawner : NetworkBehaviour {
 	[HideInInspector]
 	public Health myHealth;
 
-	public Transform[] Spawns = new Transform[10];
+	public Transform[] Spawns = new Transform[9];
 
 	// Use this for initialization
 	void Start () {
 		GameObject spawnParent = GameObject.FindGameObjectWithTag ("SpawnPoint");
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 9; i++) {
 			Spawns [i] = spawnParent.transform.GetChild (i);
 		}
 
@@ -68,15 +68,19 @@ public class PlayerSpawner : NetworkBehaviour {
 	void SpawnHero (){
 		myHero = (GameObject)Instantiate (STORAGE_HeroPrefabs.s.heroes [heroType], Spawns[DataHandler.s.playerSlots[playerid]].position, Spawns[DataHandler.s.playerSlots[playerid]].rotation);
 		myHero.GetComponent<HeroObjectRelay> ().id = playerid;
+		GetComponent<HeroController> ().movePos = myHero.transform.position;
 		myHero.name = myHero.name + " - " + playerid.ToString();
 		NetworkServer.Spawn (myHero);
 		RpcSetLocalHero (myHero, myHero.transform.position);
 
 		myHealth = myHero.GetComponent<Health> ();
-		if (DataHandler.s.playerSlots [playerid] < 5)
+		myHealth.myRespawnManager = this;
+		if (DataHandler.s.playerSlots [playerid] < 3)
 			myHealth.mySide = Health.Side.blue;
-		else
+		else if (DataHandler.s.playerSlots [playerid] < 6)
 			myHealth.mySide = Health.Side.red;
+		else
+			myHealth.mySide = Health.Side.green;
 
 		mySide = myHealth.mySide;
 	}
@@ -85,14 +89,15 @@ public class PlayerSpawner : NetworkBehaviour {
 	void RpcSetLocalHero (GameObject _myHero, Vector3 pos){
 		GetComponent<HeroController> ().movePos = pos;
 
-
 		myHero = _myHero;
 
 		myHealth = _myHero.GetComponent<Health> ();
-		if (DataHandler.s.playerSlots [playerid] < 5)
+		if (DataHandler.s.playerSlots [playerid] < 3)
 			myHealth.mySide = Health.Side.blue;
-		else
+		else if (DataHandler.s.playerSlots [playerid] < 6)
 			myHealth.mySide = Health.Side.red;
+		else
+			myHealth.mySide = Health.Side.green;
 
 		mySide = myHealth.mySide;
 
@@ -103,4 +108,62 @@ public class PlayerSpawner : NetworkBehaviour {
 
 		print ("Local Player Setup Complete! ->" + playerid.ToString());
 	}
+
+	public ObjectPool deadEfectPool;
+	public float deadTime = 10f;
+
+	public void Die (Health hp){
+		myHero.SetActive (false);
+
+		RpcDie ();
+
+		deadEfectPool.Spawn (myHero.transform.position);
+
+		Invoke ("Respawn",deadTime);
+
+		if (isLocalPlayer) {
+			DeadUI (true);
+		}
+	}
+	[ClientRpc]
+	void RpcDie (){
+		myHero.SetActive (false);
+
+		if (isLocalPlayer) {
+			DeadUI (true);
+		}
+	}
+
+	void DeadUI (bool isDead){
+		DeadUIEffectandTimer.s.isDead = isDead;
+		DeadUIEffectandTimer.s.timer = deadTime;
+	}
+
+	void Respawn(){
+		myHealth.currentHealth = myHealth.maximumHealth;
+		myHealth.isDead = false;
+
+		myHero.transform.position = Spawns [DataHandler.s.playerSlots [playerid]].position;
+		GetComponent<HeroController> ().movePos = myHero.transform.position;
+
+		myHero.SetActive (true);
+		RpcRespawn (myHero.transform.position);
+
+		if (isLocalPlayer) {
+			DeadUI (false);
+		}
+	}
+	[ClientRpc]
+	void RpcRespawn(Vector3 pos){
+		myHero.transform.position = pos;
+		myHero.SetActive (true);
+
+		if (isLocalPlayer) {
+			DeadUI (false);
+		}
+	}
+}
+
+public interface IRespawnManager {
+	void Die(Health hp);
 }

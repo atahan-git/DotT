@@ -13,11 +13,14 @@ public class Health : NetworkBehaviour
 
     //========== Properties ==========
 
-    public enum Type { minion, hero, tower, nexus, jungle };
-    public enum Side { blue, red, neutral };
+    public enum Type {minion, hero, tower, nexus, jungle};
+    public enum Side {blue, red, green, neutral};
     public Type myType = Type.jungle;
     public Side mySide = Side.neutral;
     public bool isLocalPlayerHealth;
+
+	public IRespawnManager myRespawnManager;
+	public bool isDead = false;
 
     //========== Crowd Controls ==========
 
@@ -45,8 +48,9 @@ public class Health : NetworkBehaviour
     bool canTakeDamage = true;
     float invulnerabilityDuration = 0;
 
-    //========== Defensive Stats ==========
-    float maximumHealth;
+	//========== Defensive Stats ==========
+	[SyncVar]
+    public float maximumHealth;
     [SyncVar]
     public float currentHealth = 1000;
 
@@ -125,7 +129,19 @@ public class Health : NetworkBehaviour
             SetHealthBarLines();
         }
         agent = GetComponent<NavMeshAgent>();
+
+		SetColor ();
     }
+
+
+	void SetColor (){
+		if (mySide != PlayerSpawner.LocalPlayerSpawner.mySide) {
+			if (mySide == Side.red || (PlayerSpawner.LocalPlayerSpawner.mySide == Side.red && mySide == Side.blue))
+				mainBar.color = STORAGE_HealthPrefabs.s.enemyColor1;
+			else
+				mainBar.color = STORAGE_HealthPrefabs.s.enemyColor2;
+		}
+	}
 
     //============================================================== void Update() ==============================================================
 
@@ -136,6 +152,18 @@ public class Health : NetworkBehaviour
 
         animatingDamage = Mathf.Clamp(animatingDamage, 0, maximumHealth);
         animatingHeal = Mathf.Clamp(animatingHeal, 0, maximumHealth);
+
+		//============= Diedededing check =============
+
+		if (isServer) {
+			if (currentHealth <= 0 && !isDead) {
+				if (myRespawnManager != null)
+					myRespawnManager.Die (this);
+
+				isDead = true;
+			}
+		}
+
 
         //========== Health Bar Modifcation ==========
 

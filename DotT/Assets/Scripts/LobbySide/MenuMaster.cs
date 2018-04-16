@@ -33,9 +33,9 @@ public class MenuMaster : MonoBehaviour {
 			GameObject.Find ("Host").GetComponent<Button> ().onClick.AddListener (HostaGame);
 			GameObject.Find ("Join").GetComponent<Button> ().onClick.AddListener (JoinaGame);
 			GameObject.Find ("Back").GetComponent<Button> ().onClick.AddListener (ExitaGame);
-			lobbyGUI.SetActive (false);
-			startGUI.SetActive (true);
 		}
+		lobbyGUI.SetActive (false);
+		startGUI.SetActive (true);
 
 		DecreasePlayerCount ();
 	}

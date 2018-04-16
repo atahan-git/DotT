@@ -7,6 +7,7 @@ public class PlayerScript : NetworkBehaviour {
 
 	/*
 	 * Use this script as a guideline to how to setup a player id and scoreboard system
+	 * This script is NOT in active use
 	 */
 
 	[SyncVar]

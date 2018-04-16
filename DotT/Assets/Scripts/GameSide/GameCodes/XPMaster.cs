@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class XPMaster : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
+	public static XPMaster s;
+
+	void Awake () {
+		s = this;
 	}
 	
 	// Update is called once per frame

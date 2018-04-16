@@ -16,4 +16,8 @@ public static class ExtensionMethods
 		trans.localRotation = Quaternion.identity;
 		trans.localScale = new Vector3(1, 1, 1);
 	}
+
+	public static Vector3 Floorize (this Vector3 myVec){
+		return(new Vector3 (myVec.x, 0, myVec.z));
+	}
 }

@@ -9,7 +9,8 @@ public class TelegraphController : MonoBehaviour {
 
 	//Remember that these are not prefabs but actual gameobjects
 	public GameObject[] allyGfx = new GameObject[1];
-	public GameObject[] enemyGfx = new GameObject[1];
+	public GameObject[] enemy1Gfx = new GameObject[1];
+	public GameObject[] enemy2Gfx = new GameObject[1];
 	int currentState = 0;
 
 	public TriggerChildObject[] myTriggers = new TriggerChildObject[1];
@@ -27,7 +28,11 @@ public class TelegraphController : MonoBehaviour {
 		print ("Showing telegraph: " + PlayerSpawner.LocalPlayerSpawner.name + " - " + PlayerSpawner.LocalPlayerSpawner.mySide.ToString() + " - " + myHealth.mySide);
 		if (myHealth.mySide != PlayerSpawner.LocalPlayerSpawner.mySide) {
 			//we are enemy to the local player
-			enemyGfx [currentState].SetActive (true);
+			if (myHealth.mySide == Health.Side.red || (PlayerSpawner.LocalPlayerSpawner.mySide == Health.Side.red && myHealth.mySide == Health.Side.blue))
+				enemy1Gfx [currentState].SetActive (true);
+			else
+				enemy2Gfx [currentState].SetActive (true);
+			
 		} else {
 			//we are ally to the local player
 			allyGfx [currentState].SetActive (true);
@@ -40,7 +45,11 @@ public class TelegraphController : MonoBehaviour {
 			if (go != null)
 				go.SetActive (false);
 
-		foreach (GameObject go in enemyGfx)
+		foreach (GameObject go in enemy1Gfx)
+			if (go != null)
+				go.SetActive (false);
+
+		foreach (GameObject go in enemy2Gfx)
 			if (go != null)
 				go.SetActive (false);
 	}

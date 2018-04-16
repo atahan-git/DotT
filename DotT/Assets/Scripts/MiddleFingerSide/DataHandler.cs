@@ -29,10 +29,10 @@ public class DataHandler : NetworkBehaviour {
 	}
 
 	public void SetUp (){
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 9; i++) {
 			heroIds.Add (0);
 		}
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 9; i++) {
 			playerSlots.Add (i);
 		}
 	}

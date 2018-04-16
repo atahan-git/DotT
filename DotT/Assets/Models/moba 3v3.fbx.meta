@@ -1,0 +1,225 @@
+fileFormatVersion: 2
+guid: 1d420825a06ba3f45a67667f4263152d
+timeCreated: 1523698090
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: Connect
+    100002: Connect_10
+    100004: Connect_2
+    100006: Connect_3
+    100008: Connect_4
+    100010: Connect_5
+    100012: Connect_6
+    100014: Connect_7
+    100016: Connect_8
+    100018: Connect_9
+    100020: Cylinder
+    100022: Cylinder_2
+    100024: Cylinder_3
+    100026: floor
+    100028: Jungs
+    100030: //RootNode
+    100032: Null
+    100034: Null_1
+    100036: Null_2
+    100038: Null_3
+    100040: Null_4
+    100042: Null_5
+    100044: Null_6
+    100046: Null_7
+    100048: Null_8
+    100050: Null_9
+    100052: Plane
+    100054: Roads
+    100056: Tube
+    100058: Tube_1
+    100060: Tube_2
+    100062: Tube_2_2
+    100064: Walls
+    400000: Connect
+    400002: Connect_10
+    400004: Connect_2
+    400006: Connect_3
+    400008: Connect_4
+    400010: Connect_5
+    400012: Connect_6
+    400014: Connect_7
+    400016: Connect_8
+    400018: Connect_9
+    400020: Cylinder
+    400022: Cylinder_2
+    400024: Cylinder_3
+    400026: floor
+    400028: Jungs
+    400030: //RootNode
+    400032: Null
+    400034: Null_1
+    400036: Null_2
+    400038: Null_3
+    400040: Null_4
+    400042: Null_5
+    400044: Null_6
+    400046: Null_7
+    400048: Null_8
+    400050: Null_9
+    400052: Plane
+    400054: Roads
+    400056: Tube
+    400058: Tube_1
+    400060: Tube_2
+    400062: Tube_2_2
+    400064: Walls
+    2300000: Connect
+    2300002: Connect_10
+    2300004: Connect_2
+    2300006: Connect_3
+    2300008: Connect_4
+    2300010: Connect_5
+    2300012: Connect_6
+    2300014: Connect_7
+    2300016: Connect_8
+    2300018: Connect_9
+    2300020: Cylinder
+    2300022: Cylinder_2
+    2300024: Cylinder_3
+    2300026: floor
+    2300028: Plane
+    2300030: Tube
+    2300032: Tube_1
+    2300034: Tube_2
+    2300036: Tube_2_2
+    3300000: Connect
+    3300002: Connect_10
+    3300004: Connect_2
+    3300006: Connect_3
+    3300008: Connect_4
+    3300010: Connect_5
+    3300012: Connect_6
+    3300014: Connect_7
+    3300016: Connect_8
+    3300018: Connect_9
+    3300020: Cylinder
+    3300022: Cylinder_2
+    3300024: Cylinder_3
+    3300026: floor
+    3300028: Plane
+    3300030: Tube
+    3300032: Tube_1
+    3300034: Tube_2
+    3300036: Tube_2_2
+    4300000: Plane
+    4300002: floor
+    4300004: Cylinder
+    4300006: Cylinder_2
+    4300008: Tube
+    4300010: Cylinder_3
+    4300012: Tube_2
+    4300014: Tube_1
+    4300016: Tube_2_2
+    4300018: Connect
+    4300020: Connect_2
+    4300022: Connect_3
+    4300024: Connect_4
+    4300026: Connect_5
+    4300028: Connect_6
+    4300030: Connect_7
+    4300032: Connect_8
+    4300034: Connect_9
+    4300036: Connect_10
+    6400000: Connect
+    6400002: Connect_10
+    6400004: Connect_2
+    6400006: Connect_3
+    6400008: Connect_4
+    6400010: Connect_5
+    6400012: Connect_6
+    6400014: Connect_7
+    6400016: Connect_8
+    6400018: Connect_9
+    6400020: Cylinder
+    6400022: Cylinder_2
+    6400024: Cylinder_3
+    6400026: floor
+    6400028: Plane
+    6400030: Tube
+    6400032: Tube_1
+    6400034: Tube_2
+    6400036: Tube_2_2
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 20
+    meshCompression: 0
+    addColliders: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -35,7 +35,7 @@ public class LobyController : NetworkBehaviour {
 	public void ChangePlayerCount (int amount){
 
 		playerCount += amount;
-		playerCount = Mathf.Clamp (playerCount, 1, 10);
+		playerCount = Mathf.Clamp (playerCount, 1, 9);
 		MenuMaster.s.textPlayerCount.text = playerCount.ToString ();
 
 		if(manager == null)
@@ -111,8 +111,8 @@ public class LobyController : NetworkBehaviour {
 
 			if (connectedPlayers != oldConnectedPlayers) {
 
-				if (allBotLobyPanels.Count == 0 && connectedPlayers != 10) {
-					while (connectedPlayers + allBotLobyPanels.Count < 10) {
+				if (allBotLobyPanels.Count == 0 && connectedPlayers != 9) {
+					while (connectedPlayers + allBotLobyPanels.Count < 9) {
 						GameObject extraPanel = (GameObject)Instantiate (botLobyPanel, transform.position, transform.rotation);
 						allBotLobyPanels.Add (extraPanel);
 					}
@@ -120,7 +120,7 @@ public class LobyController : NetworkBehaviour {
 
 				if (connectedPlayers > oldConnectedPlayers) {
 					
-					while (connectedPlayers + allBotLobyPanels.Count > 10) {
+					while (connectedPlayers + allBotLobyPanels.Count > 9) {
 
 						int num = allBotLobyPanels.Count;
 						GameObject toDestroy = allBotLobyPanels [num - 1];
@@ -134,7 +134,7 @@ public class LobyController : NetworkBehaviour {
 				} else if (connectedPlayers < oldConnectedPlayers) {
 
 
-					while (connectedPlayers + allBotLobyPanels.Count < 10) {
+					while (connectedPlayers + allBotLobyPanels.Count < 9) {
 						GameObject extraPanel = (GameObject)Instantiate (botLobyPanel);
 						allBotLobyPanels.Add (extraPanel);
 					}

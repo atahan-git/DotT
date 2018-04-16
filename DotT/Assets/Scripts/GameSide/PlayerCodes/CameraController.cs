@@ -39,22 +39,27 @@ public class CameraController : MonoBehaviour
 		}
         else
         {
-			if (Input.GetKey (KeyCode.A)) {
+			if (Input.GetKey (KeyCode.Z)) {
 				transform.Translate (-0.5f, 0, 0, Space.World);
 			}
-			if (Input.GetKey (KeyCode.D)) {
+			if (Input.GetKey (KeyCode.C)) {
 				transform.Translate (0.5f, 0, 0, Space.World);
 			}
-			if (Input.GetKey (KeyCode.S)) {
+			if (Input.GetKey (KeyCode.X)) {
 				transform.Translate (0, 0, -0.5f, Space.World);
 			}
-			if (Input.GetKey (KeyCode.W)) {
+			if (Input.GetKey (KeyCode.S)) {
 				transform.Translate (0, 0, 0.5f, Space.World);
 			}
 		}
 
 		if (Input.GetKeyDown (KeyCode.Escape))
 			toggle = !toggle;
+
+
+		float mouseScrollDelta = Input.GetAxis ("Mouse ScrollWheel")*10;
+
+		transform.Translate (0, 0, mouseScrollDelta, Space.Self);
     }
 
 	public void SetPos (Vector3 pos)

@@ -27,9 +27,10 @@ public class LobyPlayerController : NetworkBehaviour {
 
 		manager = GetComponent<NetworkLobbyPlayer> ();
 
-		GameObject panelParrent = GameObject.Find ("PanelParent");
-		playerPanel = (GameObject)Instantiate (playerPanel, panelParrent.transform);
+		GameObject panelParent = GameObject.Find ("PanelParent");
+		playerPanel = (GameObject)Instantiate (playerPanel, panelParent.transform);
 		playerPanel.transform.localScale = new Vector3 (0.8f, 0.8f, 0.8f);
+		PanelPositionHandler.s.panels.Add (playerPanel);
 
 		panelScript= playerPanel.GetComponent<LobyPlayerPanel> ();
 

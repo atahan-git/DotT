@@ -24,9 +24,9 @@ public class PooledObject : NetworkBehaviour {
 	public void EnableObject (){
 		if (isServer) {
 			RpcSyncEnable (transform.position, transform.rotation);
+			ResetValues ();
 			transform.GetChild(0).gameObject.SetActive (true);
 			isActive = true;
-			ResetValues ();
 			if (lifeTime > 0f)
 				Invoke ("DisableObject", lifeTime);
 		}
@@ -43,17 +43,16 @@ public class PooledObject : NetworkBehaviour {
 			transform.GetChild(0).gameObject.SetActive (false);
 			isActive = false;
 		}
+
 	}
-		
 
 	[ClientRpc]
 	void RpcSyncEnable (Vector3 pos, Quaternion rot){
-		transform.GetChild(0).gameObject.SetActive (true);
-		isActive = true;
 		transform.position = pos;
 		transform.rotation = rot;
-
 		ResetValues ();
+		transform.GetChild(0).gameObject.SetActive (true);
+		isActive = true;
 	}
 
 	[ClientRpc]
@@ -71,6 +70,13 @@ public class PooledObject : NetworkBehaviour {
 		if (GetComponentInChildren<TrailRenderer> () != null) {
 			GetComponentInChildren<TrailRenderer> ().Clear ();
 		}
+		foreach (ParticleSystem prt in GetComponentsInChildren<ParticleSystem>()) {
+			if (prt != null) {
+				prt.Clear ();
+				prt.Play ();
+			}
+		}
+
 		if (GetComponent<Rigidbody> () != null) {
 			GetComponent<Rigidbody> ().velocity = Vector3.zero;
 			GetComponent<Rigidbody> ().angularVelocity = Vector3.zero;

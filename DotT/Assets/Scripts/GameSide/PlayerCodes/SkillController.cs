@@ -13,6 +13,9 @@ public class SkillController : NetworkBehaviour {
 	public SkillDelegate ESkill;
 	public SkillDelegate RSkill;
 
+	float[] cooldown = new float[4];
+	float[] curCooldown = new float[4];
+
 	//this exists only in the server side
 	GameObject myHero;
 	// Use this for initialization
@@ -20,7 +23,6 @@ public class SkillController : NetworkBehaviour {
 		if (isServer) {
 			myHero = GetComponent<PlayerSpawner> ().myHero;
 			StartCoroutine (HookUpSkills ());
-
 		}
 	}
 
@@ -31,15 +33,23 @@ public class SkillController : NetworkBehaviour {
 					switch (skill.mySettings.skillButton) {
 					case SkillSettings.Buttons.Q:
 						QSkill = skill.ExecuteSkill;
+						cooldown [0] = skill.mySettings.cooldown;
+						SkillCooldownDisplay.disps [0].cooldown = cooldown [0];
 						break;
 					case SkillSettings.Buttons.W:
 						WSkill = skill.ExecuteSkill;
+						cooldown [1] = skill.mySettings.cooldown;
+						SkillCooldownDisplay.disps [1].cooldown = cooldown [1];
 						break;
 					case SkillSettings.Buttons.E:
 						ESkill = skill.ExecuteSkill;
+						cooldown [2] = skill.mySettings.cooldown;
+						SkillCooldownDisplay.disps [2].cooldown = cooldown [2];
 						break;
 					case SkillSettings.Buttons.R:
 						RSkill = skill.ExecuteSkill;
+						cooldown [3] = skill.mySettings.cooldown;
+						SkillCooldownDisplay.disps [3].cooldown = cooldown [3];
 						break;
 					}
 				}
@@ -60,15 +70,23 @@ public class SkillController : NetworkBehaviour {
 			switch (skill.mySettings.skillButton) {
 			case SkillSettings.Buttons.Q:
 				QSkill = skill.ExecuteSkill;
+				cooldown [0] = skill.mySettings.cooldown;
+				SkillCooldownDisplay.disps [0].cooldown = cooldown [0];
 				break;
 			case SkillSettings.Buttons.W:
 				WSkill = skill.ExecuteSkill;
+				cooldown [1] = skill.mySettings.cooldown;
+				SkillCooldownDisplay.disps [1].cooldown = cooldown [1];
 				break;
 			case SkillSettings.Buttons.E:
 				ESkill = skill.ExecuteSkill;
+				cooldown [2] = skill.mySettings.cooldown;
+				SkillCooldownDisplay.disps [2].cooldown = cooldown [2];
 				break;
 			case SkillSettings.Buttons.R:
 				RSkill = skill.ExecuteSkill;
+				cooldown [3] = skill.mySettings.cooldown;
+				SkillCooldownDisplay.disps [3].cooldown = cooldown [3];
 				break;
 			}
 		}
@@ -78,15 +96,29 @@ public class SkillController : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (isLocalPlayer) {
-			if (Input.GetKeyDown (KeyCode.Q))
+		if (isLocalPlayer && !PlayerSpawner.LocalPlayerSpawner.myHealth.isDead) {
+			if (Input.GetKeyDown (KeyCode.Q) && curCooldown [0] <= 0) {
+				curCooldown [0] = cooldown [0];
 				ExecuteSkill (SkillSettings.Buttons.Q);
-			if (Input.GetKeyDown (KeyCode.W))
+			}
+			if (Input.GetKeyDown (KeyCode.W) && curCooldown [1] <= 0) {
+				curCooldown [1] = cooldown [1];
 				ExecuteSkill (SkillSettings.Buttons.W);
-			if (Input.GetKeyDown (KeyCode.E))
+			}
+			if (Input.GetKeyDown (KeyCode.E) && curCooldown [2] <= 0) {
+				curCooldown [2] = cooldown [2];
 				ExecuteSkill (SkillSettings.Buttons.E);
-			if (Input.GetKeyDown (KeyCode.R))
+			}
+			if (Input.GetKeyDown (KeyCode.R) && curCooldown [3] <= 0) {
+				curCooldown [3] = cooldown [3];
 				ExecuteSkill (SkillSettings.Buttons.R);
+			}
+
+			for (int i = 0; i < cooldown.Length; i++) {
+				curCooldown[i] -= Time.deltaTime;
+				curCooldown [i] = Mathf.Clamp (curCooldown [i], 0, cooldown [i]);
+				SkillCooldownDisplay.disps [i].curCooldown = curCooldown [i];
+			}
 		}
 	}
 
@@ -104,7 +136,7 @@ public class SkillController : NetworkBehaviour {
 	[Command]
 	void CmdExecuteSkill (SkillSettings.Buttons mySkillType, Vector3 executePos){
 		print (gameObject.name + " executed skill in Server "+ mySkillType.ToString());
-		ExecutionData myData = new ExecutionData (true, executePos, executePos - myHero.transform.position);
+		ExecutionData myData = new ExecutionData (true, myHero.transform.position, executePos, executePos.Floorize() - myHero.transform.position.Floorize());
 		switch (mySkillType) {
 		case SkillSettings.Buttons.Q:
 			if (QSkill != null)

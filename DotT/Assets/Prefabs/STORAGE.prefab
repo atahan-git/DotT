@@ -74,3 +74,8 @@ MonoBehaviour:
     type: 2}
   heroHealthBar: {fileID: 1909475244038902, guid: 585f33935585b4c4985764cb563a4f05,
     type: 2}
+  enemyColor1: {r: 1, g: 0.34901962, b: 0, a: 1}
+  enemyColor2: {r: 1, g: 0, b: 0.49803925, a: 1}
+  playerColor: {r: 0, g: 1, b: 0.34901962, a: 1}
+  allyColor: {r: 0, g: 0.39607847, b: 1, a: 1}
+  neutralColor: {r: 1, g: 0.9490197, b: 0, a: 1}

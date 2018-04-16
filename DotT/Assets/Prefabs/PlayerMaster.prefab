@@ -27,6 +27,7 @@ GameObject:
   - component: {fileID: 114435508976988952}
   - component: {fileID: 114593008556552678}
   - component: {fileID: 114690608568941376}
+  - component: {fileID: 114136703736736268}
   m_Layer: 0
   m_Name: PlayerMaster
   m_TagString: Untagged
@@ -47,6 +48,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114136703736736268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1765742683530744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd07853cfb73304691ecae3e9171ef5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoExpand: 1
+  myObject: {fileID: 1905279768466680, guid: 849620ebfeb71e440b9caf9d1bb36a52, type: 2}
+  poolSize: 2
 --- !u!114 &114210873104359650
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -165,7 +180,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerid: -1
   heroType: -1
+  mySide: 3
   myHero: {fileID: 0}
+  myHealth: {fileID: 0}
   Spawns:
   - {fileID: 0}
   - {fileID: 0}
@@ -177,3 +194,4 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  deadEfectPool: {fileID: 114136703736736268}

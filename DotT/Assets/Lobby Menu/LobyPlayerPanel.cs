@@ -26,6 +26,7 @@ public class LobyPlayerPanel : MonoBehaviour {
 	Image bg;
 	public Color blueTeam = Color.blue;
 	public Color redTeam = Color.red;
+	public Color greenTeam = Color.green;
 
 	// Use this for initialization
 	void Start () {
@@ -42,10 +43,12 @@ public class LobyPlayerPanel : MonoBehaviour {
 			myState.color = Color.red;
 		}
 
-		if (playerSlot < 5) {
+		if (playerSlot < 3) {
 			bg.color = blueTeam;
-		} else {
+		} else if (playerSlot < 6) {
 			bg.color = redTeam;
+		} else {
+			bg.color = greenTeam;
 		}
 
 		myHero.text = heroType.ToString();
@@ -58,12 +61,13 @@ public class LobyPlayerPanel : MonoBehaviour {
 
 	void Update (){
 		if (playerSlot != -1) {
-			if (transform.parent.childCount > playerSlot) {
-				if (transform.parent.GetChild (playerSlot) != transform) {
-					transform.SetSiblingIndex (playerSlot);
+			if (PanelPositionHandler.s.panels.Count > playerSlot) {
+				if (PanelPositionHandler.s.panels[playerSlot] != gameObject) {
+					PanelPositionHandler.s.panels.Remove (gameObject);
+					PanelPositionHandler.s.panels.Insert (playerSlot, gameObject);
 				}
 			} else {
-				print ("not enough child exists!");
+				print ("not enough panel exists!");
 			}
 		}
 	}

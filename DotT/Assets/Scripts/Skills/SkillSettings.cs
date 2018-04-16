@@ -20,11 +20,6 @@ public class SkillSettings : ScriptableObject {
 	//only one available, will show up on the ground, can be left empty, can have multiple states, triggers for talents, and animations
 	public GameObject telegrapgh;	//see the end for more details
 
-
-	//Functioning Prefabs with their own settings
-	public ObjectPool[] Projectiles;
-	public ObjectPool[] Structures;
-
 	public int damage;
 	public Health.HpModType damageType;
 	//public Health.RatioType damageRatio;

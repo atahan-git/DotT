@@ -9,15 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ada231cc9d911545a4e41e381750b5f, type: 3}
-  m_Name: W_BlizzardSkill
+  m_Name: Q_ShootIce
   m_EditorClassIdentifier: Assembly-CSharp::SkillSettings
   skillButton: 0
-  skillType: 1
+  skillType: 3
   skillTarget: 0
   telegrapgh: {fileID: 0}
-  Projectiles: []
-  Structures: []
-  damage: 200
+  damage: 600
   damageType: 1
   heal: 0
   healType: 0
@@ -32,6 +30,6 @@ MonoBehaviour:
   - 0.5
   - 0.2
   manaCost: 0
-  cooldown: 0
+  cooldown: 3
   castTime: 0
   castAnimation: ShootBlizzard
