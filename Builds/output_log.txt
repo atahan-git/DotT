@@ -1,0 +1,2 @@
+There should be 'DotT_Alpha0.02 - 3v3v3 w 2 skills_Data'
+folder next to the executable
