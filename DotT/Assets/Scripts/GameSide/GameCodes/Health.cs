@@ -13,7 +13,7 @@ public class Health : NetworkBehaviour
 
     //========== Properties ==========
 
-    public enum Type {minion, hero, tower, nexus, jungle};
+    public enum Type {minion, hero, fort, keep, towerFort, towerKeep, nexus, jungle};
     public enum Side {blue, red, green, neutral};
     public Type myType = Type.jungle;
     public Side mySide = Side.neutral;
@@ -100,19 +100,17 @@ public class Health : NetworkBehaviour
     {
         switch (myType)
         {
-            case Type.minion:
-                Debug.Log("Type Error");
-                break;
+        case Type.minion:
+            Debug.Log("Type Error");
+            break;
 
-            case Type.hero:
-                healthBar = Instantiate(STORAGE_HealthPrefabs.s.heroHealthBar);
-                break;
+        case Type.hero:
+            healthBar = Instantiate(STORAGE_HealthPrefabs.s.heroHealthBar);
+            break;
 
-            case Type.tower:
-            case Type.nexus:
-            case Type.jungle:
-                Debug.Log("Type Error");
-                break;
+		default:
+			Debug.Log ("Type Error");
+			break;
         }
 
         healthBar.transform.SetParent(gameObject.transform, false);
@@ -160,6 +158,7 @@ public class Health : NetworkBehaviour
 				if (myRespawnManager != null)
 					myRespawnManager.Die (this);
 
+				XPMaster.s.AddXp (mySide, myAttackerSides.ToArray(), myType); //ATTACKER SIDE LOGIC
 				isDead = true;
 			}
 		}
@@ -482,9 +481,13 @@ public class Health : NetworkBehaviour
         HpModOverTime[type] += amount;
     }
 
+	List<Side> myAttackerSides = new List<Side> ();//ATTACKER SIDE LOGIC
     //Deals damage or heals.
-    public void ModifyHealth(float amount, HpModType type)
+	public void ModifyHealth(float amount, HpModType type, Side attackerSide)
     {
+		if(!myAttackerSides.Contains(attackerSide))
+			myAttackerSides.Add(attackerSide);  //ATTACKER SIDE LOGIC
+
         amount = FindRealAmount(amount, type);
 
         if (canTakeDamage || type == HpModType.heal)
