@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BasicAttackProjectile : MonoBehaviour {
 
+	public Health.Side mySide = Health.Side.neutral;
 	public Health target;
 
 	public float damage = 0f;
@@ -27,7 +28,7 @@ public class BasicAttackProjectile : MonoBehaviour {
 
 			if (GetComponentInParent<UnityEngine.Networking.NetworkIdentity> ().isServer) {
 				if (Vector3.Distance (transform.position, target.transform.position) < 0.2f && !isDealtDmg) {
-					target.ModifyHealth(damage, Health.HpModType.physicalDamage);
+					target.Damage(damage, Health.HpModType.physicalDamage, mySide);
 					target = null;
 					GetComponentInParent<PooledObject> ().DestroyPooledObject ();
 					isDealtDmg = true;

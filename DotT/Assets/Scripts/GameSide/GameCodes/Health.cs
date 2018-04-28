@@ -482,13 +482,18 @@ public class Health : NetworkBehaviour
     }
 
 	List<Side> myAttackerSides = new List<Side> ();//ATTACKER SIDE LOGIC
-    //Deals damage or heals.
-	public void ModifyHealth(float amount, HpModType type, Side attackerSide)
-    {
+	public void Damage (float amount, HpModType type, Side attackerSide){
 		if(!myAttackerSides.Contains(attackerSide))
 			myAttackerSides.Add(attackerSide);  //ATTACKER SIDE LOGIC
 
-        amount = FindRealAmount(amount, type);
+		ModifyHealth (amount, type);
+	}
+
+    //Deals damage or heals.
+	public void ModifyHealth(float amount, HpModType type)
+    {
+		
+		amount = FindRealAmount(amount, type);
 
         if (canTakeDamage || type == HpModType.heal)
         {

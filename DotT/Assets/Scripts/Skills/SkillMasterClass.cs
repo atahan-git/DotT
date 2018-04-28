@@ -118,7 +118,7 @@ public class SkillMasterClass : MonoBehaviour {
 
 		foreach (Health hl in myTargets.healths) {
 			if (hl != null) {
-				hl.ModifyHealth (mySettings.damage, mySettings.damageType);
+				hl.Damage (mySettings.damage, mySettings.damageType, self.mySide);
 			}
 		}
 	}

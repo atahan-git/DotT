@@ -34,7 +34,7 @@ public class AdvancedProjectile : MonoBehaviour {
 			if (hitHealth == null)
 				return;
 			if (hitHealth.mySide != mySide) {
-				hitHealth.ModifyHealth (damage, Health.HpModType.magicalDamage);
+				hitHealth.Damage (damage, Health.HpModType.magicalDamage, mySide);
 				GetComponentInParent<PooledObject> ().DestroyPooledObject ();
 			}
 
