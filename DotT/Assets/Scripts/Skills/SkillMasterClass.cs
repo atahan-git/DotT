@@ -57,6 +57,11 @@ public class SkillMasterClass : MonoBehaviour {
 		GetComponentInParent<Animator> ().SetTrigger (name);
 	}
 
+	protected void SpendMana (ExecutionData data){
+		if(data.isServer)
+			((MonoBehaviour)self.myRespawnManager).GetComponent<SkillController> ().mana -= mySettings.manaCost;
+	}
+
 	//--------------------------------------------------------------TELEGRAPHS
 	//displays the set telegrapgh based on the skill type.
 	protected void DisplayTelegraph(ExecutionData data){

@@ -54,9 +54,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heroes:
   - {fileID: 1754823917970344, guid: 4293f923cee7ca747812969614ed2db8, type: 2}
-  - {fileID: 1536462421774152, guid: 297d93028c8a08b478ff6a1361fcd008, type: 2}
-  - {fileID: 1948941357216408, guid: efb1b1daa8c7a5344a496c1cdc36635c, type: 2}
-  - {fileID: 1241356389840552, guid: dc51dd4e2e3ce7049a111f971c42eb2a, type: 2}
+  - {fileID: 1935467310731690, guid: 297d93028c8a08b478ff6a1361fcd008, type: 2}
+  - {fileID: 1675421352659138, guid: efb1b1daa8c7a5344a496c1cdc36635c, type: 2}
+  - {fileID: 1464007927318980, guid: dc51dd4e2e3ce7049a111f971c42eb2a, type: 2}
+  heroIcons:
+  - {fileID: 21300000, guid: 2b0d501178e5a3a44b7a7ed7a22bc8d3, type: 3}
+  - {fileID: 21300000, guid: 86c5e668f075f044f820dd346b49ac6b, type: 3}
+  - {fileID: 21300000, guid: cbf516273aba625459e90c56fcffe7fb, type: 3}
+  - {fileID: 21300000, guid: e8961d6b051994344aa366104aaca02f, type: 3}
 --- !u!114 &114882411488035460
 MonoBehaviour:
   m_ObjectHideFlags: 1

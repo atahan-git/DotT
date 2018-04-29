@@ -30,6 +30,9 @@ public class HeroController : NetworkBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//----------------------------------------------------------------------------------PLAYER SIDE CODE
+		if (PlayerSpawner.LocalPlayerSpawner.myHealth == null)
+			return;
+
 		if (isLocalPlayer && !PlayerSpawner.LocalPlayerSpawner.myHealth.isDead) {
 			if (Input.GetMouseButtonDown (1)) {
 				RaycastHit hit; 

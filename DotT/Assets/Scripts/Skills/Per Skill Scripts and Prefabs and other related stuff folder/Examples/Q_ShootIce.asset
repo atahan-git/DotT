@@ -29,7 +29,7 @@ MonoBehaviour:
   - 0.15
   - 0.5
   - 0.2
-  manaCost: 0
+  manaCost: 50
   cooldown: 3
   castTime: 0
   castAnimation: ShootBlizzard

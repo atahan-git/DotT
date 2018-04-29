@@ -13,6 +13,10 @@ public class SkillController : NetworkBehaviour {
 	public SkillDelegate ESkill;
 	public SkillDelegate RSkill;
 
+	[SyncVar]
+	public float mana = 500f;
+	public float maxMana = 500f;
+	public float manaRegen = 50f;
 	float[] cooldown = new float[4];
 	float[] curCooldown = new float[4];
 
@@ -96,6 +100,10 @@ public class SkillController : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (PlayerSpawner.LocalPlayerSpawner.myHealth == null)
+			return;
+		
+
 		if (isLocalPlayer && !PlayerSpawner.LocalPlayerSpawner.myHealth.isDead) {
 			if (Input.GetKeyDown (KeyCode.Q) && curCooldown [0] <= 0) {
 				curCooldown [0] = cooldown [0];
@@ -119,6 +127,9 @@ public class SkillController : NetworkBehaviour {
 				curCooldown [i] = Mathf.Clamp (curCooldown [i], 0, cooldown [i]);
 				SkillCooldownDisplay.disps [i].curCooldown = curCooldown [i];
 			}
+
+			mana += manaRegen * Time.deltaTime;
+			mana = Mathf.Clamp (mana, 0, maxMana);
 		}
 	}
 

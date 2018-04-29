@@ -87,9 +87,14 @@ public class LobyPlayerController : NetworkBehaviour {
 		}
 	}
 
-	public void ChangeHero(int amount){
-		heroType += amount;
-		heroType = Mathf.Clamp (heroType, 0, 3);
+	public void OpenHeroMenu (){
+		MenuMaster.s.OpenHeroSelectGUI (true);
+	}
+
+	public void ChangeHero(int type){
+		MenuMaster.s.OpenHeroSelectGUI (false);
+		heroType = type;
+		heroType = Mathf.Clamp (heroType, 0, STORAGE_HeroPrefabs.s.heroes.Length);
 		DataHandler.s.heroIds [id] = heroType;
 		CmdChangeHerotype (id, heroType);
 	}

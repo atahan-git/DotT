@@ -333,6 +333,7 @@ MonoBehaviour:
   textPlayerCount: {fileID: 1761345232}
   startGUI: {fileID: 1512200286}
   lobbyGUI: {fileID: 1183607428}
+  heroSelectGUI: {fileID: 893433816}
 --- !u!4 &640888422
 Transform:
   m_ObjectHideFlags: 0
@@ -721,6 +722,111 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 884170053}
+--- !u!1 &893433816
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 893433817}
+  - component: {fileID: 893433820}
+  - component: {fileID: 893433819}
+  - component: {fileID: 893433818}
+  - component: {fileID: 893433821}
+  m_Layer: 5
+  m_Name: Hero Select GUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &893433817
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 893433816}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1183607429}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 327.61, y: 243.79001}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &893433818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 893433816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2095666955, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 5
+    m_Right: 5
+    m_Top: 5
+    m_Bottom: 5
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 75, y: 75}
+  m_Spacing: {x: 5, y: 5}
+  m_Constraint: 0
+  m_ConstraintCount: 2
+--- !u!114 &893433819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 893433816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.641}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &893433820
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 893433816}
+--- !u!114 &893433821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 893433816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a004da245f4e914c8647c8c8b034baa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroSPanel: {fileID: 1769915234014524, guid: ebe0bbbc899f8d1428da5af3b7f400d4, type: 2}
 --- !u!1 &900241448
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,6 +916,68 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1006867304
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4819416318403786, guid: 71f8bca3aa80bd648b36a2355fde69cd, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4819416318403786, guid: 71f8bca3aa80bd648b36a2355fde69cd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4819416318403786, guid: 71f8bca3aa80bd648b36a2355fde69cd, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4819416318403786, guid: 71f8bca3aa80bd648b36a2355fde69cd, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4819416318403786, guid: 71f8bca3aa80bd648b36a2355fde69cd, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4819416318403786, guid: 71f8bca3aa80bd648b36a2355fde69cd, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4819416318403786, guid: 71f8bca3aa80bd648b36a2355fde69cd, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4819416318403786, guid: 71f8bca3aa80bd648b36a2355fde69cd, type: 2}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114467041970636220, guid: 71f8bca3aa80bd648b36a2355fde69cd,
+        type: 2}
+      propertyPath: heroTooltips.Array.data[0]
+      value: Your average cube. Nothing special.
+      objectReference: {fileID: 0}
+    - target: {fileID: 114467041970636220, guid: 71f8bca3aa80bd648b36a2355fde69cd,
+        type: 2}
+      propertyPath: heroTooltips.Array.data[1]
+      value: Some different colored version of your average cube.
+      objectReference: {fileID: 0}
+    - target: {fileID: 114467041970636220, guid: 71f8bca3aa80bd648b36a2355fde69cd,
+        type: 2}
+      propertyPath: heroTooltips.Array.data[2]
+      value: A cube with an even differenter color.
+      objectReference: {fileID: 0}
+    - target: {fileID: 114467041970636220, guid: 71f8bca3aa80bd648b36a2355fde69cd,
+        type: 2}
+      propertyPath: heroTooltips.Array.data[3]
+      value: A cube with the differentest color.
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 71f8bca3aa80bd648b36a2355fde69cd, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1023569945
 GameObject:
   m_ObjectHideFlags: 0
@@ -916,6 +1084,7 @@ RectTransform:
   m_Children:
   - {fileID: 301095878}
   - {fileID: 1552402122}
+  - {fileID: 893433817}
   m_Father: {fileID: 1967719670}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2024,6 +2193,24 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 114000013630324004, guid: c96035af67670e6439fadcafc0aa880b,
+        type: 2}
+      propertyPath: m_SpawnPrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 1935467310731690, guid: 297d93028c8a08b478ff6a1361fcd008,
+        type: 2}
+    - target: {fileID: 114000013630324004, guid: c96035af67670e6439fadcafc0aa880b,
+        type: 2}
+      propertyPath: m_SpawnPrefabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 1675421352659138, guid: efb1b1daa8c7a5344a496c1cdc36635c,
+        type: 2}
+    - target: {fileID: 114000013630324004, guid: c96035af67670e6439fadcafc0aa880b,
+        type: 2}
+      propertyPath: m_SpawnPrefabs.Array.data[5]
+      value: 
+      objectReference: {fileID: 1464007927318980, guid: dc51dd4e2e3ce7049a111f971c42eb2a,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c96035af67670e6439fadcafc0aa880b, type: 2}
   m_IsPrefabParent: 0

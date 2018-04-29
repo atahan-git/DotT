@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 
 [System.Serializable]
 public class LevelUpEvent : UnityEvent<int,Health.Side>{}
+[System.Serializable]
+public class XpUpEvent : UnityEvent<float,Health.Side>{}
 
-public class XPMaster : MonoBehaviour {
+public class XPMaster : NetworkBehaviour {
 
 	public static XPMaster s;
 
@@ -14,10 +17,12 @@ public class XPMaster : MonoBehaviour {
 	/// Add various level up related functions to this thread
 	/// </summary>
 	public LevelUpEvent LevelUpFunctions;
+	public XpUpEvent XpUpFunctions;
 
-	public int[] level = new int[3];
-	public float[] xp = new float[3];
-	public float[] reqXp = new float[3];
+	public SyncListInt level = new SyncListInt();
+	public SyncListFloat xp = new SyncListFloat();
+	public SyncListFloat reqXp = new SyncListFloat();
+	public SyncListFloat xp_percent = new SyncListFloat();
 
 	float baseHero = 300;
 	float heroAdd = 50;
@@ -35,12 +40,33 @@ public class XPMaster : MonoBehaviour {
 
 	void Awake () {
 		s = this;
+
+		if (level.Count == 0)
+			SetUp ();
+		
 		for (int i = 0; i < 3; i++) {
 			reqXp [i] = ReqLevelCalculator (level[i]);
 		}
+
 	}
-	
+
+	public void SetUp (){
+		for (int i = 0; i < 3; i++) {
+			level.Add (0);
+		}
+		for (int i = 0; i < 3; i++) {
+			xp.Add (0);
+		}
+		for (int i = 0; i < 3; i++) {
+			reqXp.Add (0);
+		}
+	}
+		
 	public void AddXp (Health.Side deadSide, Health.Side[] killerSides, Health.Type deadType){
+		if (!isServer) {
+			Debug.Log ("Only Server Side Xp adding allowed!");
+		}
+
 		float xpReward = 0;
 		switch (deadType) {
 		case Health.Type.hero:
@@ -82,6 +108,7 @@ public class XPMaster : MonoBehaviour {
 						reqXp [SideToInt (rewardSide)] = ReqLevelCalculator (level [SideToInt (rewardSide)]);
 						LevelUpFunctions.Invoke (level [SideToInt (rewardSide)], rewardSide);
 					}
+					XpUpFunctions.Invoke (((xp [SideToInt (rewardSide)]) - ReqLevelCalculator (level [SideToInt (rewardSide)]-1)) / (ReqLevelCalculator (level [SideToInt (rewardSide)]) - ReqLevelCalculator (level [SideToInt (rewardSide)]-1)), rewardSide);
 				}
 			}
 		}
@@ -91,6 +118,9 @@ public class XPMaster : MonoBehaviour {
 	float levInc = 2.37f;
 	float levDamp = 24f;
 	float ReqLevelCalculator (int curLevel){
+		if (curLevel < 0)
+			return 0;
+
 		return (2 + (Mathf.Pow (curLevel, levInc) / levDamp) + curLevel)*1000f;
 	}
 
@@ -108,7 +138,10 @@ public class XPMaster : MonoBehaviour {
 		}
 
 		float levelDif = lvlMore - lvlLess;
-		levelDif += (ReqLevelCalculator (lvlMore+1) - xpMore) / (ReqLevelCalculator (lvlMore+1) - ReqLevelCalculator (lvlMore));
+		//print (levelDif);
+		//print (xpMore.ToString() + " - " + ReqLevelCalculator (lvlMore-1).ToString() + " / " + ReqLevelCalculator (lvlMore).ToString() + " - " + ReqLevelCalculator (lvlMore-1).ToString());
+		levelDif += (xpMore - ReqLevelCalculator (lvlMore-1)) / (ReqLevelCalculator (lvlMore) - ReqLevelCalculator (lvlMore-1));
+		//print (levelDif);
 
 		return levelDif;
 	}
@@ -124,7 +157,7 @@ public class XPMaster : MonoBehaviour {
 		return (100f + Mathf.Pow (heroMultBase, dif) * isNegative) / 100f;
 	}
 
-	int SideToInt (Health.Side mySide){
+	public static int SideToInt (Health.Side mySide){
 		switch (mySide) {
 		case Health.Side.blue:
 			return 0;

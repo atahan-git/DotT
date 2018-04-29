@@ -11,6 +11,7 @@ public class W_BlizzardSkill : SkillMasterClass {
 	IEnumerator _Execute(ExecutionData data){
 
 		DisplayTelegraph(data);	
+		SpendMana (data);
 
 		yield return new WaitForSeconds(mySettings.waitTimes[0]);
 

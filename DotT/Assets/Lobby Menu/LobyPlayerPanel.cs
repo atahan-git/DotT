@@ -17,11 +17,10 @@ public class LobyPlayerPanel : MonoBehaviour {
 
 	public Text myName;
 	public Text myState;
-	public Text myHero;
+	public Image myHero;
 	public GameObject myButton;
 
-	public GameObject b1;
-	public GameObject b2;
+	public Button heroSelectButton;
 
 	Image bg;
 	public Color blueTeam = Color.blue;
@@ -51,11 +50,10 @@ public class LobyPlayerPanel : MonoBehaviour {
 			bg.color = greenTeam;
 		}
 
-		myHero.text = heroType.ToString();
+		myHero.sprite = STORAGE_HeroPrefabs.s.heroIcons[heroType];
 
 		myButton.SetActive (isLocalPlayer);
-		b1.SetActive (isLocalPlayer);
-		b2.SetActive (isLocalPlayer);
+		heroSelectButton.interactable = isLocalPlayer;
 
 	}
 
@@ -72,8 +70,8 @@ public class LobyPlayerPanel : MonoBehaviour {
 		}
 	}
 
-	public void ChangeHero(int amount){
-		myPlayer.ChangeHero (amount);
+	public void OpenHeroSelection(){
+		myPlayer.OpenHeroMenu ();
 	}
 
 	public void ChangeState () {

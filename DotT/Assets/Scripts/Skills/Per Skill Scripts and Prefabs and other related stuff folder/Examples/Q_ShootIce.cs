@@ -9,7 +9,9 @@ public class Q_ShootIce : SkillMasterClass {
 
 
 	IEnumerator _Execute(ExecutionData data){
+		
 		InstantiateProjectile (data);
+		SpendMana (data);
 
 		yield return null;
 	}

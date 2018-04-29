@@ -109,7 +109,7 @@ public class Health : NetworkBehaviour
             break;
 
 		default:
-			Debug.Log ("Type Error");
+			Debug.Log ("Type Error" + gameObject.name);
 			break;
         }
 

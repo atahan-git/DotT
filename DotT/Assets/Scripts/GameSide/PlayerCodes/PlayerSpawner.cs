@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 public class PlayerSpawner : NetworkBehaviour, IRespawnManager {
 
 	public static PlayerSpawner LocalPlayerSpawner;	//used for knowing which color of telegraphs to displays and such
+	public static PlayerSpawner[] AllSpawners = new PlayerSpawner[9];
 
 	[SyncVar]
 	public int playerid = -1;
@@ -14,9 +15,8 @@ public class PlayerSpawner : NetworkBehaviour, IRespawnManager {
 	[SyncVar]
 	public Health.Side mySide = Health.Side.neutral;
 
-	[HideInInspector]
+
 	public GameObject myHero;
-	[HideInInspector]
 	public Health myHealth;
 
 	public Transform[] Spawns = new Transform[9];
@@ -47,6 +47,7 @@ public class PlayerSpawner : NetworkBehaviour, IRespawnManager {
 		RpcGetId (connectionToClient.connectionId);
 
 		playerid = connectionToClient.connectionId;
+		AllSpawners [playerid] = this;
 		heroType = DataHandler.s.heroIds [playerid];
 		SpawnHero ();
 	}
@@ -55,6 +56,7 @@ public class PlayerSpawner : NetworkBehaviour, IRespawnManager {
 	void RpcGetId (int theId) {
 		print ("### Received Settings " + gameObject.name);
 		playerid = theId;
+		AllSpawners [playerid] = this;
 		heroType = DataHandler.s.heroIds [playerid];
 		print ("### My Player Id = " + playerid);
 		if (isLocalPlayer) {

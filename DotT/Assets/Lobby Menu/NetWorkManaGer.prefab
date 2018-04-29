@@ -71,15 +71,16 @@ MonoBehaviour:
   - {fileID: 1765742683530744, guid: ffdab2c3c1e3c1e41a5178628b586ba9, type: 2}
   - {fileID: 1253821496581668, guid: bf879450903a65d4ca565474b1c4786f, type: 2}
   - {fileID: 1754823917970344, guid: 4293f923cee7ca747812969614ed2db8, type: 2}
-  - {fileID: 1536462421774152, guid: 297d93028c8a08b478ff6a1361fcd008, type: 2}
-  - {fileID: 1948941357216408, guid: efb1b1daa8c7a5344a496c1cdc36635c, type: 2}
-  - {fileID: 1241356389840552, guid: dc51dd4e2e3ce7049a111f971c42eb2a, type: 2}
+  - {fileID: 1935467310731690, guid: 297d93028c8a08b478ff6a1361fcd008, type: 2}
+  - {fileID: 1675421352659138, guid: efb1b1daa8c7a5344a496c1cdc36635c, type: 2}
+  - {fileID: 1464007927318980, guid: dc51dd4e2e3ce7049a111f971c42eb2a, type: 2}
   - {fileID: 1620724889665396, guid: 142938ce20460354599f3ada3a174c9e, type: 2}
   - {fileID: 1000012591736656, guid: 5c3b69012f2171a4e8b10e9efd55fd30, type: 2}
   - {fileID: 1522347954697334, guid: da416b1f6168fd84984bb6fec9fd43d0, type: 2}
   - {fileID: 1461358515048652, guid: 7ec26be5a8e319640b0e03c3f9aa5332, type: 2}
   - {fileID: 1602344441094088, guid: 0db92c20c50c4c74aa47259ec605e40c, type: 2}
   - {fileID: 1905279768466680, guid: 849620ebfeb71e440b9caf9d1bb36a52, type: 2}
+  - {fileID: 1651744489097678, guid: 7ec4488384da2b8458e2487cece1ea54, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -175,6 +176,8 @@ MonoBehaviour:
   playerCount: 2
   isHost: 0
   isOnline: 0
+  masterScripts: {fileID: 1651744489097678, guid: 7ec4488384da2b8458e2487cece1ea54,
+    type: 2}
   botLobyPanel: {fileID: 1820228579867496, guid: f6204ea14bc351248b2e1c869d907b51,
     type: 2}
   allBotLobyPanels: []

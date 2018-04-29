@@ -87,6 +87,16 @@ public class LobyController : NetworkBehaviour {
 		oldConnectedPlayers = -1;
 	}
 
+	//-----------------------------------------------------------------Game Begin Stuff
+
+	public GameObject masterScripts;
+	void OnStartLocalPlayer (){
+		print ("-*-*-*-*-*-* Local Player has started *-*-*-*-*-*-");
+		GameObject myMasters = (GameObject)Instantiate (masterScripts);
+		NetworkServer.Spawn (myMasters);
+	}
+
+
 
 	//-----------------------------------------------------------------BOT STUFF
 

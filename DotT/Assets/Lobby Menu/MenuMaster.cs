@@ -14,6 +14,8 @@ public class MenuMaster : MonoBehaviour {
 	GameObject startGUI;
 	[SerializeField]
 	GameObject lobbyGUI;
+	[SerializeField]
+	GameObject heroSelectGUI;
 
 	GameObject buttonUp;
 
@@ -27,7 +29,8 @@ public class MenuMaster : MonoBehaviour {
 		if (textPlayerCount == null) {
 			textPlayerCount = GameObject.Find ("PlayerText").GetComponent<Text> ();
 			startGUI = GameObject.Find ("Start GUI");
-			lobbyGUI = GameObject.Find ("Lobby GUI");
+			lobbyGUI = GameObject.Find ("Lobby GUI");;
+			heroSelectGUI = GameObject.Find ("Hero Select GUI");
 			GameObject.Find ("ButtonUp").GetComponent<Button> ().onClick.AddListener (IncreasePlayerCount);
 			GameObject.Find ("ButtonDown").GetComponent<Button> ().onClick.AddListener (DecreasePlayerCount);
 			GameObject.Find ("Host").GetComponent<Button> ().onClick.AddListener (HostaGame);
@@ -36,6 +39,7 @@ public class MenuMaster : MonoBehaviour {
 		}
 		lobbyGUI.SetActive (false);
 		startGUI.SetActive (true);
+		heroSelectGUI.SetActive (false);
 
 		DecreasePlayerCount ();
 	}
@@ -73,5 +77,9 @@ public class MenuMaster : MonoBehaviour {
 	public void OpenLobbyGUI (){
 		MenuMaster.s.startGUI.SetActive (false);
 		MenuMaster.s.lobbyGUI.SetActive (true);
+	}
+
+	public void OpenHeroSelectGUI (bool state){
+		MenuMaster.s.heroSelectGUI.SetActive (state);
 	}
 }

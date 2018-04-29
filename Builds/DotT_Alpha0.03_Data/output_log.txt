@@ -1,0 +1,40 @@
+Mono path[0] = 'D:/_Unity/2018/_DotT/Builds/DotT_Alpha0.03_Data/Managed'
+Mono config path = 'D:/_Unity/2018/_DotT/Builds/DotT_Alpha0.03_Data/Mono/etc'
+PlayerConnection initialized from D:/_Unity/2018/_DotT/Builds/DotT_Alpha0.03_Data (debug = 0)
+PlayerConnection initialized network socket : 0.0.0.0 55116
+Multi-casting "[IP] 192.168.1.9 [Port] 55116 [Flags] 3 [Guid] 1835239453 [EditorId] 3833034850 [Version] 1048832 [Id] WindowsPlayer(DESKTOP-NOU197N) [Debug] 1" to [225.0.0.222:54997]...
+Waiting for connection from host on [0.0.0.0:55116]...
+PlayerConnection accepted from [192.168.1.9] handle:0x37c
+Started listening to [0.0.0.0:55116]
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,defer=y,address=0.0.0.0:56453
+PlayerConnection already initialized - listening to [0.0.0.0:55116]
+Player data archive not found at `D:/_Unity/2018/_DotT/Builds/DotT_Alpha0.03_Data/data.unity3d`, using local filesystem
+Initialize engine version: 2017.1.0f3 (472613c02cf7)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 950M (ID=0x139a)
+    Vendor:   NVIDIA
+    VRAM:     2019 MB
+    Driver:   23.21.13.8871
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\UnityEngine.Timeline.dll (this message is harmless)
+Loading D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\UnityEngine.Timeline.dll into Unity Child Domain
+Platform assembly: D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\XTUtilities.dll (this message is harmless)
+Loading D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\XTUtilities.dll into Unity Child Domain
+Platform assembly: D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\System.dll (this message is harmless)
+Platform assembly: D:\_Unity\2018\_DotT\Builds\DotT_Alpha0.03_Data\Managed\System.Core.dll (this message is harmless)
+- Completed reload, in  0.043 seconds
+<RI> Initializing input.
+<RI> Input initialized.
+Waiting for finish
