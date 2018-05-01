@@ -25,6 +25,7 @@ public class LobyController : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
 		manager = GetComponent<NetworkLobbyManager> ();
+		SceneManager.sceneLoaded += OnLevelFinishedLoading;
 		//if this is not the correct scene at start load the correct scene
 		if (SceneManager.GetActiveScene().buildIndex != 0) {
 			SceneManager.LoadScene (0);
@@ -90,10 +91,12 @@ public class LobyController : NetworkBehaviour {
 	//-----------------------------------------------------------------Game Begin Stuff
 
 	public GameObject masterScripts;
-	void OnStartLocalPlayer (){
-		print ("-*-*-*-*-*-* Local Player has started *-*-*-*-*-*-");
-		GameObject myMasters = (GameObject)Instantiate (masterScripts);
-		NetworkServer.Spawn (myMasters);
+	void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode){
+		print ("-*-*-*-*-*-* Scene: " + scene.name + " was loaded  *-*-*-*-*-*-");
+		if(scene.buildIndex != 0){
+			GameObject myMasters = (GameObject)Instantiate (masterScripts);
+			NetworkServer.Spawn (myMasters);
+		}
 	}
 
 

@@ -38,8 +38,10 @@ public class XPMaster : NetworkBehaviour {
 	float towerFort = 400;
 	float towerKeep = 650;
 
-	void Awake () {
+	void Start () {
 		s = this;
+
+		print ("Setting up XPMaster values");
 
 		if (level.Count == 0)
 			SetUp ();
@@ -59,6 +61,9 @@ public class XPMaster : NetworkBehaviour {
 		}
 		for (int i = 0; i < 3; i++) {
 			reqXp.Add (0);
+		}
+		for (int i = 0; i < 3; i++) {
+			xp_percent.Add (0);
 		}
 	}
 		
@@ -106,9 +111,15 @@ public class XPMaster : NetworkBehaviour {
 					if (xp [SideToInt (rewardSide)] > reqXp [SideToInt (rewardSide)]) {
 						level [SideToInt (rewardSide)] += 1;
 						reqXp [SideToInt (rewardSide)] = ReqLevelCalculator (level [SideToInt (rewardSide)]);
+
 						LevelUpFunctions.Invoke (level [SideToInt (rewardSide)], rewardSide);
 					}
-					XpUpFunctions.Invoke (((xp [SideToInt (rewardSide)]) - ReqLevelCalculator (level [SideToInt (rewardSide)]-1)) / (ReqLevelCalculator (level [SideToInt (rewardSide)]) - ReqLevelCalculator (level [SideToInt (rewardSide)]-1)), rewardSide);
+
+					float myXp = xp [SideToInt (rewardSide)];
+					float myReqUp = ReqLevelCalculator (level [SideToInt (rewardSide)]);
+					float myReqDown = ReqLevelCalculator (level [SideToInt (rewardSide)] - 1);
+					xp_percent [SideToInt (rewardSide)] = (myXp - myReqDown) / (myReqUp - myReqDown);
+					XpUpFunctions.Invoke (xp_percent[SideToInt(rewardSide)], rewardSide);
 				}
 			}
 		}

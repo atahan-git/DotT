@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class TriggerChildObject : MonoBehaviour {
 
@@ -13,8 +14,20 @@ public class TriggerChildObject : MonoBehaviour {
 	}
 
 
+	void Update (){
+		foreach (GameObject myObj in _collidingObjects) {
+			if (myObj != null) {
+				if (!myObj.activeSelf) {
+					_collidingObjects.Remove (myObj);
+					break;
+				}
+			}
+		}
+	}
+
 	void CleanupList (){
 		_collidingObjects.RemoveAll (GameObject => GameObject == null);
+		_collidingObjects = _collidingObjects.Distinct ().ToList ();
 	}
 
 	void OnTriggerEnter (Collider myCol){

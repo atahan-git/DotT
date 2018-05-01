@@ -27,8 +27,8 @@ public class HeroTopBarDisplay : MonoBehaviour {
 		if (myPlayerId == -1)
 			return;
 
-		if (PlayerSpawner.AllSpawners [myPlayerId] != null) {
-			myHp_percent = PlayerSpawner.AllSpawners [myPlayerId].myHealth.currentHealth / PlayerSpawner.AllSpawners [myPlayerId].myHealth.maximumHealth;
+		if (PlayerSpawner.AllSpawners [mySlotId] != null) {
+			myHp_percent = PlayerSpawner.AllSpawners [mySlotId].myHealth.currentHealth / PlayerSpawner.AllSpawners [mySlotId].myHealth.maximumHealth;
 			myHeatlhBar.value = myHp_percent;
 		} else {
 			myHeatlhBar.enabled = false;

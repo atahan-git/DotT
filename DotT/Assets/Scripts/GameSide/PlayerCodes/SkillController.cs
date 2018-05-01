@@ -32,7 +32,7 @@ public class SkillController : NetworkBehaviour {
 
 	IEnumerator HookUpSkills (){
 		while (true) {
-			if (myHero != null) {
+			if (myHero != null && gameObject.activeSelf) {
 				foreach (SkillMasterClass skill in GetComponent<PlayerSpawner>().myHero.GetComponentsInChildren<SkillMasterClass>()) {
 					switch (skill.mySettings.skillButton) {
 					case SkillSettings.Buttons.Q:

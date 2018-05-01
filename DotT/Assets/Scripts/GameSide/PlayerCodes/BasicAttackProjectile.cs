@@ -26,6 +26,7 @@ public class BasicAttackProjectile : MonoBehaviour {
 		if (target != null) {
 			transform.position = Vector3.MoveTowards (transform.position, target.transform.position, speed * Time.deltaTime);
 
+			//damage is only applied server side
 			if (GetComponentInParent<UnityEngine.Networking.NetworkIdentity> ().isServer) {
 				if (Vector3.Distance (transform.position, target.transform.position) < 0.2f && !isDealtDmg) {
 					target.Damage(damage, Health.HpModType.physicalDamage, mySide);

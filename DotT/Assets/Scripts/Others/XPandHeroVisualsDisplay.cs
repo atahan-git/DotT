@@ -63,16 +63,18 @@ public class XPandHeroVisualsDisplay : MonoBehaviour {
 		for (int i = 0; i < 3; i++) {
 			myDisps [i].myPlayerId = (XPMaster.SideToInt (mySide) * 3) + (2-i);
 			myDisps [i].SetUp ();
-			print (myDisps [i].gameObject.name);
+			//print (myDisps [i].gameObject.name);
 		}
 	}
 
 	void Update(){
 		if (XPMaster.s != null) {
-			level = XPMaster.s.level [XPMaster.SideToInt (mySide)];
-			txtLvl.text = (level + 1).ToString ();
-			xp_percent = XPMaster.s.xp [XPMaster.SideToInt (mySide)];
-			sldXp.value = xp_percent;
+			if (XPMaster.s.level.Count > XPMaster.SideToInt (mySide)) {
+				level = XPMaster.s.level [XPMaster.SideToInt (mySide)];
+				txtLvl.text = (level + 1).ToString ();
+				xp_percent = XPMaster.s.xp_percent [XPMaster.SideToInt (mySide)];
+				sldXp.value = xp_percent;
+			}
 		}
 	}
 

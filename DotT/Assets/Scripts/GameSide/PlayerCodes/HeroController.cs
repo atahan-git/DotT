@@ -78,14 +78,13 @@ public class HeroController : NetworkBehaviour {
 			spawn.myHero.GetComponent<NavMeshAgent> ().enabled = false;
 			break;
 		case MovementMode.attackmove:
-			if (attackTarget != null) {
+			if (attackTarget != null && attackTarget.gameObject.activeSelf) {
 				if (Vector3.Distance (spawn.myHero.transform.position, attackTarget.transform.position) < attackrange) {
 					if (attackCounter <= 0) {
-						if(attackTarget != null)
-							ShootProjectile ();
+						ShootProjectile ();
 						attackCounter = 1f / attackSpeed;
 					} else {
-
+						//do nothing
 					}
 					movePos = GetComponent<PlayerSpawner> ().myHero.transform.position;
 				} else {
