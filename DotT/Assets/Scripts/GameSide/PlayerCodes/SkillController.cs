@@ -141,12 +141,12 @@ public class SkillController : NetworkBehaviour {
 									//do nothing as we can target both the enemy and the friend
 										break;
 									case SkillSettings.Target.Enemy:
-										/*if (mySide == enemySide)
-											continue;*/
+										if (mySide == enemySide)
+											continue;
 										break;
 									case SkillSettings.Target.Ally:
-										/*if (mySide != enemySide)
-											continue;*/
+										if (mySide != enemySide)
+											continue;
 										break;
 									}
 								} else {

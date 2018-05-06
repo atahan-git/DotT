@@ -28,6 +28,7 @@ public class SkillMasterClass : NetworkBehaviour{
 	//--------------------------------------------------------------EXECUTE BLOCK
 	public void ExecuteSkill (ExecutionData data){
 		if (isServer) {
+			data.myType = this.GetType ().Name;
 			print (SkillName + " activated from skillmasterclass");
 			StartCoroutine (Execute (data));
 		}
@@ -72,7 +73,13 @@ public class SkillMasterClass : NetworkBehaviour{
 	//--------------------------------------------------------------TELEGRAPHS
 	//displays the set telegrapgh based on the skill type.
 	public string SkillName = "def";
-	protected void DisplayTelegraph(ExecutionData data){
+	public void DisplayTelegraph(ExecutionData data){
+		if (!data.isServer && this.GetType().Name != data.myType) {
+			print ("Fuck you UNet, WRONG RPC TYPE... correcting " + this.GetType().Name + " >> " + data.myType);
+			((SkillMasterClass)GetComponent (data.myType)).DisplayTelegraph (data);
+			return;
+		}
+			
 		try {
 			switch(mySettings.skillType){
 			case SkillSettings.Types.Area:
@@ -100,7 +107,12 @@ public class SkillMasterClass : NetworkBehaviour{
 	//over head effect for targeted, ground telegrapgh for area and directional,
 	//There wont be any telegraphs for instant and toggle. There will be amazingly advanced vectors for vector stuff (hopefully)
 
-	protected void HideTelegraph(ExecutionData data){
+	public void HideTelegraph(ExecutionData data){
+		if (!data.isServer && this.GetType().Name != data.myType) {
+			print ("Fuck you UNet, WRONG RPC TYPE... correcting " + this.GetType().Name + " >> " + data.myType);
+			((SkillMasterClass)GetComponent (data.myType)).HideTelegraph (data);
+			return;
+		}
 		try {
 			activeTelegraph.HideTelegraph ();
 			print (gameObject.name + " HideTelegraph");
@@ -273,6 +285,7 @@ public class ExecutionData{
 	public Vector3 heroPos;
 	public Vector3 executePos;
 	public Vector3 executeDir;
+	public string myType;
 	public Quaternion executeRot{
 		get{
 			return Quaternion.LookRotation (executeDir);
