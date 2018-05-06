@@ -52,16 +52,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62986103778105a44827bf2089c6b1c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goMark: {fileID: 1688101221281416, guid: 0b61de8841a77bf40b79ae45f8c1079b, type: 2}
+  attackMark: {fileID: 1825128914347060, guid: e5914028e76e38c43ad17b5887820bf6, type: 2}
   heroes:
   - {fileID: 1754823917970344, guid: 4293f923cee7ca747812969614ed2db8, type: 2}
   - {fileID: 1935467310731690, guid: 297d93028c8a08b478ff6a1361fcd008, type: 2}
   - {fileID: 1675421352659138, guid: efb1b1daa8c7a5344a496c1cdc36635c, type: 2}
   - {fileID: 1464007927318980, guid: dc51dd4e2e3ce7049a111f971c42eb2a, type: 2}
   heroIcons:
-  - {fileID: 21300000, guid: 2b0d501178e5a3a44b7a7ed7a22bc8d3, type: 3}
+  - {fileID: 21300000, guid: 18f80acc83df58b44a3ccd6bdd4ca5c4, type: 3}
   - {fileID: 21300000, guid: 86c5e668f075f044f820dd346b49ac6b, type: 3}
   - {fileID: 21300000, guid: cbf516273aba625459e90c56fcffe7fb, type: 3}
   - {fileID: 21300000, guid: e8961d6b051994344aa366104aaca02f, type: 3}
+  heroTooltips:
+  - Good old StoneDriller. Has good knowledge of physics and time.
+  - Some different colored version of your average cube.
+  - A cube with an even differenter color.
+  - A cube with the differentest color.
 --- !u!114 &114882411488035460
 MonoBehaviour:
   m_ObjectHideFlags: 1

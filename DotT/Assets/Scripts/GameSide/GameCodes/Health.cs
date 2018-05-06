@@ -75,6 +75,8 @@ public class Health : NetworkBehaviour
     Image greenBar;
     Image mainBar;
     Image greyBar;
+	public Vector3 healthBarOffset = new Vector3 (0,0.7f,0);
+	public SpriteRenderer pointyCircle;
 
     GameObject healthBar;
     float healthBarWidth;
@@ -104,8 +106,8 @@ public class Health : NetworkBehaviour
             Debug.Log("Type Error");
             break;
 
-        case Type.hero:
-            healthBar = Instantiate(STORAGE_HealthPrefabs.s.heroHealthBar);
+		case Type.hero:
+			healthBar = Instantiate (STORAGE_HealthPrefabs.s.heroHealthBar);
             break;
 
 		default:
@@ -114,6 +116,7 @@ public class Health : NetworkBehaviour
         }
 
         healthBar.transform.SetParent(gameObject.transform, false);
+		healthBar.transform.localPosition = healthBarOffset;
 
         orangeBar = healthBar.transform.Find("Orange").GetComponent<Image>();
         greenBar = healthBar.transform.Find("Green").GetComponent<Image>();
@@ -134,10 +137,15 @@ public class Health : NetworkBehaviour
 
 	void SetColor (){
 		if (mySide != PlayerSpawner.LocalPlayerSpawner.mySide) {
-			if (mySide == Side.red || (PlayerSpawner.LocalPlayerSpawner.mySide == Side.red && mySide == Side.blue))
+			if (mySide == Side.red || (PlayerSpawner.LocalPlayerSpawner.mySide == Side.red && mySide == Side.blue)) {
 				mainBar.color = STORAGE_HealthPrefabs.s.enemyColor1;
-			else
+				if(pointyCircle != null)
+					pointyCircle.color = STORAGE_HealthPrefabs.s.enemyColor1;
+			} else {
 				mainBar.color = STORAGE_HealthPrefabs.s.enemyColor2;
+				if(pointyCircle != null)
+					pointyCircle.color = STORAGE_HealthPrefabs.s.enemyColor2;
+			}
 		}
 	}
 
@@ -487,6 +495,12 @@ public class Health : NetworkBehaviour
 			myAttackerSides.Add(attackerSide);  //ATTACKER SIDE LOGIC
 
 		ModifyHealth (amount, type);
+	}
+	public void Damage (float amount, HpModType type, float duration, Side attackerSide){
+		if(!myAttackerSides.Contains(attackerSide))
+			myAttackerSides.Add(attackerSide);  //ATTACKER SIDE LOGIC
+
+		ModifyHealth (amount, type, duration);
 	}
 
     //Deals damage or heals.

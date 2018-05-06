@@ -37,11 +37,14 @@ public class HeroController : NetworkBehaviour {
 			if (Input.GetMouseButtonDown (1)) {
 				RaycastHit hit; 
 				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition); 
-				if (Physics.Raycast (ray, out hit, 100.0f)) { 
-					if (hit.transform.root.gameObject.tag == "Hero" && hit.transform.root.gameObject.GetComponent<Health>()!= null) {
+				int layerMask = (1 << 8) | (1 << 9);
+				if (Physics.Raycast (ray, out hit, 100.0f, layerMask)) { 
+					if (hit.transform.root.gameObject.tag == "Hero" && hit.transform.root.gameObject.GetComponent<Health> () != null) {
 						CmdAttack (hit.transform.root.gameObject);
+						Instantiate (STORAGE_HeroPrefabs.s.attackMark, hit.transform.root.gameObject.transform.position + hit.transform.root.gameObject.GetComponent<Health> ().healthBarOffset, Quaternion.identity);
 					} else {
-						CmdChangePos(hit.point);
+						CmdChangePos (hit.point);
+						Instantiate (STORAGE_HeroPrefabs.s.goMark, hit.point, Quaternion.identity);
 					}
 				}
 			}

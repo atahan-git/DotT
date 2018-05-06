@@ -6,6 +6,9 @@ public class STORAGE_HeroPrefabs : MonoBehaviour
 {
 	public static STORAGE_HeroPrefabs s;
 
+	public GameObject goMark;
+	public GameObject attackMark;
+
 	public GameObject[] heroes = new GameObject[4];
 	public Sprite[] heroIcons = new Sprite[4];
 	[TextArea]

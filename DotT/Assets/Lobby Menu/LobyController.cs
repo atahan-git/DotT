@@ -91,11 +91,17 @@ public class LobyController : NetworkBehaviour {
 	//-----------------------------------------------------------------Game Begin Stuff
 
 	public GameObject masterScripts;
+	//public GameObject cheatsCanvas;
 	void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode){
 		print ("-*-*-*-*-*-* Scene: " + scene.name + " was loaded  *-*-*-*-*-*-");
 		if(scene.buildIndex != 0){
-			GameObject myMasters = (GameObject)Instantiate (masterScripts);
-			NetworkServer.Spawn (myMasters);
+			if (isHost) {
+				print ("-*-*-*-*-*-* Spawned master scripts *-*-*-*-*-*-");
+				GameObject myMasters = (GameObject)Instantiate (masterScripts);
+				NetworkServer.Spawn (myMasters);
+				/*GameObject myCheats = (GameObject)Instantiate (cheatsCanvas);
+				NetworkServer.Spawn (myCheats);*/
+			}
 		}
 	}
 

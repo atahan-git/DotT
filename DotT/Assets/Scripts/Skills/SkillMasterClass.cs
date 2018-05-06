@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-
-//-----------------------------THIS SCRIPT SHOULD BE CALLED BOTH IN THE SERVER AND IN THE CLIENT TO WORK
-public class SkillMasterClass : MonoBehaviour {
+//-----------------------------Removed the dumb both server & client stuff. This will be called on server only an the rest will be adjusted
+public class SkillMasterClass : NetworkBehaviour{
 	protected delegate IEnumerator ChildDelegate (ExecutionData data);
 
 	public SkillSettings mySettings;
@@ -12,11 +12,6 @@ public class SkillMasterClass : MonoBehaviour {
 	Health self{
 		get{
 			return GetComponent<Health> ();
-		}
-	}
-	Health target{
-		get{
-			return activeTelegraph.GetTarget ();
 		}
 	}
 	MultipleHealths areaTargets{
@@ -32,7 +27,10 @@ public class SkillMasterClass : MonoBehaviour {
 
 	//--------------------------------------------------------------EXECUTE BLOCK
 	public void ExecuteSkill (ExecutionData data){
-		StartCoroutine (Execute (data));
+		if (isServer) {
+			print (SkillName + " activated from skillmasterclass");
+			StartCoroutine (Execute (data));
+		}
 	}
 
 	//use IEnumerable Execute(){} to define your own method inside this guy
@@ -54,7 +52,16 @@ public class SkillMasterClass : MonoBehaviour {
 
 	//----------------------------------------------------------------------------------------------------------------------HELPER METHODS
 	protected void TriggerAnimation(string name){	//triggers an animation in the player model
-		GetComponentInParent<Animator> ().SetTrigger (name);
+		GetComponentInChildren<Animator> ().SetTrigger (name);
+		RpcTriggerAnimation (name);
+	}
+
+	protected void TriggerAnimation(){	//triggers the cast animation in the player model
+		TriggerAnimation("Cast");
+	}
+	[ClientRpc]
+	void RpcTriggerAnimation (string name){
+		GetComponentInChildren<Animator> ().SetTrigger (name);
 	}
 
 	protected void SpendMana (ExecutionData data){
@@ -64,25 +71,50 @@ public class SkillMasterClass : MonoBehaviour {
 
 	//--------------------------------------------------------------TELEGRAPHS
 	//displays the set telegrapgh based on the skill type.
+	public string SkillName = "def";
 	protected void DisplayTelegraph(ExecutionData data){
 		try {
-			activeTelegraph.ShowTelegraph ();
-			activeTelegraph.SetPosition (data.executePos);
-			print (gameObject.name + " ShowTelegraph");
+			switch(mySettings.skillType){
+			case SkillSettings.Types.Area:
+				activeTelegraph.ShowTelegraph ();
+				activeTelegraph.SetPosition (data.executePos);
+				print (gameObject.name + " ShowTelegraph - " + data.isServer + " - " + SkillName);
+				break;
+			case SkillSettings.Types.Targeted:
+				activeTelegraph.ShowTelegraph (data.target.transform);
+				print (gameObject.name + " ShowTelegraph over target - " + data.isServer + " - " + SkillName);
+				break;
+			}
+			if(data.isServer)
+				RpcDisplayTelegraph(data);
+		} catch (System.Exception e) {
+			Debug.LogError (e.Message + " - " + e.StackTrace);
+		}
+	}
+	[ClientRpc]
+	void RpcDisplayTelegraph(ExecutionData data){
+		data.isServer = false;
+		DisplayTelegraph (data);
+	}
+
+	//over head effect for targeted, ground telegrapgh for area and directional,
+	//There wont be any telegraphs for instant and toggle. There will be amazingly advanced vectors for vector stuff (hopefully)
+
+	protected void HideTelegraph(ExecutionData data){
+		try {
+			activeTelegraph.HideTelegraph ();
+			print (gameObject.name + " HideTelegraph");
+			if(data.isServer)
+				RpcHideTelegraph(data);
 		} catch (System.Exception e) {
 			Debug.LogError (e.StackTrace);
 		}
 	}
-	//over head effect for targeted, ground telegrapgh for area and directional,
-	//There wont be any telegraphs for istant and toggle. There will be amazingly advanced vectors for vector stuff (hopefully)
 
-	protected void HideTelegraph(){
-		try {
-			activeTelegraph.HideTelegraph ();
-			print (gameObject.name + " HideTelegraph");
-		} catch (System.Exception e) {
-			Debug.LogError (e.StackTrace);
-		}
+	[ClientRpc]
+	void RpcHideTelegraph(ExecutionData data){
+		data.isServer = false;
+		HideTelegraph (data);
 	}
 
 	protected void ChangeTelegrapghState(int state){}	//for changing telegrapgh state (talents etc.)
@@ -93,10 +125,23 @@ public class SkillMasterClass : MonoBehaviour {
 	//InstantiateEffect(-index-, settings);	//will add settings as needed - maybe custom locations?
 	public ObjectPool[] effectPools = new ObjectPool[1];
 
-	protected void InstantiateEffect(ExecutionData data, int index){
+	protected GameObject InstantiateEffect(ExecutionData data, int index, Vector3 position){
 		if (!data.isServer)
-			return;
-		effectPools [index].Spawn (data.executePos);
+			return null;
+		GameObject myObj = effectPools [index].Spawn (position);
+		return myObj;
+	}	
+
+	protected GameObject InstantiateEffect(ExecutionData data, int index){
+		return InstantiateEffect (data, index, data.executePos);
+	}	
+
+	protected GameObject InstantiateEffectOverTelegraph(ExecutionData data, int index){
+		if (!data.isServer)
+			return null;
+		GameObject myObj = InstantiateEffect (data, index, activeTelegraph.transform.position);
+		myObj.transform.parent = activeTelegraph.transform;
+		return myObj;
 	}	
 
 
@@ -113,7 +158,9 @@ public class SkillMasterClass : MonoBehaviour {
 		case SkillSettings.Types.Area:
 			Damage (data, areaTargets);
 			break;
-
+		case SkillSettings.Types.Targeted:
+			Damage (data, new MultipleHealths (new Health[]{ data.target.GetComponent<Health> () }));
+			break;
 		}
 	}
 
@@ -121,9 +168,20 @@ public class SkillMasterClass : MonoBehaviour {
 		if (!data.isServer)
 			return;
 
+		Damage (data, myTargets, mySettings.damage);
+	}
+
+	protected void Damage (ExecutionData data, MultipleHealths myTargets, float damageValue){
+		if (!data.isServer)
+			return;
+
 		foreach (Health hl in myTargets.healths) {
 			if (hl != null) {
-				hl.Damage (mySettings.damage, mySettings.damageType, self.mySide);
+				if (mySettings.damageOverTime > 0) {
+					hl.Damage (damageValue, mySettings.damageType, mySettings.damageOverTime, self.mySide);
+				} else {
+					hl.Damage (damageValue, mySettings.damageType, self.mySide);
+				}
 			}
 		}
 	}
@@ -132,7 +190,37 @@ public class SkillMasterClass : MonoBehaviour {
 
 	protected void Heal(){}		//same as damage but heals, custom values can also be used
 
-	protected void ApplyEffect(ExecutionData data){}		//Aplies status effect
+	protected void ApplyEffect(ExecutionData data){		//Aplies status effect
+		if (!data.isServer)
+			return;
+
+		switch(mySettings.skillType){
+		case SkillSettings.Types.Area:
+			ApplyEffect (data, areaTargets);
+			break;
+		case SkillSettings.Types.Targeted:
+			ApplyEffect (data, new MultipleHealths (new Health[]{ data.target.GetComponent<Health> () }));
+			break;
+		}
+	}
+
+	protected void ApplyEffect (ExecutionData data, MultipleHealths myTargets){
+		if (!data.isServer)
+			return;
+
+		foreach (Health hl in myTargets.healths) {
+			if (hl != null) {
+				switch (mySettings.myEffect) {
+				case SkillSettings.StatusEffect.Slow:
+					hl.ModifyMovementSpeed (mySettings.myEffectAmount,mySettings.myEffectDuration);
+					break;
+				case SkillSettings.StatusEffect.Stun:
+					hl.Stun (mySettings.myEffectDuration);
+					break;
+				}
+			}
+		}
+	}
 
 
 	//--------------------------------------------------------------STRUCTURE AND PROJECTILE STUFF
@@ -181,6 +269,7 @@ public class MultipleHealths{
 [System.Serializable]
 public class ExecutionData{
 	public bool isServer;
+	public GameObject target; //only has value if its a targeted skill
 	public Vector3 heroPos;
 	public Vector3 executePos;
 	public Vector3 executeDir;
@@ -196,10 +285,11 @@ public class ExecutionData{
 	public ExecutionData(){}
 
 
-	public ExecutionData(bool _isServer,Vector3 _heroPos, Vector3 _executePos, Vector3 _executeDir){
+	public ExecutionData(bool _isServer,Vector3 _heroPos, Vector3 _executePos, Vector3 _executeDir, GameObject _target){
 		isServer = _isServer;
 		heroPos = _heroPos;
 		executePos = _executePos;
 		executeDir = _executeDir;
+		target = _target;
 	}
 }

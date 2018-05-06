@@ -17,8 +17,11 @@ public class SkillController : NetworkBehaviour {
 	public float mana = 500f;
 	public float maxMana = 500f;
 	public float manaRegen = 50f;
-	float[] cooldown = new float[4];
 	float[] curCooldown = new float[4];
+
+	SkillSettings[] skillSettings = new SkillSettings[4];
+
+	public bool isCooldownEnabled = true;
 
 	//this exists only in the server side
 	GameObject myHero;
@@ -37,25 +40,22 @@ public class SkillController : NetworkBehaviour {
 					switch (skill.mySettings.skillButton) {
 					case SkillSettings.Buttons.Q:
 						QSkill = skill.ExecuteSkill;
-						cooldown [0] = skill.mySettings.cooldown;
-						SkillCooldownDisplay.disps [0].cooldown = cooldown [0];
 						break;
 					case SkillSettings.Buttons.W:
 						WSkill = skill.ExecuteSkill;
-						cooldown [1] = skill.mySettings.cooldown;
-						SkillCooldownDisplay.disps [1].cooldown = cooldown [1];
 						break;
 					case SkillSettings.Buttons.E:
 						ESkill = skill.ExecuteSkill;
-						cooldown [2] = skill.mySettings.cooldown;
-						SkillCooldownDisplay.disps [2].cooldown = cooldown [2];
 						break;
 					case SkillSettings.Buttons.R:
 						RSkill = skill.ExecuteSkill;
-						cooldown [3] = skill.mySettings.cooldown;
-						SkillCooldownDisplay.disps [3].cooldown = cooldown [3];
 						break;
 					}
+
+					int mySkillIndex = NumFromButton (skill.mySettings.skillButton);
+					skillSettings [mySkillIndex] = skill.mySettings;
+
+					SkillCooldownDisplay.disps [mySkillIndex].cooldown = skillSettings [mySkillIndex].cooldown;
 				}
 
 				RpcHookUpClient (myHero);
@@ -69,30 +69,28 @@ public class SkillController : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	void RpcHookUpClient (GameObject myHero){
+	void RpcHookUpClient (GameObject _myHero){
+		myHero = _myHero;
 		foreach (SkillMasterClass skill in myHero.GetComponentsInChildren<SkillMasterClass>()) {
 			switch (skill.mySettings.skillButton) {
 			case SkillSettings.Buttons.Q:
 				QSkill = skill.ExecuteSkill;
-				cooldown [0] = skill.mySettings.cooldown;
-				SkillCooldownDisplay.disps [0].cooldown = cooldown [0];
 				break;
 			case SkillSettings.Buttons.W:
 				WSkill = skill.ExecuteSkill;
-				cooldown [1] = skill.mySettings.cooldown;
-				SkillCooldownDisplay.disps [1].cooldown = cooldown [1];
 				break;
 			case SkillSettings.Buttons.E:
 				ESkill = skill.ExecuteSkill;
-				cooldown [2] = skill.mySettings.cooldown;
-				SkillCooldownDisplay.disps [2].cooldown = cooldown [2];
 				break;
 			case SkillSettings.Buttons.R:
 				RSkill = skill.ExecuteSkill;
-				cooldown [3] = skill.mySettings.cooldown;
-				SkillCooldownDisplay.disps [3].cooldown = cooldown [3];
 				break;
 			}
+
+			int mySkillIndex = NumFromButton (skill.mySettings.skillButton);
+			skillSettings [mySkillIndex] = skill.mySettings;
+
+			SkillCooldownDisplay.disps [mySkillIndex].cooldown = skillSettings [mySkillIndex].cooldown;
 		}
 	}
 
@@ -105,27 +103,79 @@ public class SkillController : NetworkBehaviour {
 		
 
 		if (isLocalPlayer && !PlayerSpawner.LocalPlayerSpawner.myHealth.isDead) {
-			if (Input.GetKeyDown (KeyCode.Q) && curCooldown [0] <= 0) {
-				curCooldown [0] = cooldown [0];
-				ExecuteSkill (SkillSettings.Buttons.Q);
-			}
-			if (Input.GetKeyDown (KeyCode.W) && curCooldown [1] <= 0) {
-				curCooldown [1] = cooldown [1];
-				ExecuteSkill (SkillSettings.Buttons.W);
-			}
-			if (Input.GetKeyDown (KeyCode.E) && curCooldown [2] <= 0) {
-				curCooldown [2] = cooldown [2];
-				ExecuteSkill (SkillSettings.Buttons.E);
-			}
-			if (Input.GetKeyDown (KeyCode.R) && curCooldown [3] <= 0) {
-				curCooldown [3] = cooldown [3];
-				ExecuteSkill (SkillSettings.Buttons.R);
+			bool[] isKeyPressed = new bool[4];
+			if (Input.GetKeyDown (KeyCode.Q))
+				isKeyPressed [0] = true;
+			if (Input.GetKeyDown (KeyCode.W))
+				isKeyPressed [1] = true;
+			if (Input.GetKeyDown (KeyCode.E))
+				isKeyPressed [2] = true;
+			if (Input.GetKeyDown (KeyCode.R))
+				isKeyPressed [3] = true;
+
+
+			if (isKeyPressed[0] || isKeyPressed[1] || isKeyPressed[2] || isKeyPressed[3]) {
+				RaycastHit FloorHit; 
+				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+				int floorMask = (1 << 8);
+				if (Physics.Raycast (ray, out FloorHit, 100.0f, floorMask)) {
+					float distance = Vector3.Distance (myHero.transform.position.Floorize (), FloorHit.point.Floorize ());
+
+					for (int i = 0; i < 4; i++) {
+						if (isKeyPressed[i] && curCooldown [i] <= 0 && distance <= skillSettings [i].range && mana > skillSettings [i].manaCost) {
+							Health myTarget = null;
+							if (skillSettings [i].skillType == SkillSettings.Types.Targeted) {
+								
+								RaycastHit heroHit; 
+								int heroMask = (1 << 9);
+								if (Physics.Raycast (ray, out heroHit, 100.0f, heroMask)) {
+									myTarget = heroHit.transform.root.gameObject.GetComponent<Health> ();
+									if (myTarget == null)
+										continue;
+								
+									Health.Side mySide = PlayerSpawner.LocalPlayerSpawner.myHealth.mySide;
+									Health.Side enemySide =	myTarget.mySide;
+
+									switch (skillSettings [i].skillTarget) {
+									case SkillSettings.Target.Both:
+									//do nothing as we can target both the enemy and the friend
+										break;
+									case SkillSettings.Target.Enemy:
+										/*if (mySide == enemySide)
+											continue;*/
+										break;
+									case SkillSettings.Target.Ally:
+										/*if (mySide != enemySide)
+											continue;*/
+										break;
+									}
+								} else {
+									continue;
+								}
+							}
+							GameObject target = null;
+							if (myTarget != null)
+								target = myTarget.gameObject;
+							curCooldown [i] = skillSettings [i].cooldown;
+							ExecuteSkill (ButtonFromNum (i), FloorHit.point, target);
+						}
+					}
+				}
 			}
 
-			for (int i = 0; i < cooldown.Length; i++) {
-				curCooldown[i] -= Time.deltaTime;
-				curCooldown [i] = Mathf.Clamp (curCooldown [i], 0, cooldown [i]);
-				SkillCooldownDisplay.disps [i].curCooldown = curCooldown [i];
+
+
+			for (int i = 0; i < skillSettings.Length; i++) {
+				if (skillSettings [i] != null) {
+					if (!isCooldownEnabled) {
+						curCooldown [i] = 0;
+						mana = maxMana;
+					}
+
+					curCooldown [i] -= Time.deltaTime;
+					curCooldown [i] = Mathf.Clamp (curCooldown [i], 0, skillSettings [i].cooldown);
+					SkillCooldownDisplay.disps [i].curCooldown = curCooldown [i];
+				}
 			}
 
 			mana += manaRegen * Time.deltaTime;
@@ -134,20 +184,16 @@ public class SkillController : NetworkBehaviour {
 	}
 
 
-	void ExecuteSkill (SkillSettings.Buttons mySkillType){
+	void ExecuteSkill (SkillSettings.Buttons mySkillType, Vector3 hitPos, GameObject target){
 		print (gameObject.name + " skill event triggered");
-		RaycastHit hit; 
-		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-		int layerMask = 1 << 8;
-		if (Physics.Raycast (ray, out hit, 100.0f, layerMask)) {
-			CmdExecuteSkill (mySkillType, hit.point);
-		}
+
+		CmdExecuteSkill (mySkillType, hitPos, target);
 	}
 
 	[Command]
-	void CmdExecuteSkill (SkillSettings.Buttons mySkillType, Vector3 executePos){
+	void CmdExecuteSkill (SkillSettings.Buttons mySkillType, Vector3 executePos, GameObject target){
 		print (gameObject.name + " executed skill in Server "+ mySkillType.ToString());
-		ExecutionData myData = new ExecutionData (true, myHero.transform.position, executePos, executePos.Floorize() - myHero.transform.position.Floorize());
+		ExecutionData myData = new ExecutionData (true, myHero.transform.position, executePos, executePos.Floorize() - myHero.transform.position.Floorize(),target);
 		switch (mySkillType) {
 		case SkillSettings.Buttons.Q:
 			if (QSkill != null)
@@ -167,12 +213,14 @@ public class SkillController : NetworkBehaviour {
 			break;
 		}
 		RpcExecuteSkill (mySkillType, myData);
+
+		myHero.transform.LookAt (myData.executePos);
 	}
 
 	[ClientRpc]
 	void RpcExecuteSkill (SkillSettings.Buttons mySkillType, ExecutionData myData){
 		print (gameObject.name + " executed skill in Client "+ mySkillType.ToString());
-		myData.isServer = false;
+		/*myData.isServer = false;
 		switch (mySkillType) {
 		case SkillSettings.Buttons.Q:
 			if (QSkill != null)
@@ -190,6 +238,47 @@ public class SkillController : NetworkBehaviour {
 			if (RSkill != null)
 				RSkill (myData);
 			break;
+		}*/
+
+		myHero.transform.LookAt (myData.executePos);
+	}
+
+
+	SkillSettings.Buttons ButtonFromNum (int i){
+		switch (i) {
+		case 0:
+			return SkillSettings.Buttons.Q;
+			break;
+		case 1:
+			return SkillSettings.Buttons.W;
+			break;
+		case 2:
+			return SkillSettings.Buttons.E;
+			break;
+		case 3:
+			return SkillSettings.Buttons.R;
+			break;
 		}
+
+		return SkillSettings.Buttons.Q;
+	}
+
+	int NumFromButton (SkillSettings.Buttons i){
+		switch (i) {
+		case SkillSettings.Buttons.Q:
+			return 0;
+			break;
+		case SkillSettings.Buttons.W:
+			return 1;
+			break;
+		case SkillSettings.Buttons.E:
+			return 2;
+			break;
+		case SkillSettings.Buttons.R:
+			return 3;
+			break;
+		}
+
+		return 0;
 	}
 }

@@ -11,7 +11,19 @@ public class PooledObject : NetworkBehaviour {
 
 	public bool isActive = false;
 
-	public float lifeTime = -1f; //if a value bigger than zero will auto disable after that time
+	[SerializeField]
+	float _lifetime = -1f; //if a value bigger than zero will auto disable after that time
+	public float lifeTime{
+		get{
+			return _lifetime;
+		}
+		set{
+			if (_lifetime != value) {
+				LifetimeChangeCheck ();
+				_lifetime = value;
+			}
+		}
+	}
 
 	void Start (){
 		transform.GetChild(0).gameObject.SetActive (false);
@@ -30,6 +42,14 @@ public class PooledObject : NetworkBehaviour {
 			if (lifeTime > 0f)
 				Invoke ("DisableObject", lifeTime);
 		}
+	}
+
+
+	void LifetimeChangeCheck (){
+		if (IsInvoking ("DisableObject")) {
+			CancelInvoke ("DisableObject");
+			Invoke ("DisableObject", lifeTime);
+		};
 	}
 
 

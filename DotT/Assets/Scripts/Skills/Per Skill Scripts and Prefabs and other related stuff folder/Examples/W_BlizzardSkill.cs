@@ -29,6 +29,6 @@ public class W_BlizzardSkill : SkillMasterClass {
 
 		yield return new WaitForSeconds(mySettings.waitTimes[3]);
 
-		HideTelegraph();
+		HideTelegraph(data);
 	}
 }

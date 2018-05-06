@@ -8,6 +8,8 @@ public class CameraController : MonoBehaviour
 
 	public bool toggle = true;
 	public Vector3 cameraOffset = new Vector3(0,5,5);
+	public Vector2 cameraBounds = new Vector2(3,6);
+	public bool isBounded = true;
 
 	float area = 100;
 
@@ -57,7 +59,14 @@ public class CameraController : MonoBehaviour
 			toggle = !toggle;
 
 
-		float mouseScrollDelta = Input.GetAxis ("Mouse ScrollWheel")*10;
+		float mouseScrollDelta = Input.GetAxis ("Mouse ScrollWheel") * 10;
+
+		if (isBounded) {
+			if (transform.position.y > cameraBounds.y && mouseScrollDelta < 0)
+				return;
+			if (transform.position.y < cameraBounds.x && mouseScrollDelta > 0)
+				return;
+		}		
 
 		transform.Translate (0, 0, mouseScrollDelta, Space.Self);
     }

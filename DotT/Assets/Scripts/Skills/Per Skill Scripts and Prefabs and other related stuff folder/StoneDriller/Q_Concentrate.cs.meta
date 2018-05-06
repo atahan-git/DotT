@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7ad7d4549e93447448f7f9d0441cea0a
+timeCreated: 1513528739
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - mySettings: {fileID: 11400000, guid: f8ac6599d70c554429a50c142997e445, type: 2}
+  - activeTelegraph: {instanceID: 0}
+  - SpawnedObject: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

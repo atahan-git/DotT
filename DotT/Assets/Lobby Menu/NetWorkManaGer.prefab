@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114000013630324004}
   - component: {fileID: 114620059338078450}
   - component: {fileID: 114000013756502130}
+  - component: {fileID: 114359303795695982}
   m_Layer: 0
   m_Name: NetWorkManaGer
   m_TagString: Untagged
@@ -81,6 +82,9 @@ MonoBehaviour:
   - {fileID: 1602344441094088, guid: 0db92c20c50c4c74aa47259ec605e40c, type: 2}
   - {fileID: 1905279768466680, guid: 849620ebfeb71e440b9caf9d1bb36a52, type: 2}
   - {fileID: 1651744489097678, guid: 7ec4488384da2b8458e2487cece1ea54, type: 2}
+  - {fileID: 1425609571785454, guid: 686f9d3617d4fbf46a798017df8f20fc, type: 2}
+  - {fileID: 1549782239683848, guid: 1be067827e10bbc4d965b68631bd5fba, type: 2}
+  - {fileID: 1747857884583914, guid: 1b3ea6870ffcd874b841d997d99eaf30, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -162,6 +166,17 @@ MonoBehaviour:
   showGUI: 0
   offsetX: 0
   offsetY: 0
+--- !u!114 &114359303795695982
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012408815834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 398970ae9e29b9d498ae95f4798990fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114620059338078450
 MonoBehaviour:
   m_ObjectHideFlags: 1

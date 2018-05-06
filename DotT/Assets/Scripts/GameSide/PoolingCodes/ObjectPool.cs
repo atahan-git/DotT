@@ -98,6 +98,10 @@ public class ObjectPool : NetworkBehaviour {
 		return Spawn (new Vector3 (x, y, z));
 	}
 
+	/*public GameObject Spawn (){
+		return Spawn (myObject.transform.position, myObject.transform.rotation);
+	}*/
+
 
 	void _DestroyPooledObject(int id){
 		if (objs [id] != null) {
